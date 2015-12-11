@@ -1,0 +1,222 @@
+{
+    "order": 10,
+    "template": "bitscout-*",
+    "settings": {
+        "index.refresh_interval": "5s"
+    },
+    "mappings": {
+        "_default_": {
+            "dynamic_templates": [
+                {
+                    "message_field": {
+                        "mapping": {
+                            "index": "analyzed",
+                            "omit_norms": true,
+                            "type": "string"
+                        },
+                        "match_mapping_type": "string",
+                        "match": "message"
+                    }
+                },
+                {
+                    "string_fields": {
+                        "mapping": {
+                            "index": "analyzed",
+                            "omit_norms": true,
+                            "type": "string",
+                            "fields": {
+                                "raw": {
+                                    "index": "not_analyzed",
+                                    "ignore_above": 256,
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "match_mapping_type": "string",
+                        "match": "*"
+                    }
+                }
+            ],
+            "properties": {
+                "@timestamp": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
+                    "fields": {
+                        "raw": {
+                            "index": "not_analyzed",
+                            "ignore_above": 256,
+                            "type": "string"
+                        }
+                    }
+                },
+                "@version": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "message": {
+                    "type": "string",
+                    "norms": {
+                        "enabled": false
+                    }
+                },
+                "hostname": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "ipaddr4": {
+                    "type": "ip",
+                    "norms": {
+                        "enabled": false
+                    },
+                    "fields": {
+                        "raw": {
+                            "type": "string",
+                            "index": "not_analyzed",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "ipaddr6": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "level": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "pid": {
+                    "type": "string",
+                    "index": "not_analyzed"
+                },
+                "geoip": {
+                    "dynamic": true,
+                    "properties": {
+                        "location": {
+                            "type": "geo_point"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "_all": {
+                "enabled": true,
+                "omit_norms": true
+            }
+        },
+        "rsyslog": {
+            "_meta": {
+                "version": "2015-09-24.0"
+            },
+            "properties": {
+                "rsyslog": {
+                    "properties": {
+                        "facility": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "programname": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "fromhost": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "fromhost-ip": {
+                            "type": "ip",
+                            "norms": {
+                                "enabled": false
+                            },
+                            "fields": {
+                                "raw": {
+                                    "type": "string",
+                                    "index": "not_analyzed",
+                                    "ignore_above": 256
+                                }
+                            }
+                        },
+                        "timegenerated": {
+                            "type": "date",
+                            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
+                        },
+                        "protocol-version": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "structured-data": {
+                            "type": "string",
+                            "norms": {
+                                "enabled": false
+                            }
+                        },
+                        "app-name": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "msgid": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "inputname": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        }
+                    }
+                }
+            }
+        },
+        "openstack": {
+            "_meta": {
+                "version": "2015-09-24.0"
+            },
+            "properties": {
+                "@timestamp": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd'T'HH:mm:ssZ",
+                    "fields": {
+                        "raw": {
+                            "index": "not_analyzed",
+                            "ignore_above": 256,
+                            "type": "string"
+                        }
+                    }
+                },
+                "openstack": {
+                    "properties": {
+                        "class": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "service": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        },
+                        "context": {
+                            "type": "string",
+                            "index": "not_analyzed"
+                        }
+                    }
+                }
+            }
+        },
+        "fluentd": {
+            "_meta": {
+                "version": "2015-09-24.0"
+            },
+            "properties": {
+                "@timestamp": {
+                    "type": "date",
+                    "format": "yyyy-MM-dd'T'HH:mm:ssZ",
+                    "fields": {
+                        "raw": {
+                            "index": "not_analyzed",
+                            "ignore_above": 256,
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "aliases": { }
+}
