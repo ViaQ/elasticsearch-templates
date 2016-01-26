@@ -1,6 +1,6 @@
 {
     "order": 10,
-    "template": "bitscout-*",
+    "template": "viaq-*",
     "settings": {
         "index.refresh_interval": "5s"
     },
