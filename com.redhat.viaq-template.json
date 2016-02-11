@@ -1,11 +1,11 @@
 {
-    "order": 10,
-    "template": "viaq-*",
-    "settings": {
-        "index.refresh_interval": "5s"
-    },
+    "aliases": {},
     "mappings": {
         "_default_": {
+            "_all": {
+                "enabled": true,
+                "omit_norms": true
+            },
             "dynamic_templates": [
                 {
                     "message_field": {
@@ -14,79 +14,44 @@
                             "omit_norms": true,
                             "type": "string"
                         },
-                        "match_mapping_type": "string",
-                        "match": "message"
+                        "match": "message",
+                        "match_mapping_type": "string"
                     }
                 },
                 {
                     "string_fields": {
                         "mapping": {
-                            "index": "analyzed",
-                            "omit_norms": true,
-                            "type": "string",
                             "fields": {
                                 "raw": {
-                                    "index": "not_analyzed",
                                     "ignore_above": 256,
+                                    "index": "not_analyzed",
                                     "type": "string"
                                 }
-                            }
+                            },
+                            "index": "analyzed",
+                            "omit_norms": true,
+                            "type": "string"
                         },
-                        "match_mapping_type": "string",
-                        "match": "*"
+                        "match": "*",
+                        "match_mapping_type": "string"
                     }
                 }
             ],
             "properties": {
                 "@timestamp": {
-                    "type": "date",
-                    "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
                     "fields": {
                         "raw": {
-                            "index": "not_analyzed",
                             "ignore_above": 256,
+                            "index": "not_analyzed",
                             "type": "string"
                         }
-                    }
+                    },
+                    "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
+                    "type": "date"
                 },
                 "@version": {
-                    "type": "string",
-                    "index": "not_analyzed"
-                },
-                "message": {
-                    "type": "string",
-                    "norms": {
-                        "enabled": false
-                    }
-                },
-                "hostname": {
-                    "type": "string",
-                    "index": "not_analyzed"
-                },
-                "ipaddr4": {
-                    "type": "ip",
-                    "norms": {
-                        "enabled": false
-                    },
-                    "fields": {
-                        "raw": {
-                            "type": "string",
-                            "index": "not_analyzed",
-                            "ignore_above": 256
-                        }
-                    }
-                },
-                "ipaddr6": {
-                    "type": "string",
-                    "index": "not_analyzed"
-                },
-                "level": {
-                    "type": "string",
-                    "index": "not_analyzed"
-                },
-                "pid": {
-                    "type": "string",
-                    "index": "not_analyzed"
+                    "index": "not_analyzed",
+                    "type": "string"
                 },
                 "geoip": {
                     "dynamic": true,
@@ -96,106 +61,41 @@
                         }
                     },
                     "type": "object"
-                }
-            },
-            "_all": {
-                "enabled": true,
-                "omit_norms": true
-            }
-        },
-        "rsyslog": {
-            "_meta": {
-                "version": "2015-09-24.0"
-            },
-            "properties": {
-                "rsyslog": {
-                    "properties": {
-                        "facility": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-                        "programname": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-                        "fromhost": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-                        "fromhost-ip": {
-                            "type": "ip",
-                            "norms": {
-                                "enabled": false
-                            },
-                            "fields": {
-                                "raw": {
-                                    "type": "string",
-                                    "index": "not_analyzed",
-                                    "ignore_above": 256
-                                }
-                            }
-                        },
-                        "timegenerated": {
-                            "type": "date",
-                            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ"
-                        },
-                        "protocol-version": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-                        "structured-data": {
-                            "type": "string",
-                            "norms": {
-                                "enabled": false
-                            }
-                        },
-                        "app-name": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-                        "msgid": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-                        "inputname": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        }
-                    }
-                }
-            }
-        },
-        "openstack": {
-            "_meta": {
-                "version": "2015-09-24.0"
-            },
-            "properties": {
-                "@timestamp": {
-                    "type": "date",
-                    "format": "yyyy-MM-dd'T'HH:mm:ssZ",
+                },
+                "hostname": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "ipaddr4": {
                     "fields": {
                         "raw": {
-                            "index": "not_analyzed",
                             "ignore_above": 256,
+                            "index": "not_analyzed",
                             "type": "string"
                         }
-                    }
+                    },
+                    "norms": {
+                        "enabled": false
+                    },
+                    "type": "ip"
                 },
-                "openstack": {
-                    "properties": {
-                        "class": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-                        "service": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        },
-                        "context": {
-                            "type": "string",
-                            "index": "not_analyzed"
-                        }
-                    }
+                "ipaddr6": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "level": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "message": {
+                    "norms": {
+                        "enabled": false
+                    },
+                    "type": "string"
+                },
+                "pid": {
+                    "index": "not_analyzed",
+                    "type": "string"
                 }
             }
         },
@@ -205,18 +105,118 @@
             },
             "properties": {
                 "@timestamp": {
-                    "type": "date",
-                    "format": "yyyy-MM-dd'T'HH:mm:ssZ",
                     "fields": {
                         "raw": {
-                            "index": "not_analyzed",
                             "ignore_above": 256,
+                            "index": "not_analyzed",
                             "type": "string"
+                        }
+                    },
+                    "format": "yyyy-MM-dd'T'HH:mm:ssZ",
+                    "type": "date"
+                }
+            }
+        },
+        "openstack": {
+            "_meta": {
+                "version": "2015-09-24.0"
+            },
+            "properties": {
+                "@timestamp": {
+                    "fields": {
+                        "raw": {
+                            "ignore_above": 256,
+                            "index": "not_analyzed",
+                            "type": "string"
+                        }
+                    },
+                    "format": "yyyy-MM-dd'T'HH:mm:ssZ",
+                    "type": "date"
+                },
+                "openstack": {
+                    "properties": {
+                        "class": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "context": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "service": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "rsyslog": {
+            "_meta": {
+                "version": "2015-09-24.0"
+            },
+            "properties": {
+                "rsyslog": {
+                    "properties": {
+                        "app-name": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "facility": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "fromhost": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "fromhost-ip": {
+                            "fields": {
+                                "raw": {
+                                    "ignore_above": 256,
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            },
+                            "norms": {
+                                "enabled": false
+                            },
+                            "type": "ip"
+                        },
+                        "inputname": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "msgid": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "programname": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "protocol-version": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "structured-data": {
+                            "norms": {
+                                "enabled": false
+                            },
+                            "type": "string"
+                        },
+                        "timegenerated": {
+                            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
+                            "type": "date"
                         }
                     }
                 }
             }
         }
     },
-    "aliases": { }
+    "order": 10,
+    "settings": {
+        "index.refresh_interval": "5s"
+    },
+    "template": "viaq-*"
 }
