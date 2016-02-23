@@ -6,6 +6,9 @@
                 "enabled": true,
                 "omit_norms": true
             },
+            "_meta": {
+                "version": "2016-02-23.0"
+            },
             "date_detection": false,
             "dynamic_templates": [
                 {
@@ -53,6 +56,9 @@
                 "@version": {
                     "index": "not_analyzed",
                     "type": "string"
+                },
+                "CEE": {
+                    "type": "object"
                 },
                 "geoip": {
                     "dynamic": true,
@@ -104,30 +110,17 @@
                             "index": "not_analyzed",
                             "type": "string"
                         },
-                        "original_msg": {
+                        "original_raw_message": {
                             "index": "not_analyzed",
                             "type": "string"
                         },
-                        "pipeline_trace": {
-                            "properties": {
-                                "fromhost-ip": {
-                                    "fields": {
-                                        "raw": {
-                                            "ignore_above": 256,
-                                            "index": "not_analyzed",
-                                            "type": "string"
-                                        }
-                                    },
-                                    "norms": {
-                                        "enabled": false
-                                    },
-                                    "type": "ip"
-                                },
-                                "normalizer": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                }
-                            }
+                        "timegenerated": {
+                            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
+                            "type": "date"
+                        },
+                        "trace": {
+                            "analyzer": "whitespace",
+                            "type": "string"
                         }
                     }
                 },
@@ -146,10 +139,6 @@
                                 "enabled": false
                             },
                             "type": "string"
-                        },
-                        "timegenerated": {
-                            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
-                            "type": "date"
                         }
                     }
                 },
@@ -166,6 +155,10 @@
                                     "type": "string"
                                 },
                                 "KERNEL_SUBSYSTEM": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "UDEV_DEVLINK": {
                                     "index": "not_analyzed",
                                     "type": "string"
                                 },
