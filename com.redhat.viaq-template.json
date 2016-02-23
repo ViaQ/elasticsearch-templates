@@ -6,6 +6,7 @@
                 "enabled": true,
                 "omit_norms": true
             },
+            "date_detection": false,
             "dynamic_templates": [
                 {
                     "message_field": {
@@ -46,7 +47,7 @@
                             "type": "string"
                         }
                     },
-                    "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
+                    "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
                     "type": "date"
                 },
                 "@version": {
@@ -95,6 +96,221 @@
                 },
                 "pid": {
                     "index": "not_analyzed",
+                    "type": "string"
+                },
+                "pipeline_metadata": {
+                    "properties": {
+                        "inputname": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "original_msg": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "pipeline_trace": {
+                            "properties": {
+                                "fromhost-ip": {
+                                    "fields": {
+                                        "raw": {
+                                            "ignore_above": 256,
+                                            "index": "not_analyzed",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "norms": {
+                                        "enabled": false
+                                    },
+                                    "type": "ip"
+                                },
+                                "normalizer": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "rsyslog": {
+                    "properties": {
+                        "facility": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "protocol-version": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "structured-data": {
+                            "norms": {
+                                "enabled": false
+                            },
+                            "type": "string"
+                        },
+                        "timegenerated": {
+                            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
+                            "type": "date"
+                        }
+                    }
+                },
+                "service": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "systemd": {
+                    "properties": {
+                        "k": {
+                            "properties": {
+                                "KERNEL_DEVICE": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "KERNEL_SUBSYSTEM": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "UDEV_DEVNODE": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "UDEV_SYSNAME": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "t": {
+                            "properties": {
+                                "AUDIT_LOGINUID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "AUDIT_SESSION": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "BOOT_ID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "CAP_EFFECTIVE": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "CMDLINE": {
+                                    "norms": {
+                                        "enabled": false
+                                    },
+                                    "type": "string"
+                                },
+                                "COMM": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "EXE": {
+                                    "norms": {
+                                        "enabled": false
+                                    },
+                                    "type": "string"
+                                },
+                                "GID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "HOSTNAME": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "MACHINE_ID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "PID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "SELINUX_CONTEXT": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "SOURCE_REALTIME_TIMESTAMP": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "SYSTEMD_CGROUP": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "SYSTEMD_OWNER_UID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "SYSTEMD_SESSION": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "SYSTEMD_SLICE": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "SYSTEMD_UNIT": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "SYSTEMD_USER_UNIT": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "TRANSPORT": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "UID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "u": {
+                            "properties": {
+                                "CODE_FILE": {
+                                    "norms": {
+                                        "enabled": false
+                                    },
+                                    "type": "string"
+                                },
+                                "CODE_FUNCTION": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "CODE_LINE": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "ERRNO": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "MESSAGE_ID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "RESULT": {
+                                    "norms": {
+                                        "enabled": false
+                                    },
+                                    "type": "string"
+                                },
+                                "UNIT": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": {
+                    "analyzer": "whitespace",
                     "type": "string"
                 }
             }
@@ -146,68 +362,6 @@
                         "service": {
                             "index": "not_analyzed",
                             "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "rsyslog": {
-            "_meta": {
-                "version": "2015-09-24.0"
-            },
-            "properties": {
-                "rsyslog": {
-                    "properties": {
-                        "app-name": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "facility": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "fromhost": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "fromhost-ip": {
-                            "fields": {
-                                "raw": {
-                                    "ignore_above": 256,
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                }
-                            },
-                            "norms": {
-                                "enabled": false
-                            },
-                            "type": "ip"
-                        },
-                        "inputname": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "msgid": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "programname": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "protocol-version": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "structured-data": {
-                            "norms": {
-                                "enabled": false
-                            },
-                            "type": "string"
-                        },
-                        "timegenerated": {
-                            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ",
-                            "type": "date"
                         }
                     }
                 }
