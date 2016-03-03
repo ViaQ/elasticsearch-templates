@@ -1,0 +1,298 @@
+{
+    "aliases": {
+        "rhci-logstash": {}
+    },
+    "mappings": {
+        "jenkins_job": {
+            "_all": {
+                "enabled": true,
+                "omit_norms": true
+            },
+            "_meta": {
+                "version": "2016-03-03.0"
+            },
+            "date_detection": false,
+            "dynamic_templates": [
+                {
+                    "message_field": {
+                        "mapping": {
+                            "index": "analyzed",
+                            "omit_norms": true,
+                            "type": "string"
+                        },
+                        "match": "message",
+                        "match_mapping_type": "string"
+                    }
+                },
+                {
+                    "string_fields": {
+                        "mapping": {
+                            "fields": {
+                                "raw": {
+                                    "ignore_above": 256,
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            },
+                            "index": "analyzed",
+                            "omit_norms": true,
+                            "type": "string"
+                        },
+                        "match": "*",
+                        "match_mapping_type": "string"
+                    }
+                }
+            ],
+            "properties": {
+                "@timestamp": {
+                    "fields": {
+                        "raw": {
+                            "ignore_above": 256,
+                            "index": "not_analyzed",
+                            "type": "string"
+                        }
+                    },
+                    "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
+                    "type": "date"
+                },
+                "@version": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "CEE": {
+                    "type": "object"
+                },
+                "geoip": {
+                    "dynamic": true,
+                    "properties": {
+                        "location": {
+                            "type": "geo_point"
+                        }
+                    },
+                    "type": "object"
+                },
+                "hostname": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "ipaddr4": {
+                    "fields": {
+                        "raw": {
+                            "ignore_above": 256,
+                            "index": "not_analyzed",
+                            "type": "string"
+                        }
+                    },
+                    "norms": {
+                        "enabled": false
+                    },
+                    "type": "ip"
+                },
+                "ipaddr6": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "jenkins_job": {
+                    "properties": {
+                        "build_id": {
+                            "type": "integer"
+                        },
+                        "custom_fields": {
+                            "properties": {
+                                "BKR_JOBID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "CI_MESSAGE": {
+                                    "type": "string"
+                                },
+                                "EXISTING_NODES": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "LABEL": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "PRIVATE_IPS": {
+                                    "fields": {
+                                        "raw": {
+                                            "ignore_above": 256,
+                                            "index": "not_analyzed",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "norms": {
+                                        "enabled": false
+                                    },
+                                    "type": "ip"
+                                },
+                                "PROVISION_JOB": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "SITE": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "UUID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "cleanup": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "deployment_target": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "disconnected_mode": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "email-list": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "ise-ci-branch": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "iso_source": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "job_type": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "jobstartwait": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "junk": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "node_name": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "phase2_pipeline": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "pit_branch": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "project_name": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "scenario_name": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "teardown": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "full_url": {
+                            "fields": {
+                                "raw": {
+                                    "ignore_above": 256,
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "string"
+                        },
+                        "jenkins_master": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "jenkins_slave_ip": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "jenkins_slave_label": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "jenkins_slave_name": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "job_name": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "job_phase": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "job_status": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "log_url": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        }
+                    }
+                },
+                "level": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "message": {
+                    "norms": {
+                        "enabled": false
+                    },
+                    "type": "string"
+                },
+                "pid": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "pipeline_metadata": {
+                    "properties": {
+                        "inputname": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "original_raw_message": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "timegenerated": {
+                            "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
+                            "type": "date"
+                        },
+                        "trace": {
+                            "analyzer": "whitespace",
+                            "type": "string"
+                        }
+                    }
+                },
+                "service": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                },
+                "tags": {
+                    "analyzer": "whitespace",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "order": 10,
+    "settings": {
+        "index.refresh_interval": "5s"
+    },
+    "template": "rhci-v2016.03.03-logstash-*"
+}
