@@ -460,3 +460,7 @@ openstack:
               type: string
               index: not_analyzed
               ignore_above: 256
+
+doc_sections:
+  - ["_default_", "Common logging metadata"]
+  - ["openstack", "OpenStack-specific information"]

@@ -31,8 +31,8 @@ def fields_to_es_template(input, skeleton, output):
         return
 
     # Remove sections as only needed for docs
-    if "sections" in docs.keys():
-        del docs["sections"]
+    if "doc_sections" in docs.keys():
+        del docs["doc_sections"]
 
     # Each template needs defaults
     if "defaults" not in docs.keys():
@@ -61,6 +61,7 @@ def fields_to_mappings(source, template, mapping_type):
     if mapping_type != "_default_":
         # prepare the skeleton by cloning the mappings structure:
         template["mappings"][mapping_type] = template["mappings"]["_default_"].copy()
+        del template["mappings"][mapping_type]["dynamic_templates"]
         prop = fill_section_properties(source[mapping_type], defaults)
         properties.update(prop)
     template["mappings"][mapping_type]["properties"] = properties

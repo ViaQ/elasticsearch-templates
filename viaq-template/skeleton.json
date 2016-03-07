@@ -41,12 +41,12 @@
                     }
                 }
             ],
-            "order": 10,
-            "properties": {},
-            "settings": {
-                "index.refresh_interval": "5s"
-            },
-            "template": "viaq-*"
+            "properties": {}
         }
-    }
+    },
+    "order": 10,
+    "settings": {
+        "index.refresh_interval": "5s"
+    },
+    "template": "viaq-*"
 }
