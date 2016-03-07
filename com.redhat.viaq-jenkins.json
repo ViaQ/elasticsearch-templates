@@ -1,13 +1,15 @@
 {
-    "aliases": {},
+    "aliases": {
+        "rhci-logstash": {}
+    },
     "mappings": {
-        "_default_": {
+        "jenkins_job": {
             "_all": {
                 "enabled": true,
                 "omit_norms": true
             },
             "_meta": {
-                "version": "2016-02-23.0"
+                "version": "2016-03-03.0"
             },
             "date_detection": false,
             "dynamic_templates": [
@@ -90,6 +92,159 @@
                     "index": "not_analyzed",
                     "type": "string"
                 },
+                "jenkins_job": {
+                    "properties": {
+                        "build_id": {
+                            "type": "integer"
+                        },
+                        "custom_fields": {
+                            "properties": {
+                                "BKR_JOBID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "CI_MESSAGE": {
+                                    "type": "string"
+                                },
+                                "EXISTING_NODES": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "LABEL": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "PRIVATE_IPS": {
+                                    "fields": {
+                                        "raw": {
+                                            "ignore_above": 256,
+                                            "index": "not_analyzed",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "norms": {
+                                        "enabled": false
+                                    },
+                                    "type": "ip"
+                                },
+                                "PROVISION_JOB": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "SITE": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "UUID": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "cleanup": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "deployment_target": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "disconnected_mode": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "email-list": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "ise-ci-branch": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "iso_source": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "job_type": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "jobstartwait": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "junk": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "node_name": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "phase2_pipeline": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "pit_branch": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "project_name": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "scenario_name": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                },
+                                "teardown": {
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "full_url": {
+                            "fields": {
+                                "raw": {
+                                    "ignore_above": 256,
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "string"
+                        },
+                        "jenkins_master": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "jenkins_slave_ip": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "jenkins_slave_label": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "jenkins_slave_name": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "job_name": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "job_phase": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "job_status": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        },
+                        "log_url": {
+                            "index": "not_analyzed",
+                            "type": "string"
+                        }
+                    }
+                },
                 "level": {
                     "index": "not_analyzed",
                     "type": "string"
@@ -124,239 +279,13 @@
                         }
                     }
                 },
-                "rsyslog": {
-                    "properties": {
-                        "facility": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "protocol-version": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "structured-data": {
-                            "norms": {
-                                "enabled": false
-                            },
-                            "type": "string"
-                        }
-                    }
-                },
                 "service": {
                     "index": "not_analyzed",
                     "type": "string"
                 },
-                "systemd": {
-                    "properties": {
-                        "k": {
-                            "properties": {
-                                "KERNEL_DEVICE": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "KERNEL_SUBSYSTEM": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "UDEV_DEVLINK": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "UDEV_DEVNODE": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "UDEV_SYSNAME": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "t": {
-                            "properties": {
-                                "AUDIT_LOGINUID": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "AUDIT_SESSION": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "BOOT_ID": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "CAP_EFFECTIVE": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "CMDLINE": {
-                                    "norms": {
-                                        "enabled": false
-                                    },
-                                    "type": "string"
-                                },
-                                "COMM": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "EXE": {
-                                    "norms": {
-                                        "enabled": false
-                                    },
-                                    "type": "string"
-                                },
-                                "GID": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "HOSTNAME": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "MACHINE_ID": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "PID": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "SELINUX_CONTEXT": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "SOURCE_REALTIME_TIMESTAMP": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "SYSTEMD_CGROUP": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "SYSTEMD_OWNER_UID": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "SYSTEMD_SESSION": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "SYSTEMD_SLICE": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "SYSTEMD_UNIT": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "SYSTEMD_USER_UNIT": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "TRANSPORT": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "UID": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "u": {
-                            "properties": {
-                                "CODE_FILE": {
-                                    "norms": {
-                                        "enabled": false
-                                    },
-                                    "type": "string"
-                                },
-                                "CODE_FUNCTION": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "CODE_LINE": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "ERRNO": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "MESSAGE_ID": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                },
-                                "RESULT": {
-                                    "norms": {
-                                        "enabled": false
-                                    },
-                                    "type": "string"
-                                },
-                                "UNIT": {
-                                    "index": "not_analyzed",
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                },
                 "tags": {
                     "analyzer": "whitespace",
                     "type": "string"
-                }
-            }
-        },
-        "fluentd": {
-            "_meta": {
-                "version": "2015-09-24.0"
-            },
-            "properties": {
-                "@timestamp": {
-                    "fields": {
-                        "raw": {
-                            "ignore_above": 256,
-                            "index": "not_analyzed",
-                            "type": "string"
-                        }
-                    },
-                    "format": "yyyy-MM-dd'T'HH:mm:ssZ",
-                    "type": "date"
-                }
-            }
-        },
-        "openstack": {
-            "_meta": {
-                "version": "2015-09-24.0"
-            },
-            "properties": {
-                "@timestamp": {
-                    "fields": {
-                        "raw": {
-                            "ignore_above": 256,
-                            "index": "not_analyzed",
-                            "type": "string"
-                        }
-                    },
-                    "format": "yyyy-MM-dd'T'HH:mm:ssZ",
-                    "type": "date"
-                },
-                "openstack": {
-                    "properties": {
-                        "class": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "context": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        },
-                        "service": {
-                            "index": "not_analyzed",
-                            "type": "string"
-                        }
-                    }
                 }
             }
         }
@@ -365,5 +294,5 @@
     "settings": {
         "index.refresh_interval": "5s"
     },
-    "template": "viaq-*"
+    "template": "rhci-v2016.03.03-logstash-*"
 }
