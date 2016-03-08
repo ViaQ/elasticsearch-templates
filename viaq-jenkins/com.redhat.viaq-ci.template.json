@@ -1,0 +1,183 @@
+{
+  "aliases": {},
+  "mappings": {
+    "_default_": {
+      "_all": {
+        "enabled": true,
+        "omit_norms": true
+      },
+      "_meta": {
+        "version": "2016-02-23.0"
+      },
+      "date_detection": false,
+      "dynamic_templates": [
+        {
+          "message_field": {
+            "mapping": {
+              "index": "analyzed",
+              "omit_norms": true,
+              "type": "string"
+            },
+            "match": "message",
+            "match_mapping_type": "string"
+          }
+        },
+        {
+          "string_fields": {
+            "mapping": {
+              "fields": {
+                "raw": {
+                  "ignore_above": 256,
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              },
+              "index": "analyzed",
+              "omit_norms": true,
+              "type": "string"
+            },
+            "match": "*",
+            "match_mapping_type": "string"
+          }
+        }
+      ],
+      "properties": {
+        "@timestamp": {
+          "fields": {
+            "raw": {
+              "ignore_above": 256,
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          },
+          "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
+          "type": "date"
+        },
+        "@version": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "ci_agent": {
+          "properties": {
+            "label": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "name": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "ci_job": {
+          "properties": {
+            "build_id": {
+              "type": "integer"
+            },
+            "log_url": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "name": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "phase": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "status": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "ci_master": {
+          "properties": {
+            "hostname": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
+        },
+        "geoip": {
+          "dynamic": true,
+          "properties": {
+            "location": {
+              "type": "geo_point"
+            }
+          },
+          "type": "object"
+        },
+        "hostname": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "ipaddr4": {
+          "fields": {
+            "raw": {
+              "ignore_above": 256,
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          },
+          "norms": {
+            "enabled": false
+          },
+          "type": "ip"
+        },
+        "ipaddr6": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "level": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "message": {
+          "norms": {
+            "enabled": false
+          },
+          "type": "string"
+        },
+        "pid": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "pipeline_metadata": {
+          "properties": {
+            "inputname": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "original_raw_message": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "timegenerated": {
+              "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
+              "type": "date"
+            },
+            "trace": {
+              "analyzer": "whitespace",
+              "type": "string"
+            }
+          }
+        },
+        "service": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "tags": {
+          "analyzer": "whitespace",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "order": 10,
+  "settings": {
+    "index.refresh_interval": "5s"
+  },
+  "template": "v2016.03.07-jenkins-*"
+}

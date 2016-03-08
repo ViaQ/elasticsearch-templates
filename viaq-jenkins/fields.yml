@@ -1,0 +1,206 @@
+version: 1.0
+
+defaults:
+  type: string
+
+
+_default_:
+  type: group
+  description: >
+    Contains common fields, corresponds to mappings of the _default_.
+    This mapping represents generic Jenkins configuration.
+  fields:
+    - name: "@timestamp"
+      type: date
+      format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+      example: 2015-01-24T14:06:05.071Z
+      description: >
+        UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known; 
+        this is the log processing pipeline’s “best effort” determination of when the log payload was generated
+        FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
+      fields:
+        - name: raw
+          ignore_above: 256
+          type: string
+          index: not_analyzed
+
+    - name: "@version"
+      index: not_analyzed
+      type: string
+      example: TODO
+      description: >
+        Version of “com.redhat.viaq” mapping the document is intended to adhere to at the time of creation; this allows us to potentially migrate data from an older mapping to a new mapping if necessary (see the Logstash Jira 675 on their schema change) 
+
+    - name: geoip
+      description: >
+        geo-ip of the machine
+      type: object
+      object_struct:
+        dynamic: True
+        properties:
+          location:
+            type: geo_point
+
+    - name: hostname
+      type: string
+      index: not_analyzed
+      description: >
+        FQDN of the entity generating the original payload
+        This field is a best effort attempt to derive this context; sometimes the entity generating it knows it; other times that entity has a restricted namespace itself, and the collector or normalizer knows that
+
+    - name: ipaddr4
+      type: ip
+      description: >
+        IP address v4 of the source server, can be an array.
+      fields:
+        - name: raw
+          ignore_above: 256
+          type: string
+          index: not_analyzed
+      norms:
+        enabled: false
+
+    - name: ipaddr6
+      type: string
+      index: not_analyzed
+      description: >
+        IP address v6 of the source server(if available).
+
+    - name: level
+      type: string
+      index: not_analyzed
+      example: info
+      description: >
+        Loging level as provided by: rsyslog(severitytext property), python's logging module, etc.
+        Possible values: info, warning, notice, err, debug
+
+    - name: message
+      type: string
+      example: TODO
+      description: >
+        Typical log entry message, or payload, possibly stripped of metadata pulled out of it by collector/normalizer, UTF-8 encoded.
+      norms:
+        enabled: false
+
+    - name: pid
+      type: string
+      index: not_analyzed
+      description: >
+        PID... look into details on systemd stuff
+
+    - name: service
+      type: string
+      index: not_analyzed
+      description: >
+        name of the service. syslog's APP-NAME and programname are renamed to service field as well.
+
+    - name: tags
+      type: string
+      analyzer: whitespace
+      description: >
+        Field contains whitespace-delimited tags. Tagging is configured on normalizers/collectors.
+        Please note that this field is analyzed and not an array since rsyslog doesn't play well with JSON lists
+
+    - pipeline_metadata:
+      type: group
+      description: >
+        Metadata related to ViaQ log collection pipeline.
+        Everything about log collector, normalizers goes here.
+        Data in this subgroup is stored for troublehsooting purposes mostly.
+      name: pipeline_metadata
+      fields:
+      - name: inputname
+        type: string
+        index: not_analyzed
+        description: >
+          how the log message was received on normalizer(?) whether it was TCP/UDP.
+
+      - name: original_raw_message
+        type: string
+        index: not_analyzed
+        description: >
+          The original non-parsed log message, collected by collector or as close to the source as possible.
+
+      - name: "timegenerated"
+        type: date
+        format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+        description: >
+          Time when the message was generated according to collector.
+
+      - name: trace
+        type: string
+        analyzer: whitespace
+        example: "rsyslog,8.16,2016.02.01 logstash,1.5,2016.03.03"
+        description: >
+          The field records the trace of the message.
+          Each collector/normalizer appends information about itself and the date/time when the message was processed.
+
+    - CI_master:
+      type: group
+      description: >
+        Metadata related to the master server of CI (f.e. Jenkins master).
+      name: ci_master
+      fields:
+      - name: hostname
+        type: string
+        index: not_analyzed
+        description: >
+          FQDN of the CI master.
+
+    - CI_agent:
+      type: group
+      description: >
+        Metadata related to the CI agent/slave that executed the job.
+      name: ci_agent
+      fields:
+      - name: label
+        type: string
+        index: not_analyzed
+        description: >
+          TODO.
+
+      - name: name
+        type: string
+        index: not_analyzed
+        description: >
+          TODO.
+
+    - CI_job:
+      type: group
+      description: >
+        Metadata related to the CI job itself.
+      name: ci_job
+      fields:
+      - name: name
+        type: string
+        index: not_analyzed
+        description: >
+          Name of the CI job.
+
+      - name: build_id
+        type: integer
+        description: >
+          Build ID of the CI job.
+
+      - name: phase
+        type: string
+        index: not_analyzed
+        description: >
+          Phase of the CI job.
+
+      - name: status
+        type: string
+        index: not_analyzed
+        description: >
+          CI job status.
+
+      - name: log_url
+        type: string
+        index: not_analyzed
+        description: >
+          URL to the html log of the CI job.
+
+doc_sections:
+  - ["_default_", "Common logging metadata"]
+  - ["openstack", "OpenStack-specific information"]
+

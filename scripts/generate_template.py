@@ -118,7 +118,7 @@ def fill_field_properties(field, defaults):
                 "enabled": False
             }
         }
-    elif field.get("type") in ["string", "date", "ip"]:
+    elif field.get("type") in ["string", "date", "ip", "integer"]:
         properties[field["name"]] = working_field.copy()
         properties[field.get("name")].update(fill_subfields(field, defaults))
     elif field.get("type") == "object":

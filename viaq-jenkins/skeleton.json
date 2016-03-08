@@ -1,0 +1,52 @@
+{
+    "aliases": {},
+    "mappings": {
+        "_default_": {
+            "_all": {
+                "enabled": true,
+                "omit_norms": true
+            },
+            "_meta": {
+                "version": "2016-02-23.0"
+            },
+            "date_detection": false,
+            "dynamic_templates": [
+                {
+                    "message_field": {
+                        "mapping": {
+                            "index": "analyzed",
+                            "omit_norms": true,
+                            "type": "string"
+                        },
+                        "match": "message",
+                        "match_mapping_type": "string"
+                    }
+                },
+                {
+                    "string_fields": {
+                        "mapping": {
+                            "fields": {
+                                "raw": {
+                                    "ignore_above": 256,
+                                    "index": "not_analyzed",
+                                    "type": "string"
+                                }
+                            },
+                            "index": "analyzed",
+                            "omit_norms": true,
+                            "type": "string"
+                        },
+                        "match": "*",
+                        "match_mapping_type": "string"
+                    }
+                }
+            ],
+            "properties": {}
+        }
+    },
+    "order": 10,
+    "settings": {
+        "index.refresh_interval": "5s"
+    },
+    "template": "v2016.03.07-jenkins-*"
+}

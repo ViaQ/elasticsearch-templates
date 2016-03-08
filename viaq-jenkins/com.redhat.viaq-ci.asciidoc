@@ -1,0 +1,220 @@
+
+////
+This file is generated! See fields.yml and scripts/generate_field_docs.py
+////
+
+[[exported-fields]]
+== Exported Fields
+
+This document describes the fields that are exported by Com.Redhat.Viaq-Ci. They are
+grouped in the following categories:
+
+* <<exported-fields-_default_>>
+* <<exported-fields-openstack>>
+
+[[exported-fields-_default_]]
+=== Common logging metadata Fields
+
+Contains common fields, corresponds to mappings of the _default_. This mapping represents generic Jenkins configuration.
+
+
+
+==== @timestamp
+
+type: date
+
+example: 2015-01-24 14:06:05.071000
+
+format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+
+UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known;  this is the log processing pipeline’s “best effort” determination of when the log payload was generated FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
+
+
+==== @version
+
+type: string
+
+example: TODO
+
+Version of “com.redhat.viaq” mapping the document is intended to adhere to at the time of creation; this allows us to potentially migrate data from an older mapping to a new mapping if necessary (see the Logstash Jira 675 on their schema change) 
+
+
+==== geoip
+
+type: object
+
+geo-ip of the machine
+
+
+==== hostname
+
+type: string
+
+FQDN of the entity generating the original payload This field is a best effort attempt to derive this context; sometimes the entity generating it knows it; other times that entity has a restricted namespace itself, and the collector or normalizer knows that
+
+
+==== ipaddr4
+
+type: ip
+
+IP address v4 of the source server, can be an array.
+
+
+==== ipaddr6
+
+type: string
+
+IP address v6 of the source server(if available).
+
+
+==== level
+
+type: string
+
+example: info
+
+Loging level as provided by: rsyslog(severitytext property), python's logging module, etc. Possible values: info, warning, notice, err, debug
+
+
+==== message
+
+type: string
+
+example: TODO
+
+Typical log entry message, or payload, possibly stripped of metadata pulled out of it by collector/normalizer, UTF-8 encoded.
+
+
+==== pid
+
+type: string
+
+PID... look into details on systemd stuff
+
+
+==== service
+
+type: string
+
+name of the service. syslog's APP-NAME and programname are renamed to service field as well.
+
+
+==== tags
+
+type: string
+
+Field contains whitespace-delimited tags. Tagging is configured on normalizers/collectors. Please note that this field is analyzed and not an array since rsyslog doesn't play well with JSON lists
+
+
+=== pipeline_metadata Fields
+
+Metadata related to ViaQ log collection pipeline. Everything about log collector, normalizers goes here. Data in this subgroup is stored for troublehsooting purposes mostly.
+
+
+
+==== inputname
+
+type: string
+
+how the log message was received on normalizer(?) whether it was TCP/UDP.
+
+
+==== original_raw_message
+
+type: string
+
+The original non-parsed log message, collected by collector or as close to the source as possible.
+
+
+==== timegenerated
+
+type: date
+
+format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+
+Time when the message was generated according to collector.
+
+
+==== trace
+
+type: string
+
+example: rsyslog,8.16,2016.02.01 logstash,1.5,2016.03.03
+
+The field records the trace of the message. Each collector/normalizer appends information about itself and the date/time when the message was processed.
+
+
+=== ci_master Fields
+
+Metadata related to the master server of CI (f.e. Jenkins master).
+
+
+
+==== hostname
+
+type: string
+
+FQDN of the CI master.
+
+
+=== ci_agent Fields
+
+Metadata related to the CI agent/slave that executed the job.
+
+
+
+==== label
+
+type: string
+
+TODO.
+
+
+==== name
+
+type: string
+
+TODO.
+
+
+=== ci_job Fields
+
+Metadata related to the CI job itself.
+
+
+
+==== name
+
+type: string
+
+Name of the CI job.
+
+
+==== build_id
+
+type: integer
+
+Build ID of the CI job.
+
+
+==== phase
+
+type: string
+
+Phase of the CI job.
+
+
+==== status
+
+type: string
+
+CI job status.
+
+
+==== log_url
+
+type: string
+
+URL to the html log of the CI job.
+
+
