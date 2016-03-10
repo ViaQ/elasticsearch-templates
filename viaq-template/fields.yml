@@ -1,4 +1,4 @@
-version: 1.0
+version: 2016.03.10.0
 
 defaults:
   type: string
@@ -106,6 +106,30 @@ _default_:
       description: >
         Field contains whitespace-delimited tags. Tagging is configured on normalizers/collectors.
         Please note that this field is analyzed and not an array since rsyslog doesn't play well with JSON lists
+
+    - name: file
+      type: string
+      description: >
+        File something.
+      norms:
+        enabled: True
+      fields:
+        - name: raw
+          type: string
+          index: not_analyzed
+          ignore_above: 256
+
+    - name: offset
+      type: string
+      description: >
+        TODO.
+      norms:
+        enabled: True
+      fields:
+        - name: raw
+          type: string
+          index: not_analyzed
+          ignore_above: 256
 
     - pipeline_metadata:
       type: group
@@ -394,30 +418,6 @@ openstack:
     Mapping specifically for openstack. Inherits all the fields from __default__
     _type of the documents in this mapping should be openstack
   fields:
-    - name: file
-      type: string
-      description: >
-        File something.
-      norms:
-        enabled: True
-      fields:
-        - name: raw
-          type: string
-          index: not_analyzed
-          ignore_above: 256
-
-    - name: offset
-      type: string
-      description: >
-        TODO.
-      norms:
-        enabled: True
-      fields:
-        - name: raw
-          type: string
-          index: not_analyzed
-          ignore_above: 256
-
     - name: openstack
       type: group
       description: >

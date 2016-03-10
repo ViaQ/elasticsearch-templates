@@ -113,6 +113,20 @@ type: string
 Field contains whitespace-delimited tags. Tagging is configured on normalizers/collectors. Please note that this field is analyzed and not an array since rsyslog doesn't play well with JSON lists
 
 
+==== file
+
+type: string
+
+File something.
+
+
+==== offset
+
+type: string
+
+TODO.
+
+
 === pipeline_metadata Fields
 
 Metadata related to ViaQ log collection pipeline. Everything about log collector, normalizers goes here. Data in this subgroup is stored for troublehsooting purposes mostly.
@@ -438,20 +452,6 @@ TODO
 
 Mapping specifically for openstack. Inherits all the fields from __default__ _type of the documents in this mapping should be openstack
 
-
-
-==== file
-
-type: string
-
-File something.
-
-
-==== offset
-
-type: string
-
-TODO.
 
 
 [[exported-fields-openstack]]
