@@ -1,4 +1,4 @@
-version: 1.0
+version: 2016-03-14.0
 
 defaults:
   type: string
@@ -18,6 +18,7 @@ _default_:
         UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known; 
         this is the log processing pipeline’s “best effort” determination of when the log payload was generated
         FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
+        Collected by shipshift from Jenkins, when the message was emitted.
       fields:
         - name: raw
           ignore_above: 256
@@ -86,7 +87,7 @@ _default_:
       type: string
       index: not_analyzed
       description: >
-        PID... look into details on systemd stuff
+        PID of the process that emitted the log message
 
     - name: service
       type: string
@@ -98,7 +99,7 @@ _default_:
       type: string
       analyzer: whitespace
       description: >
-        Field contains whitespace-delimited tags. Tagging is configured on normalizers/collectors.
+        Field contains whitespace-delimited tags or an array of tag strings. Tagging is configured on normalizers/collectors.
         Please note that this field is analyzed and not an array since rsyslog doesn't play well with JSON lists
 
     - pipeline_metadata:
@@ -117,23 +118,30 @@ _default_:
 
       - name: original_raw_message
         type: string
-        index: not_analyzed
         description: >
           The original non-parsed log message, collected by collector or as close to the source as possible.
+          The field is analyzed for now for troubleshooting purposes. In future we may change it to not_analyzed
 
-      - name: "timegenerated"
+      - name: "received_at"
         type: date
         format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
         description: >
-          Time when the message was generated according to collector.
+          Time at which the message was received by the normalizer (logstash in this case).
 
       - name: trace
         type: string
         analyzer: whitespace
-        example: "rsyslog,8.16,2016.02.01 logstash,1.5,2016.03.03"
+        example: "shipshift,<version>,2016.02.01 logstash,1.5,2016.03.03"
         description: >
           The field records the trace of the message.
           Each collector/normalizer appends information about itself and the date/time when the message was processed.
+
+    - shipshift_metadata:
+      type: group
+      name: shipshift_metadata
+      description: >
+        Placeholder for shipshift metadata. In control by shipshift team.
+      fields:
 
     - CI_master:
       type: group
@@ -200,7 +208,72 @@ _default_:
         description: >
           URL to the html log of the CI job.
 
+    - name: file
+      type: string
+      index: not_analyzed
+      description: >
+        name of the log file. 
+
+    - name: offset
+      type: integer
+      description: >
+        offset of the message in the logs file. 
+
+jenkins_logs:
+  type: group
+  description: >
+    RHCI-specific mapping. It inherits all the fields from _default_ mapping
+  fields:
+    - rhci:
+      type: group
+      description: >
+        Metadata related to the CI job itself.
+      name: rhci
+      fields:
+      - name: ise_ci_branch
+        type: string
+        index: not_analyzed
+        description: >
+          TODO.
+
+      - name: iso_source
+        type: string
+        index: not_analyzed
+        description: >
+          TODO.
+
+      - name: pit_branch
+        type: string
+        index: not_analyzed
+        description: >
+          TODO.
+
+      - name: project_name
+        type: string
+        index: not_analyzed
+        description: >
+          TODO.
+
+      - name: scenario_name
+        type: string
+        index: not_analyzed
+        description: >
+          TODO.
+
+      - name: project_name
+        type: string
+        index: not_analyzed
+        description: >
+          TODO.
+
+      - name: task_process
+        type: string
+        index: not_analyzed
+        description: >
+          offset of the message in the logs file.
+
 doc_sections:
-  - ["_default_", "Common logging metadata"]
-  - ["openstack", "OpenStack-specific information"]
+  - ["_default_", "Common logging metadata for CI"]
+  - ["jenkins_logs", "RHCI-specific information"]
+
 

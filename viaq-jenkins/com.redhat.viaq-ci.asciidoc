@@ -10,10 +10,10 @@ This document describes the fields that are exported by Com.Redhat.Viaq-Ci. They
 grouped in the following categories:
 
 * <<exported-fields-_default_>>
-* <<exported-fields-openstack>>
+* <<exported-fields-jenkins_logs>>
 
 [[exported-fields-_default_]]
-=== Common logging metadata Fields
+=== Common logging metadata for CI Fields
 
 Contains common fields, corresponds to mappings of the _default_. This mapping represents generic Jenkins configuration.
 
@@ -27,7 +27,7 @@ example: 2015-01-24 14:06:05.071000
 
 format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
 
-UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known;  this is the log processing pipeline’s “best effort” determination of when the log payload was generated FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
+UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known;  this is the log processing pipeline’s “best effort” determination of when the log payload was generated FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch Collected by shipshift from Jenkins, when the message was emitted.
 
 
 ==== @version
@@ -89,7 +89,7 @@ Typical log entry message, or payload, possibly stripped of metadata pulled out 
 
 type: string
 
-PID... look into details on systemd stuff
+PID of the process that emitted the log message
 
 
 ==== service
@@ -103,7 +103,7 @@ name of the service. syslog's APP-NAME and programname are renamed to service fi
 
 type: string
 
-Field contains whitespace-delimited tags. Tagging is configured on normalizers/collectors. Please note that this field is analyzed and not an array since rsyslog doesn't play well with JSON lists
+Field contains whitespace-delimited tags or an array of tag strings. Tagging is configured on normalizers/collectors. Please note that this field is analyzed and not an array since rsyslog doesn't play well with JSON lists
 
 
 === pipeline_metadata Fields
@@ -123,25 +123,30 @@ how the log message was received on normalizer(?) whether it was TCP/UDP.
 
 type: string
 
-The original non-parsed log message, collected by collector or as close to the source as possible.
+The original non-parsed log message, collected by collector or as close to the source as possible. The field is analyzed for now for troubleshooting purposes. In future we may change it to not_analyzed
 
 
-==== timegenerated
+==== received_at
 
 type: date
 
 format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
 
-Time when the message was generated according to collector.
+Time at which the message was received by the normalizer (logstash in this case).
 
 
 ==== trace
 
 type: string
 
-example: rsyslog,8.16,2016.02.01 logstash,1.5,2016.03.03
+example: shipshift,<version>,2016.02.01 logstash,1.5,2016.03.03
 
 The field records the trace of the message. Each collector/normalizer appends information about itself and the date/time when the message was processed.
+
+
+=== shipshift_metadata Fields
+
+Placeholder for shipshift metadata. In control by shipshift team.
 
 
 === ci_master Fields
@@ -216,5 +221,81 @@ CI job status.
 type: string
 
 URL to the html log of the CI job.
+
+
+==== file
+
+type: string
+
+name of the log file. 
+
+
+==== offset
+
+type: integer
+
+offset of the message in the logs file. 
+
+
+[[exported-fields-jenkins_logs]]
+=== RHCI-specific information Fields
+
+RHCI-specific mapping. It inherits all the fields from _default_ mapping
+
+
+
+=== rhci Fields
+
+Metadata related to the CI job itself.
+
+
+
+==== ise_ci_branch
+
+type: string
+
+TODO.
+
+
+==== iso_source
+
+type: string
+
+TODO.
+
+
+==== pit_branch
+
+type: string
+
+TODO.
+
+
+==== project_name
+
+type: string
+
+TODO.
+
+
+==== scenario_name
+
+type: string
+
+TODO.
+
+
+==== project_name
+
+type: string
+
+TODO.
+
+
+==== task_process
+
+type: string
+
+offset of the message in the logs file.
 
 

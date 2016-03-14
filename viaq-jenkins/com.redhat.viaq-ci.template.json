@@ -7,7 +7,7 @@
         "omit_norms": true
       },
       "_meta": {
-        "version": "2016-02-23.0"
+        "version": "2016-03-14.0"
       },
       "date_detection": false,
       "dynamic_templates": [
@@ -100,6 +100,10 @@
             }
           }
         },
+        "file": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
         "geoip": {
           "dynamic": true,
           "properties": {
@@ -140,6 +144,9 @@
           },
           "type": "string"
         },
+        "offset": {
+          "type": "integer"
+        },
         "pid": {
           "index": "not_analyzed",
           "type": "string"
@@ -151,10 +158,9 @@
               "type": "string"
             },
             "original_raw_message": {
-              "index": "not_analyzed",
               "type": "string"
             },
-            "timegenerated": {
+            "received_at": {
               "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
               "type": "date"
             },
@@ -171,6 +177,46 @@
         "tags": {
           "analyzer": "whitespace",
           "type": "string"
+        }
+      }
+    },
+    "jenkins_logs": {
+      "_all": {
+        "enabled": true,
+        "omit_norms": true
+      },
+      "_meta": {
+        "version": "2016-03-14.0"
+      },
+      "date_detection": false,
+      "properties": {
+        "rhci": {
+          "properties": {
+            "ise_ci_branch": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "iso_source": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "pit_branch": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "project_name": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "scenario_name": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "task_process": {
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
         }
       }
     }

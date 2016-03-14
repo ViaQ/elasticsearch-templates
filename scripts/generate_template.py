@@ -77,10 +77,12 @@ def fill_section_properties(section, defaults):
     properties = {}
 
     #print "Trying to fill section properties of section %s"%(section)
-    for field in section["fields"]:
-        prop = fill_field_properties(field, defaults)
-        properties.update(prop)
-
+    try:
+        for field in section["fields"]:
+            prop = fill_field_properties(field, defaults)
+            properties.update(prop)
+    except TypeError:
+        print "Skipping empty section %s" % (section)
     return properties
 
 
