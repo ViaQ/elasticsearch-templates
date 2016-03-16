@@ -7,7 +7,7 @@
         "omit_norms": true
       },
       "_meta": {
-        "version": "2016-03-14.0"
+        "version": "2016.03.16.0"
       },
       "date_detection": false,
       "dynamic_templates": [
@@ -73,6 +73,10 @@
           "properties": {
             "build_id": {
               "type": "integer"
+            },
+            "full_url": {
+              "index": "not_analyzed",
+              "type": "string"
             },
             "log_url": {
               "index": "not_analyzed",
@@ -180,23 +184,93 @@
         }
       }
     },
-    "jenkins_logs": {
+    "jenkins_data": {
       "_all": {
         "enabled": true,
         "omit_norms": true
       },
       "_meta": {
-        "version": "2016-03-14.0"
+        "version": "2016.03.16.0"
       },
       "date_detection": false,
       "properties": {
         "rhci": {
           "properties": {
+            "BKR_JOBID": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "CI_MESSAGE": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "EXISTING_NODES": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "LABEL": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "PRIVATE_IPS": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "PROVISION_JOB": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "SITE": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "UUID": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "cleanup": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "deployment_target": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "disconnected_mode": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "email-list": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
             "ise_ci_branch": {
               "index": "not_analyzed",
               "type": "string"
             },
             "iso_source": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "job_type": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "jobstartwait": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "junk": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "osp_controller_count": {
+              "type": "integer"
+            },
+            "osp_hypervisor_count": {
+              "type": "integer"
+            },
+            "phase2_pipeline": {
               "index": "not_analyzed",
               "type": "string"
             },
@@ -208,11 +282,18 @@
               "index": "not_analyzed",
               "type": "string"
             },
+            "rhev_hypervisor_count": {
+              "type": "integer"
+            },
             "scenario_name": {
               "index": "not_analyzed",
               "type": "string"
             },
             "task_process": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "teardown": {
               "index": "not_analyzed",
               "type": "string"
             }
@@ -225,5 +306,5 @@
   "settings": {
     "index.refresh_interval": "5s"
   },
-  "template": "v2016.03.07-jenkins-*"
+  "template": "rhci-v2016.03.16.0-jenkins-*"
 }

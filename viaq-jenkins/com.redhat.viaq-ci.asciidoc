@@ -10,7 +10,7 @@ This document describes the fields that are exported by Com.Redhat.Viaq-Ci. They
 grouped in the following categories:
 
 * <<exported-fields-_default_>>
-* <<exported-fields-jenkins_logs>>
+* <<exported-fields-jenkins_data>>
 
 [[exported-fields-_default_]]
 === Common logging metadata for CI Fields
@@ -223,6 +223,13 @@ type: string
 URL to the html log of the CI job.
 
 
+==== full_url
+
+type: string
+
+Full URL to the CI job on the CI master.
+
+
 ==== file
 
 type: string
@@ -237,7 +244,7 @@ type: integer
 offset of the message in the logs file. 
 
 
-[[exported-fields-jenkins_logs]]
+[[exported-fields-jenkins_data]]
 === RHCI-specific information Fields
 
 RHCI-specific mapping. It inherits all the fields from _default_ mapping
@@ -297,5 +304,145 @@ TODO.
 type: string
 
 offset of the message in the logs file.
+
+
+==== BKR_JOBID
+
+type: string
+
+TODO
+
+
+==== CI_MESSAGE
+
+type: string
+
+TODO
+
+
+==== EXISTING_NODES
+
+type: string
+
+TODO
+
+
+==== PRIVATE_IPS
+
+type: string
+
+TODO
+
+
+==== PROVISION_JOB
+
+type: string
+
+TODO
+
+
+==== SITE
+
+type: string
+
+TODO
+
+
+==== UUID
+
+type: string
+
+TODO
+
+
+==== cleanup
+
+type: string
+
+TODO
+
+
+==== deployment_target
+
+type: string
+
+TODO
+
+
+==== disconnected_mode
+
+type: string
+
+TODO
+
+
+==== email-list
+
+type: string
+
+TODO
+
+
+==== job_type
+
+type: string
+
+TODO
+
+
+==== jobstartwait
+
+type: string
+
+TODO
+
+
+==== junk
+
+type: string
+
+TODO
+
+
+==== phase2_pipeline
+
+type: string
+
+TODO
+
+
+==== teardown
+
+type: string
+
+TODO
+
+
+==== LABEL
+
+type: string
+
+TODO
+
+
+==== osp_controller_count
+
+type: integer
+
+TODO
+
+
+==== osp_hypervisor_count
+
+type: integer
+
+TODO
+
+
+==== rhev_hypervisor_count
+
+type: integer
+
+TODO
 
 
