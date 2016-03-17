@@ -43,28 +43,29 @@ def fields_to_es_template(input, skeleton, output):
     # Load skeleton
     template = json.load(skeleton)
 
+    # Prepare skeleton adding empty sections for each mapping type
+    for map_type in docs.keys():
+        if map_type not in ["version", "defaults"]:
+            if map_type != "_default_":
+                template["mappings"][map_type] = template["mappings"]["_default_"].copy()
+                del template["mappings"][map_type]["dynamic_templates"]
+
     for map_type in docs.keys():
         if map_type not in ["version", "defaults"]:
             fields_to_mappings(docs, template, map_type)
+
+    add_template_version(docs["version"],template)
 
     json.dump(template, output,
               indent=2, separators=(',', ': '),
               sort_keys=True)
 
 def fields_to_mappings(source, template, mapping_type):
-
+    """ fill mapping 'properties' for the provided mapping_type"""
     defaults = source["defaults"]
-    properties = {}
-    prop = fill_section_properties(source["_default_"], defaults)
-    properties.update(prop)
 
-    if mapping_type != "_default_":
-        # prepare the skeleton by cloning the mappings structure:
-        template["mappings"][mapping_type] = template["mappings"]["_default_"].copy()
-        del template["mappings"][mapping_type]["dynamic_templates"]
-        prop = fill_section_properties(source[mapping_type], defaults)
-        properties.update(prop)
-    template["mappings"][mapping_type]["properties"] = properties
+    prop = fill_section_properties(source[mapping_type], defaults)
+    template["mappings"][mapping_type]["properties"] = prop
 
 
 
@@ -156,6 +157,11 @@ def fill_subfields(field, defaults):
         if len(prop) is not 0:
             properties["fields"] = prop
     return properties
+
+def add_template_version(version,template):
+    """replaces <version> placeholder in the template(index name and _meta) with the actual version number"""
+    template["mappings"]["_default_"]["_meta"]["version"] = version
+    template["template"] = template["template"].replace("<version>", version) 
 
 if __name__ == "__main__":
 

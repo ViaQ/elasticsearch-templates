@@ -2,12 +2,8 @@
     "aliases": {},
     "mappings": {
         "_default_": {
-            "_all": {
-                "enabled": true,
-                "omit_norms": true
-            },
             "_meta": {
-                "version": "2016-02-23.0"
+                "version": "<version>"
             },
             "date_detection": false,
             "dynamic_templates": [
@@ -48,5 +44,5 @@
     "settings": {
         "index.refresh_interval": "5s"
     },
-    "template": "viaq-*"
+    "template": "v<version>-viaq-*"
 }
