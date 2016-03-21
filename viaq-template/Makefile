@@ -1,4 +1,4 @@
-TEMPLATE_NAME = com.redhat.viaq-template
+TEMPLATE_NAME = com.redhat.viaq
 
 all: $(TEMPLATE_NAME).template.json $(TEMPLATE_NAME).asciidoc
 .PHONY: all clean
