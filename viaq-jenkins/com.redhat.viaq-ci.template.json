@@ -267,6 +267,14 @@
               "index": "not_analyzed",
               "type": "string"
             },
+            "JSLAVELABEL": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "JSLAVENAME": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
             "LABEL": {
               "index": "not_analyzed",
               "type": "string"
@@ -300,6 +308,10 @@
               "type": "string"
             },
             "email-list": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "host_name": {
               "index": "not_analyzed",
               "type": "string"
             },
@@ -365,5 +377,5 @@
   "settings": {
     "index.refresh_interval": "5s"
   },
-  "template": "rhci-v2016.03.21.0-jenkins-*"
+  "template": "rhci-logs-*"
 }

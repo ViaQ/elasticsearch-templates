@@ -48,5 +48,5 @@
     "settings": {
         "index.refresh_interval": "5s"
     },
-    "template": "rhci-v<version>-jenkins-*"
+    "template": "rhci-logs-*"
 }

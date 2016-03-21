@@ -499,6 +499,27 @@ type: string
 TODO
 
 
+==== JSLAVELABEL
+
+type: string
+
+TODO
+
+
+==== JSLAVENAME
+
+type: string
+
+TODO
+
+
+==== host_name
+
+type: string
+
+TODO
+
+
 ==== osp_controller_count
 
 type: integer

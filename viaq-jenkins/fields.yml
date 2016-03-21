@@ -453,6 +453,24 @@ jenkins_data:
         description: >
           TODO
 
+      - name: JSLAVELABEL
+        type: string
+        index: not_analyzed
+        description: >
+          TODO
+
+      - name: JSLAVENAME
+        type: string
+        index: not_analyzed
+        description: >
+          TODO
+
+      - name: host_name
+        type: string
+        index: not_analyzed
+        description: >
+          TODO
+
       - name: osp_controller_count
         type: integer
         description: >
