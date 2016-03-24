@@ -13,11 +13,12 @@ _default_:
     - name: "@timestamp"
       type: date
       format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
-      example: 2015-01-24T14:06:05.071Z
+      example: ["2015-01-24T14:06:05.071Z", "2015-01-24T14:06:11Z", "2015-02-30"]
       description: >
-        UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known; 
+        This can be a UTC value or a value can also be in a specific timezone, but it must be convertible to UTC.
+        The value marks when the log payload was created, or when log payload was first collected if the creation time is not known; 
         this is the log processing pipeline’s “best effort” determination of when the log payload was generated
-        FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
+        FYI: the “@” prefix convention denotes a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
         Collected by shipshift from Jenkins, when the message was emitted.
       fields:
         - name: raw
@@ -25,9 +26,21 @@ _default_:
           type: string
           index: not_analyzed
 
+    - name: ipaddr4
+      type: ip
+      description: >
+        IP address v4 of the source server, can be an array.
+      fields:
+        - name: raw
+          ignore_above: 256
+          type: string
+          index: not_analyzed
+      norms:
+        enabled: false
+
     - name: geoip
       description: >
-        geo-ip of the machine
+        geo-ip of the machine with the ippaddr4
       type: object
       object_struct:
         dynamic: True
@@ -42,18 +55,6 @@ _default_:
         FQDN of the entity generating the original payload
         This field is a best effort attempt to derive this context; sometimes the entity generating it knows it; other times that entity has a restricted namespace itself, and the collector or normalizer knows that
 
-    - name: ipaddr4
-      type: ip
-      description: >
-        IP address v4 of the source server, can be an array.
-      fields:
-        - name: raw
-          ignore_above: 256
-          type: string
-          index: not_analyzed
-      norms:
-        enabled: false
-
     - name: ipaddr6
       type: string
       index: not_analyzed
@@ -65,8 +66,10 @@ _default_:
       index: not_analyzed
       example: info
       description: >
-        Loging level as provided by: rsyslog(severitytext property), python's logging module, etc.
-        Possible values: info, warning, notice, err, debug
+        Loging level. The baseline values are provided by syslog(rfc5424): emerg, alert, crit, err, warning, notice, info, debug.
+        Any other level will be attempted to be mapped in those values by the normalizer based on semantic similarity.
+        If no similar level already exist then a new level will be added.
+        For example in Python's logging module 'DEBUG' log level will map to 'debug', but 'TRACE' level is added as 'trace'
 
     - name: message
       type: string
@@ -84,6 +87,7 @@ _default_:
 
     - name: service
       type: string
+      example: dhcpd, nova.compute
       index: not_analyzed
       description: >
         name of the service. syslog's APP-NAME and programname are renamed to service field as well.
@@ -94,13 +98,15 @@ _default_:
       description: >
         Field contains whitespace-delimited tags or an array of tag strings. Tagging is configured on normalizers/collectors.
         Please note that this field is analyzed and not an array since rsyslog doesn't play well with JSON lists
+        This allows administrator to add additional metadata about logging in their environment.
 
     - pipeline_metadata:
       type: group
       description: >
+        This is an optional subgroup
         Metadata related to ViaQ log collection pipeline.
         Everything about log collector, normalizers goes here.
-        Data in this subgroup is stored for troublehsooting purposes mostly.
+        Data in this subgroup is stored for troubleshooting purposes mostly.
       name: pipeline_metadata
       fields:
       - name: collector
@@ -192,8 +198,8 @@ _default_:
         type: string
         example: TODO
         description: >
-          Version of “com.redhat.viaq” mapping the document is intended to adhere by the normalizer. It must be set by the normalizer. 
-          The value must correspond to the [_meta][version].
+          Version of “com.redhat.viaq-ci” template. Normalizer sets the value to the Template version it intends to use.
+          The value must correspond to the [_meta][version]. See README.md for details on Template version.
 
       - name: original_raw_message
         type: string
@@ -207,13 +213,14 @@ _default_:
         example: "shipshift,<version>,2016.02.01 logstash,1.5,2016.03.03"
         description: >
           The field records the trace of the message.
-          Each collector/normalizer appends information about itself and the date/time when the message was processed.
+          Each collector/normalizer can append information about itself and might include the date/time when the message was processed.
 
     - shipshift_metadata:
       type: group
       name: shipshift_metadata
       description: >
         Placeholder for shipshift metadata. In control by shipshift team.
+        Feel free to add whatever fields/structure you like here.
       fields:
 
     - CI_master:
@@ -291,17 +298,20 @@ _default_:
       type: string
       index: not_analyzed
       description: >
-        name of the log file. 
+        Optional field present when the data is collected from a file from a known file location.
+        The field may contain the full local path to the file.
 
     - name: offset
       type: long
       description: >
-        offset of the message in the logs file. 
+        Offset of the message in the logs file(see the field 'file'). 
 
 jenkins_data:
   type: group
   description: >
     RHCI-specific mapping. It inherits all the fields from _default_ mapping
+    This is the name you put in _type when ingesting the documents in ES
+
   fields:
     - rhci:
       type: group
@@ -322,12 +332,6 @@ jenkins_data:
           TODO.
 
       - name: pit_branch
-        type: string
-        index: not_analyzed
-        description: >
-          TODO.
-
-      - name: project_name
         type: string
         index: not_analyzed
         description: >

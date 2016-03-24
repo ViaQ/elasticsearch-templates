@@ -120,7 +120,7 @@ def fill_field_properties(field, defaults):
                 "enabled": False
             }
         }
-    elif field.get("type") in ["string", "date", "ip", "integer"]:
+    elif field.get("type") in ["string", "date", "ip", "integer", "long"]:
         properties[field["name"]] = working_field.copy()
         properties[field.get("name")].update(fill_subfields(field, defaults))
     elif field.get("type") == "object":
@@ -129,11 +129,6 @@ def fill_field_properties(field, defaults):
         else:
             properties[field["name"]] = {}
         properties[field["name"]]["type"] = "object"
-    elif field.get("type") == "long":
-        properties[field["name"]] = {
-            "type": "long",
-            "doc_values": "true"
-        }
     elif field.get("type") == "float":
         properties[field["name"]] = {
             "type": "float",

@@ -145,7 +145,6 @@
           "type": "string"
         },
         "offset": {
-          "doc_values": "true",
           "type": "long"
         },
         "pid": {
