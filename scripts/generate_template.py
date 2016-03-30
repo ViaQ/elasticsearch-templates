@@ -77,10 +77,12 @@ def fill_section_properties(section, defaults):
     properties = {}
 
     #print "Trying to fill section properties of section %s"%(section)
-    for field in section["fields"]:
-        prop = fill_field_properties(field, defaults)
-        properties.update(prop)
-
+    try:
+        for field in section["fields"]:
+            prop = fill_field_properties(field, defaults)
+            properties.update(prop)
+    except TypeError:
+        print "Skipping empty section %s" % (section)
     return properties
 
 
@@ -118,7 +120,7 @@ def fill_field_properties(field, defaults):
                 "enabled": False
             }
         }
-    elif field.get("type") in ["string", "date", "ip"]:
+    elif field.get("type") in ["string", "date", "ip", "integer", "long"]:
         properties[field["name"]] = working_field.copy()
         properties[field.get("name")].update(fill_subfields(field, defaults))
     elif field.get("type") == "object":
@@ -127,11 +129,6 @@ def fill_field_properties(field, defaults):
         else:
             properties[field["name"]] = {}
         properties[field["name"]]["type"] = "object"
-    elif field.get("type") == "long":
-        properties[field["name"]] = {
-            "type": "long",
-            "doc_values": "true"
-        }
     elif field.get("type") == "float":
         properties[field["name"]] = {
             "type": "float",
