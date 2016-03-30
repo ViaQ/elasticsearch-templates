@@ -66,9 +66,9 @@ _default_:
       index: not_analyzed
       example: info
       description: >
-        Loging level. The baseline values are provided by syslog(rfc5424): emerg, alert, crit, err, warning, notice, info, debug.
-        Any other level will be attempted to be mapped in those values by the normalizer based on semantic similarity.
-        If no similar level already exist then a new level will be added.
+        Logging level. The baseline values are provided by syslog(rfc5424): emerg, alert, crit, err, warning, notice, info, debug.
+        An attempt will be made to map any other value in to one of the base where reasonable.
+        If no similar level already exist then a new lowercased level will be added.
         For example in Python's logging module 'DEBUG' log level will map to 'debug', but 'TRACE' level is added as 'trace'
 
     - name: message
@@ -198,8 +198,8 @@ _default_:
         type: string
         example: TODO
         description: >
-          Version of “com.redhat.viaq-ci” template. Normalizer sets the value to the Template version it intends to use.
-          The value must correspond to the [_meta][version]. See README.md for details on Template version.
+          Version of “com.redhat.viaq-ci” template. Normalizer sets the value to the template version it intends to use.
+          The value must correspond to the [_meta][version]. See README.md for details on template version.
 
       - name: original_raw_message
         type: string
@@ -310,7 +310,8 @@ jenkins_data:
   type: group
   description: >
     RHCI-specific mapping. It inherits all the fields from _default_ mapping
-    This is the name you put in _type when ingesting the documents in ES
+    This is the name of the mapping.
+    This will be the value used as the ElasticSearch Document Type of a document being indexed.
 
   fields:
     - rhci:
