@@ -27,7 +27,7 @@ example: 2015-01-24 14:06:05.071000
 
 format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
 
-UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known;  this is the log processing pipeline’s “best effort” determination of when the log payload was generated FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
+UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known; this is the log processing pipeline’s “best effort” determination of when the log payload was generated FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
 
 
 ==== CEE
@@ -137,6 +137,13 @@ type: string
 FQDN of the collector. It might be different from the FQDN of the actual emitter of the logs.
 
 
+==== name
+
+type: string
+
+Name of the normalizer.
+
+
 ==== ipaddr4
 
 type: ip
@@ -160,6 +167,13 @@ format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
 Time when the message was received at the collector.
 
 
+==== original_raw_message
+
+type: string
+
+The original non-parsed log message, collected by collector or as close to the source as possible.
+
+
 === normalizer Fields
 
 The section contains metadata specific to the normalizer.
@@ -171,6 +185,13 @@ The section contains metadata specific to the normalizer.
 type: string
 
 FQDN of the normalizer.
+
+
+==== name
+
+type: string
+
+Name of the normalizer.
 
 
 ==== ipaddr4
@@ -196,20 +217,20 @@ format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
 Time when the message was received at the collector.
 
 
+==== original_raw_message
+
+type: string
+
+The original non-parsed log message as it is received at the normalizer.
+
+
 ==== @version
 
 type: string
 
 example: TODO
 
-Version of “com.redhat.viaq” mapping the document is intended to adhere by the normalizer. It must be set by the normalizer.  The value must correspond to the [_meta][version].
-
-
-==== original_raw_message
-
-type: string
-
-The original non-parsed log message, collected by collector or as close to the source as possible.
+Version of “com.redhat.viaq” mapping the document is intended to adhere by the normalizer. It must be set by the normalizer. The value must correspond to the [_meta][version].
 
 
 ==== trace
@@ -246,6 +267,20 @@ rsyslog protocol version
 type: string
 
 syslog's structured-data. see syslog specification for more information
+
+
+==== msgid
+
+type: long
+
+rsyslog protocol version
+
+
+==== appname
+
+type: string
+
+syslog's APP-NAME. If APP-NAME is same as programname, we only fill top-level field 'service'. If APP-NAME is not equal to programname, this field will hold APP-NAME. See syslog specification for more information
 
 
 === systemd Fields

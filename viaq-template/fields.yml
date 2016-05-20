@@ -2,6 +2,9 @@ version: 2016.03.10.0
 
 defaults:
   type: string
+  doc_values: true
+  index: not_analyzed
+
 
 
 _default_:
@@ -16,14 +19,13 @@ _default_:
       format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
       example: 2015-01-24T14:06:05.071Z
       description: >
-        UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known; 
+        UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known;
         this is the log processing pipeline’s “best effort” determination of when the log payload was generated
         FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
       fields:
         - name: raw
           ignore_above: 256
           type: string
-          index: not_analyzed
 
     - name: CEE
       type: object
@@ -43,7 +45,6 @@ _default_:
 
     - name: hostname
       type: string
-      index: not_analyzed
       description: >
         FQDN of the entity generating the original payload
         This field is a best effort attempt to derive this context; sometimes the entity generating it knows it; other times that entity has a restricted namespace itself, and the collector or normalizer knows that
@@ -56,19 +57,16 @@ _default_:
         - name: raw
           ignore_above: 256
           type: string
-          index: not_analyzed
       norms:
         enabled: false
 
     - name: ipaddr6
       type: string
-      index: not_analyzed
       description: >
         IP address v6 of the source server(if available).
 
     - name: level
       type: string
-      index: not_analyzed
       example: info
       description: >
         Loging level as provided by: rsyslog(severitytext property), python's logging module, etc.
@@ -76,6 +74,8 @@ _default_:
 
     - name: message
       type: string
+      index: analyzed
+      doc_values: false
       example: TODO
       description: >
         Typical log entry message, or payload, possibly stripped of metadata pulled out of it by collector/normalizer, UTF-8 encoded.
@@ -84,18 +84,18 @@ _default_:
 
     - name: pid
       type: string
-      index: not_analyzed
       description: >
         PID... look into details on systemd stuff
 
     - name: service
       type: string
-      index: not_analyzed
       description: >
         name of the service. syslog's APP-NAME and programname are renamed to service field as well.
 
     - name: tags
       type: string
+      doc_values: false
+      index: analyzed
       analyzer: whitespace
       description: >
         Field contains whitespace-delimited tags. Tagging is configured on normalizers/collectors.
@@ -103,6 +103,8 @@ _default_:
 
     - name: file
       type: string
+      index: analyzed
+      doc_values: false
       description: >
         Full local path.
         TODO: analyzer for file paths
@@ -111,7 +113,6 @@ _default_:
       fields:
         - name: raw
           type: string
-          index: not_analyzed
           ignore_above: 256
 
     - name: offset
@@ -134,9 +135,13 @@ _default_:
         fields:
         - name: hostname
           type: string
-          index: not_analyzed
           description: >
             FQDN of the collector. It might be different from the FQDN of the actual emitter of the logs.
+
+        - name: name
+          type: string
+          description: >
+            Name of the normalizer.
 
         - name: ipaddr4
           type: ip
@@ -146,13 +151,11 @@ _default_:
             - name: raw
               ignore_above: 256
               type: string
-              index: not_analyzed
           norms:
             enabled: false
 
         - name: inputname
           type: string
-          index: not_analyzed
           description: >
             how the log message was received on the collector whether it was TCP/UDP, or maybe imjournal/imfile.
 
@@ -162,6 +165,17 @@ _default_:
           description: >
             Time when the message was received at the collector.
 
+        - name: original_raw_message
+          type: string
+          index: analyzed
+          doc_values: false
+          description: >
+            The original non-parsed log message, collected by collector or as close to the source as possible.
+          fields:
+          - name: raw
+            type: string
+            ignore_above: 256
+
       - name: normalizer
         type: group
         description: >
@@ -169,9 +183,13 @@ _default_:
         fields:
         - name: hostname
           type: string
-          index: not_analyzed
           description: >
             FQDN of the normalizer.
+
+        - name: name
+          type: string
+          description: >
+            Name of the normalizer.
 
         - name: ipaddr4
           type: ip
@@ -181,13 +199,11 @@ _default_:
             - name: raw
               ignore_above: 256
               type: string
-              index: not_analyzed
           norms:
             enabled: false
 
         - name: inputname
           type: string
-          index: not_analyzed
           description: >
             how the log message was received on the normalizer whether it was TCP/UDP.
 
@@ -197,26 +213,28 @@ _default_:
           description: >
             Time when the message was received at the collector.
 
+        - name: original_raw_message
+          type: string
+          index: analyzed
+          doc_values: false
+          description: >
+            The original non-parsed log message as it is received at the normalizer.
+          fields:
+          - name: raw
+            type: string
+            ignore_above: 256
+
       - name: "@version"
-        index: not_analyzed
         type: string
         example: TODO
         description: >
-          Version of “com.redhat.viaq” mapping the document is intended to adhere by the normalizer. It must be set by the normalizer. 
+          Version of “com.redhat.viaq” mapping the document is intended to adhere by the normalizer. It must be set by the normalizer.
           The value must correspond to the [_meta][version].
 
-      - name: original_raw_message
-        type: string
-        description: >
-          The original non-parsed log message, collected by collector or as close to the source as possible.
-        fields:
-        - name: raw
-          type: string
-          index: not_analyzed
-          ignore_above: 256
 
       - name: trace
         type: string
+        index: analyzed
         analyzer: whitespace
         example: "rsyslog,8.16,2016.02.01 logstash,1.5,2016.03.03"
         description: >
@@ -231,13 +249,11 @@ _default_:
       fields:
       - name: facility
         type: string
-        index: not_analyzed
         description: >
           rsyslog's facility. see syslog specification for more information
 
       - name: protocol-version
         type: string
-        index: not_analyzed
         description: >
            rsyslog protocol version
 
@@ -247,6 +263,17 @@ _default_:
           syslog's structured-data. see syslog specification for more information
         norms:
           enabled: false
+
+      - name: msgid
+        type: long
+        description: >
+           rsyslog protocol version
+
+      - name: appname
+        type: string
+        description: >
+          syslog's APP-NAME. If APP-NAME is same as programname, we only fill top-level field 'service'.
+          If APP-NAME is not equal to programname, this field will hold APP-NAME. See syslog specification for more information
 
     - name: systemd
       type: group
@@ -260,31 +287,26 @@ _default_:
         fields:
         - name: KERNEL_DEVICE
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: KERNEL_SUBSYSTEM
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: UDEV_DEVLINK
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: UDEV_DEVNODE
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: UDEV_SYSNAME
           type: string
-          index: not_analyzed
           description: >
              TODO
 
@@ -295,25 +317,21 @@ _default_:
         fields:
         - name: AUDIT_LOGINUID
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: BOOT_ID
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: AUDIT_SESSION
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: CAP_EFFECTIVE
           type: string
-          index: not_analyzed
           description: >
             TODO
 
@@ -326,7 +344,6 @@ _default_:
 
         - name: COMM
           type: string
-          index: not_analyzed
           description: >
             TODO
 
@@ -339,85 +356,71 @@ _default_:
 
         - name: GID
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: HOSTNAME
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: MACHINE_ID
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: PID
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: SELINUX_CONTEXT
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: SOURCE_REALTIME_TIMESTAMP
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: SYSTEMD_CGROUP
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: SYSTEMD_OWNER_UID
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: SYSTEMD_SESSION
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: SYSTEMD_SLICE
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: SYSTEMD_UNIT
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: SYSTEMD_USER_UNIT
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: TRANSPORT
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: UID
           type: string
-          index: not_analyzed
           description: >
             TODO
 
@@ -428,45 +431,40 @@ _default_:
         fields:
         - name: CODE_FILE
           type: string
-          norms: 
+          norms:
             enabled: false
           description: >
             TODO
 
         - name: CODE_FUNCTION
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: CODE_LINE
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: ERRNO
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: MESSAGE_ID
           type: string
-          index: not_analyzed
           description: >
             TODO
 
         - name: RESULT
           type: string
-          norms: 
+          norms:
             enabled: false
           description: >
             TODO
 
         - name: UNIT
           type: string
-          index: not_analyzed
           description: >
             TODO
 
@@ -485,7 +483,6 @@ openstack:
       fields:
         - name: instance
           type: string
-          index: not_analyzed
           description: >
             TODO.
           norms:
@@ -493,7 +490,6 @@ openstack:
 
         - name: context
           type: string
-          index: not_analyzed
           description: >
             We understand this to be a value scraped from the originating HTTP REST API request so that one can track related API requests throughout the stack, as such it is an identifier and should not be tokenized when indexed.
           norms:
@@ -501,7 +497,6 @@ openstack:
 
         - name: class
           type: string
-          index: not_analyzed
           description: >
             TODO.
           norms:
@@ -510,4 +505,3 @@ openstack:
 doc_sections:
   - ["_default_", "Common logging metadata"]
   - ["openstack", "OpenStack-specific information"]
-
