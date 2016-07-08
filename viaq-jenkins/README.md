@@ -1,8 +1,8 @@
 # com.redhat.viaq-ci template
 
-The template file com.redhat.viaq.template.json is automatically generated. Please _do not edit_** the file directly.
+The template file `com.redhat.viaq.template.json` is automatically generated. Please _do not edit_ the file directly.
 
-In order to edit the template please modify fields.yml and skeleton.json files.
+In order to edit the template please modify [fields.yml](fields.yml) and [skeleton.json](skeleton.json) files.
 
 To rebuild the template, run:
 > make clean && make
