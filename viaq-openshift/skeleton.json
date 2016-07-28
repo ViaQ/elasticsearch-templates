@@ -44,5 +44,5 @@
     "settings": {
         "index.refresh_interval": "5s"
     },
-    "template": "logstash-*"
+    "template": "viaq-openshift-v<version>-*"
 }
