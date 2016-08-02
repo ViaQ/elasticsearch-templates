@@ -1,0 +1,10 @@
+skeleton_path: ../skeleton.json
+
+elasticsearch_template:
+  name: com.redhat.viaq-openshift-project
+  index_pattern: project.*
+  order: 11
+
+types:
+  - openshift/pod_log.yml
+#  - openshift/app_log.yml
