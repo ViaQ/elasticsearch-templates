@@ -1,5 +1,8 @@
 {
-    "aliases": {},
+    "aliases": {
+        "project.{index}" : {},
+        ".all": {}
+    },
     "mappings": {
         "_default_": {
             "_meta": {
