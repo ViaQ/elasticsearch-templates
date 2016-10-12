@@ -3,7 +3,7 @@
   "mappings": {
     "_default_": {
       "_meta": {
-        "version": "2016.06.21.0"
+        "version": "2016.10.12.0"
       },
       "date_detection": false,
       "dynamic_templates": [
@@ -51,6 +51,15 @@
           "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
           "index": "not_analyzed",
           "type": "date"
+        },
+        "docker": {
+          "properties": {
+            "container_id": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
         },
         "file": {
           "doc_values": false,
@@ -102,6 +111,50 @@
           "doc_values": true,
           "index": "not_analyzed",
           "type": "string"
+        },
+        "kubernetes": {
+          "properties": {
+            "host": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            },
+            "namespace_id": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            },
+            "namespace_name": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            },
+            "pod_id": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            },
+            "pod_name": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            }
+          }
         },
         "level": {
           "doc_values": true,
@@ -161,6 +214,11 @@
                   },
                   "type": "ip"
                 },
+                "ipaddr6": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
                 "name": {
                   "doc_values": true,
                   "index": "not_analyzed",
@@ -184,6 +242,11 @@
                   "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
                   "index": "not_analyzed",
                   "type": "date"
+                },
+                "version": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
                 }
               }
             },
@@ -215,6 +278,11 @@
                   },
                   "type": "ip"
                 },
+                "ipaddr6": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
                 "name": {
                   "doc_values": true,
                   "index": "not_analyzed",
@@ -238,6 +306,11 @@
                   "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
                   "index": "not_analyzed",
                   "type": "date"
+                },
+                "version": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
                 }
               }
             },
@@ -249,86 +322,6 @@
             }
           }
         },
-        "service": {
-          "doc_values": true,
-          "index": "not_analyzed",
-          "type": "string"
-        },
-        "tags": {
-          "analyzer": "whitespace",
-          "doc_values": false,
-          "index": "analyzed",
-          "type": "string"
-        }
-      }
-    },
-    "pod_log": {
-      "_meta": {
-        "version": "2016.06.21.0"
-      },
-      "date_detection": false,
-      "properties": {
-        "docker": {
-          "properties": {
-            "container_id": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "kubernetes": {
-          "properties": {
-            "hostname": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
-              "type": "string"
-            },
-            "namespace_id": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
-              "type": "string"
-            },
-            "namespace_name": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
-              "type": "string"
-            },
-            "pod_id": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
-              "type": "string"
-            },
-            "pod_name": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
-              "type": "string"
-            }
-          }
-        }
-      }
-    },
-    "syslog": {
-      "_meta": {
-        "version": "2016.06.21.0"
-      },
-      "date_detection": false,
-      "properties": {
         "rsyslog": {
           "properties": {
             "appname": {
@@ -360,6 +353,11 @@
               "type": "string"
             }
           }
+        },
+        "service": {
+          "doc_values": true,
+          "index": "not_analyzed",
+          "type": "string"
         },
         "systemd": {
           "properties": {
@@ -553,6 +551,12 @@
               }
             }
           }
+        },
+        "tags": {
+          "analyzer": "whitespace",
+          "doc_values": false,
+          "index": "analyzed",
+          "type": "string"
         }
       }
     }
@@ -561,5 +565,5 @@
   "settings": {
     "index.refresh_interval": "5s"
   },
-  "template": ".operations.*"
+  "template": "*"
 }

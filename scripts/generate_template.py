@@ -21,11 +21,11 @@ def object_types_to_template(template_definition, output, objects_dir):
     """
 
     if template_definition is None:
-        print "objects.yml is empty. Cannot generate template."
+        print "template.yml is empty. Cannot generate template."
         return
 
     if 'skeleton_path' not in template_definition or\
-       'types' not in template_definition:
+       'namespaces' not in template_definition:
         print "skeleton_path is not defined. Cannot generate template."
         return
 
@@ -33,32 +33,31 @@ def object_types_to_template(template_definition, output, objects_dir):
     with open(template_definition['skeleton_path'], 'r') as f:
         skeleton = yaml.load(f)
 
-    src_files = {}
     res = {}
+    namespaces = []
 
     # Load object_type files
     with open(objects_dir + '/_default_.yml', 'r') as f:
-        src_files['_default_'] = yaml.load(f)
+        default_mapping_yml = yaml.load(f)
     map_types = [('_default_', '_default_')]
+    default_mapping = default_mapping_yml['_default_']
 
-    for type_file in template_definition['types']:
-        with open(objects_dir + type_file, 'r') as f:
-            src_files[type_file] = yaml.load(f)
-        for section in src_files[type_file]:
-            # Prepare skeleton adding empty sections for each mapping type
-            if section not in ["version", "defaults", "doc_sections"]:
-                map_types.append((section, type_file))
+    for ns_file in template_definition['namespaces']:
+        with open(objects_dir + ns_file, 'r') as f:
+            cur_ns_yml = yaml.load(f)
+        if 'namespace' not in cur_ns_yml:
+            print("namespace section is absent in file {0}".format(ns_file))
+            return
+        ns_name = cur_ns_yml['namespace']['name']
 
-    for map_type, type_file in map_types:
-        add_mapping_to_skeleton(map_type, skeleton)
+        default_mapping['fields'].append(cur_ns_yml['namespace'])
 
-        # Entry point to parsing of the source files.
-        # Inserting parsed data into the skeleton.
-        skeleton['mappings'][map_type]['properties'] =\
-         fields_to_object_type(src_files[type_file], map_type)
+    skeleton['mappings']['_default_']['properties'] =\
+         traverse_group_section(default_mapping,
+                               default_mapping_yml['field_defaults'])
 
-        add_type_version(src_files[type_file]["version"],
-                         skeleton['mappings'][map_type])
+    add_type_version(default_mapping_yml["version"],
+                     skeleton['mappings']['_default_'])
 
     add_index_pattern(template_definition['elasticsearch_template']['index_pattern'], skeleton)
     add_index_order(template_definition['elasticsearch_template']['order'], skeleton)
@@ -77,33 +76,6 @@ def add_mapping_to_skeleton(map_type, skeleton):
     if map_type != '_default_':
         skeleton['mappings'][map_type] = skeleton['mappings']['_default_'].copy()
         del skeleton['mappings'][map_type]['dynamic_templates']
-
-
-def fields_to_object_type(obj_type, mapping_type):
-    """
-    Reads the YAML file from input and generates the JSON for
-    the ES template in output. input and output are both file
-    pointers.
-    Args:
-        obj_type(dict): dict definition loaded from object_type file
-        mapping_type(string): what mapping type to parse
-    Returns:
-        dict of processed mapping type
-    """
-
-    # No fields defined, can't generate template
-    if obj_type is None:
-        print "object_type file is empty. Cannot generate template."
-        return
-
-    # Each template needs defaults
-    if "defaults" not in obj_type.keys():
-        print "No defaults are defined. Each type needs at least some defaults defined."
-        return
-
-    defaults = obj_type['defaults']
-    return traverse_group_section(obj_type[mapping_type], defaults)
-
 
 def traverse_group_section(group, defaults):
     """

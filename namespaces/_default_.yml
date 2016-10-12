@@ -1,0 +1,112 @@
+version: 2016.10.12.0
+
+field_defaults:
+  type: string
+  doc_values: true
+  index: not_analyzed
+
+_default_:
+  type: group
+  description: >
+    Contains common fields, this is what populates the actual the mappings of the _default_.
+    Oritinated from the mapping for rsyslog clients, but can be used with other clients as well.
+  fields:
+    - name: "@timestamp"
+      type: date
+      format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+      example: 2015-01-24T14:06:05.071Z
+      description: >
+        UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known;
+        this is the log processing pipeline’s “best effort” determination of when the log payload was generated
+        FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
+      fields:
+        - name: raw
+          ignore_above: 256
+          type: string
+
+    - name: geoip
+      description: >
+        geo-ip of the machine
+      type: object
+      object_struct:
+        dynamic: True
+        properties:
+          location:
+            type: geo_point
+
+    - name: hostname
+      type: string
+      description: >
+        FQDN of the entity generating the original payload
+        This field is a best effort attempt to derive this context; sometimes the entity generating it knows it; other times that entity has a restricted namespace itself, and the collector or normalizer knows that
+
+    - name: ipaddr4
+      type: ip
+      description: >
+        IP address v4 of the source server, can be an array.
+      fields:
+        - name: raw
+          ignore_above: 256
+          type: string
+      norms:
+        enabled: false
+
+    - name: ipaddr6
+      type: string
+      description: >
+        IP address v6 of the source server(if available).
+
+    - name: level
+      type: string
+      example: info
+      description: >
+        Loging level as provided by: rsyslog(severitytext property), python's logging module, etc.
+        Possible values: info, warning, notice, err, debug
+
+    - name: message
+      type: string
+      index: analyzed
+      doc_values: false
+      example: TODO
+      description: >
+        Typical log entry message, or payload, possibly stripped of metadata pulled out of it by collector/normalizer, UTF-8 encoded.
+      norms:
+        enabled: false
+
+    - name: pid
+      type: string
+      description: >
+        PID... look into details on systemd stuff
+
+    - name: service
+      type: string
+      description: >
+        name of the service. syslog's APP-NAME and programname are renamed to service field as well.
+
+    - name: tags
+      type: string
+      doc_values: false
+      index: analyzed
+      analyzer: whitespace
+      description: >
+        Field contains whitespace-delimited tags. Tagging is configured on normalizers/collectors.
+        Please note that this field is analyzed and not an array since rsyslog doesn't play well with JSON lists
+
+    - name: file
+      type: string
+      index: analyzed
+      doc_values: false
+      description: >
+        Full local path.
+        TODO: analyzer for file paths
+      norms:
+        enabled: True
+      fields:
+        - name: raw
+          type: string
+          ignore_above: 256
+
+    - name: offset
+      type: long
+      description: >
+        Offset in the log file.

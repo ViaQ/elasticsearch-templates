@@ -1,0 +1,34 @@
+
+namespace:
+  name: rsyslog
+  type: group
+  description: >
+    rsyslog/syslog-specific metadata, excluding systemd metadata
+  fields:
+  - name: facility
+    type: string
+    description: >
+      rsyslog's facility. see syslog specification for more information
+
+  - name: protocol-version
+    type: string
+    description: >
+       rsyslog protocol version
+
+  - name: structured-data
+    type: string
+    description: >
+      syslog's structured-data. see syslog specification for more information
+    norms:
+      enabled: false
+
+  - name: msgid
+    type: long
+    description: >
+       rsyslog protocol version
+
+  - name: appname
+    type: string
+    description: >
+      syslog's APP-NAME. If APP-NAME is same as programname, we only fill top-level field 'service'.
+      If APP-NAME is not equal to programname, this field will hold APP-NAME. See syslog specification for more information
