@@ -1,12 +1,13 @@
-com.redhat.viaq-openshift template
+viaq openshift index templates for ElasticSearch
 =================================
 
-The template file com.redhat.viaq-openshift.template.json is automatically generated. Please *do not edit* the file directly.
+The template files are automatically generated.
+Please _do not edit_ the files directly.
 
-In order to edit the template please modify fields.yml and skeleton.json files.
+In order to edit the template please modify [objects.yml](objects.yml) and the respective object type files.
 
 To rebuild the template, run:
-> python ../scripts/generate_template.py . com.redhat.viaq-template
+> python ../scripts/generate_template.py . ../../objects_dir
 
 For details about the mapping please see [ElasticSearch reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html)
 
@@ -25,11 +26,11 @@ by sections:
 `settings`: various settings  
 `template`: indices that will be matched by this template  
 
-fields.yml
+objects.yml
 ----------
-This is the file that contains all the mappings information.  
-`version`: version of the mapping  
-`defaults`: default values. if a particular field is missing a parameter it'll be taken from the default values  
-`_default_`: description of the fields used to populate `mappings -> _default_` in the generated template.  
-`pod_log`: special mapping for OpenShift pod container logs. inherits all the fields from _default_  
-`doc_sections`: used in the generation of the documentation to name the sections.  
+This is the file that contains all the settings information and pointers to the specific mappings.  
+* `skeleton_path`: The path to the `skeleton.json` file that contain the initial JSON structure of the template.
+* `elasticsearch_template`: This section defines the parameters common for the entire template, they are explicitly overwritten in the final template file.
+** `name`: index pattern matched.
+** `order`: template order. Lower order is applied first. [details](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html#multiple-templates)
+* `types`: filenames of various document object types to be included in the template

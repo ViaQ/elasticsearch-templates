@@ -3,7 +3,7 @@
   "mappings": {
     "_default_": {
       "_meta": {
-        "version": "2016.06.21.0"
+        "version": "2016.10.12.0"
       },
       "date_detection": false,
       "dynamic_templates": [
@@ -49,10 +49,17 @@
             }
           },
           "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
+          "index": "not_analyzed",
           "type": "date"
         },
-        "CEE": {
-          "type": "object"
+        "docker": {
+          "properties": {
+            "container_id": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
         },
         "file": {
           "doc_values": false,
@@ -64,6 +71,7 @@
               "type": "string"
             }
           },
+          "index": "analyzed",
           "norms": {
             "enabled": true
           },
@@ -93,6 +101,7 @@
               "type": "string"
             }
           },
+          "index": "not_analyzed",
           "norms": {
             "enabled": false
           },
@@ -103,6 +112,50 @@
           "index": "not_analyzed",
           "type": "string"
         },
+        "kubernetes": {
+          "properties": {
+            "host": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            },
+            "namespace_id": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            },
+            "namespace_name": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            },
+            "pod_id": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            },
+            "pod_name": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            }
+          }
+        },
         "level": {
           "doc_values": true,
           "index": "not_analyzed",
@@ -110,6 +163,7 @@
         },
         "message": {
           "doc_values": false,
+          "index": "analyzed",
           "norms": {
             "enabled": false
           },
@@ -117,6 +171,7 @@
         },
         "offset": {
           "doc_values": true,
+          "index": "not_analyzed",
           "type": "long"
         },
         "pid": {
@@ -153,15 +208,45 @@
                       "type": "string"
                     }
                   },
+                  "index": "not_analyzed",
                   "norms": {
                     "enabled": false
                   },
                   "type": "ip"
                 },
+                "ipaddr6": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "name": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "original_raw_message": {
+                  "doc_values": false,
+                  "fields": {
+                    "raw": {
+                      "doc_values": true,
+                      "ignore_above": 256,
+                      "index": "not_analyzed",
+                      "type": "string"
+                    }
+                  },
+                  "index": "analyzed",
+                  "type": "string"
+                },
                 "received_at": {
                   "doc_values": true,
                   "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
+                  "index": "not_analyzed",
                   "type": "date"
+                },
+                "version": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
                 }
               }
             },
@@ -187,43 +272,72 @@
                       "type": "string"
                     }
                   },
+                  "index": "not_analyzed",
                   "norms": {
                     "enabled": false
                   },
                   "type": "ip"
                 },
+                "ipaddr6": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "name": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "original_raw_message": {
+                  "doc_values": false,
+                  "fields": {
+                    "raw": {
+                      "doc_values": true,
+                      "ignore_above": 256,
+                      "index": "not_analyzed",
+                      "type": "string"
+                    }
+                  },
+                  "index": "analyzed",
+                  "type": "string"
+                },
                 "received_at": {
                   "doc_values": true,
                   "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
+                  "index": "not_analyzed",
                   "type": "date"
-                }
-              }
-            },
-            "original_raw_message": {
-              "doc_values": false,
-              "fields": {
-                "raw": {
+                },
+                "version": {
                   "doc_values": true,
-                  "ignore_above": 256,
                   "index": "not_analyzed",
                   "type": "string"
                 }
-              },
-              "type": "string"
+              }
             },
             "trace": {
               "analyzer": "whitespace",
               "doc_values": false,
+              "index": "analyzed",
               "type": "string"
             }
           }
         },
         "rsyslog": {
           "properties": {
+            "appname": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
             "facility": {
               "doc_values": true,
               "index": "not_analyzed",
               "type": "string"
+            },
+            "msgid": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "long"
             },
             "protocol-version": {
               "doc_values": true,
@@ -441,75 +555,8 @@
         "tags": {
           "analyzer": "whitespace",
           "doc_values": false,
+          "index": "analyzed",
           "type": "string"
-        }
-      }
-    },
-    "pod_log": {
-      "_meta": {
-        "version": "2016.06.21.0"
-      },
-      "date_detection": false,
-      "properties": {
-        "docker": {
-          "properties": {
-            "container_id": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
-        },
-        "kubernetes": {
-          "properties": {
-            "hostname": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
-              "type": "string"
-            },
-            "labels": {
-              "index": "analyzed",
-              "norms": {
-                "enabled": false
-              },
-              "type": "string"
-            },
-            "namespace_id": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
-              "type": "string"
-            },
-            "namespace_name": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
-              "type": "string"
-            },
-            "pod_id": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
-              "type": "string"
-            },
-            "pod_name": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
-              "type": "string"
-            }
-          }
         }
       }
     }
@@ -518,5 +565,5 @@
   "settings": {
     "index.refresh_interval": "5s"
   },
-  "template": "viaq-openshift-v2016.06.21.0-*"
+  "template": "*"
 }
