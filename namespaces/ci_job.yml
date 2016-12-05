@@ -1,0 +1,70 @@
+
+namespace:
+  name: ci_job
+  type: group
+  description: >
+    Namespace for CI-specific metadata. f.e. Jenkins job run metadata.
+    The namespace contains the details for the metadata of individual job run.
+  fields:
+  - name: master
+    type: string
+    description: >
+      FQDN of the CI Master server.
+
+  - name: name
+    type: string
+    description: >
+      Name of the CI job.
+
+  - name: build_id
+    type: integer
+    description: >
+      Build ID of the CI job.
+
+  - name: build_timestamp
+    type: date
+    format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+    description: >
+      Time of the build completion if different from field "@timestamp".
+
+  - name: duration
+    type: float
+    description: >
+      Build duration in seconds.
+
+  - name: phase
+    type: string
+    description: >
+      Phase of the CI job.
+
+  - name: result
+    type: string
+    description: >
+      CI job result.
+
+  - name: url
+    type: string
+    description: >
+      Full URL to the CI job on the CI master.
+
+  - name: artifacts
+    type: group
+    description: >
+      List of the artifacts of the build.
+      The console output in case of Jenkins is considered an artifact with name
+      `consoleText`.
+    fields:
+    - name: name
+      type: string
+      description: >
+       file name of the artifact
+
+    - name: url
+      type: string
+      description: >
+        URL to the html log of the CI job on cold storage.
+
+    - name: original_url
+      type: string
+      description: >
+        URL to the html log of the CI job on the CI server.

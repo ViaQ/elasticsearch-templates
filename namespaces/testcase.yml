@@ -1,0 +1,119 @@
+
+namespace:
+  name: testcase
+  type: group
+  description: >
+    Namespace for testcase-specific metadata. It generally follows XUNIT schema.
+    Testcase is considered 1st class citizen, Testsuites are also covered here,
+    they are nested under testsuite group.
+  fields:
+  - name: name
+    type: string
+    description: >
+      Name of the testcase.
+
+  - name: id
+    type: string
+    description: >
+      ID of the testcase.
+
+  - name: time
+    type: float
+    description: >
+      Duration of testcase execution in seconds.
+
+  - name: status
+    type: string
+    description: >
+      Result of the testcase. Possible values are: passed, skipped, failed.
+
+  - name: classname
+    type: string
+    description: >
+      Xunit classname of the testcase.
+
+  - name: line
+    type: integer
+    description: >
+      TODO. Line number of testcase(?).
+
+  - name: file
+    type: string
+    description: >
+      File name that contains this testcase.
+
+  - name: system-out
+    type: string
+    description: >
+      Content of <system-out> tag in the xunit testcase.
+
+  - name: type
+    type: string
+    description: >
+      TODO.
+
+  - name: details
+    type: string
+    index: analyzed
+    doc_values: false
+    description: >
+      Xunit text from the body of testcase tag.
+    norms:
+      enabled: True
+
+  - name: properties
+    type: group
+    description: >
+      Testcase-level properties. Xunit-style key-value properties are stored
+      as Hash.
+
+  - name: testsuite
+    type: group
+    description: >
+      testsuite-specific metadata.
+    fields:
+    - name: name
+      type: string
+      description: >
+        Name of the testsuite
+
+    - name: id
+      type: string
+      description: >
+        id of the testsuite
+
+    - name: errors
+      type: integer
+      description: >
+        Number of testcases that resulted in errors in this testsuite.
+
+    - name: failures
+      type: integer
+      description: >
+        Number of testcases that resulted in failures in this testsuite.
+
+    - name: skips
+      type: integer
+      description: >
+        Number of testcases that resulted in skips in this testsuite.
+
+    - name: tests
+      type: integer
+      description: >
+        Total number of testcases that were executed in this testsuite.
+
+    - name: time
+      type: float
+      description: >
+        Duration of testsuite execution in seconds.
+
+    - name: properties
+      type: group
+      description: >
+        Testsuite-level properties. Xunit-style key-value properties are stored
+        as Hash.
+      fields:
+      - name: name
+        type: string
+        description: >
+          Name of the testsuite
