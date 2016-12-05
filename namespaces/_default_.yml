@@ -8,8 +8,9 @@ field_defaults:
 _default_:
   type: group
   description: >
-    Contains common fields, this is what populates the actual the mappings of the _default_.
-    Oritinated from the mapping for rsyslog clients, but can be used with other clients as well.
+    Contains common fields and generic pattern-matched field descriptions; this
+    is what populates the actual mappings of _default_ in the template's mapping
+    section.
   fields:
     - name: "@timestamp"
       type: date
@@ -60,8 +61,9 @@ _default_:
       type: string
       example: info
       description: >
-        Loging level as provided by: rsyslog(severitytext property), python's logging module, etc.
-        Possible values: info, warning, notice, err, debug
+        Logging level as provided by: rsyslog(severitytext property), python's
+        logging module, etc.
+        Possible values: trace, crit, alert, emerg
 
     - name: message
       type: string
@@ -69,19 +71,22 @@ _default_:
       doc_values: false
       example: TODO
       description: >
-        Typical log entry message, or payload, possibly stripped of metadata pulled out of it by collector/normalizer, UTF-8 encoded.
+        Typical log entry message, or payload, possibly stripped of metadata
+        pulled out of it by collector/normalizer, UTF-8 encoded.
       norms:
         enabled: false
 
     - name: pid
       type: string
       description: >
-        PID... look into details on systemd stuff
+        This is the process ID of the logging entity, if available.
 
     - name: service
       type: string
       description: >
-        name of the service. syslog's APP-NAME and programname are renamed to service field as well.
+        Name of the service associated with the logging entity, if available.
+        For example, syslog's APP-NAME and rsyslog's programname property are
+        mapped to the service field.
 
     - name: tags
       type: string
@@ -89,15 +94,17 @@ _default_:
       index: analyzed
       analyzer: whitespace
       description: >
-        Field contains whitespace-delimited tags. Tagging is configured on normalizers/collectors.
-        Please note that this field is analyzed and not an array since rsyslog doesn't play well with JSON lists
+        Optionally provided operator defined list of tags placed on each log
+        by the collector or normalizer. The payload can be a string with
+        whitespace-delimited string tokens, or a JSON list of string tokens.
 
     - name: file
       type: string
       index: analyzed
       doc_values: false
       description: >
-        Full local path.
+        Optional path to the file containing the log entry local to the
+        collector
         TODO: analyzer for file paths
       norms:
         enabled: True
@@ -109,4 +116,8 @@ _default_:
     - name: offset
       type: long
       description: >
-        Offset in the log file.
+        The offset value can represent bytes to the start of the log line in the
+        file (zero or one based), or log line numbers (zero or one based), so
+        long as the values are strictly monotonically increasing in the context
+        of a single log file. They values are allowed to wrap, representing a
+        new version of the log file (rotation).

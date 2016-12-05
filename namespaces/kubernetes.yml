@@ -3,15 +3,12 @@ namespace:
   name: kubernetes
   type: group
   description: >
-    Kubernetes-specific metadata.
+    Namespace for kubernetes-specific metadata
   fields:
   - name: pod_name
     type: string
-    index: not_analyzed
     description: >
       The name of the pod
-    norms:
-      enabled: True
 
   - name: labels
     type: group
@@ -23,35 +20,23 @@ namespace:
 
   - name: pod_id
     type: string
-    index: not_analyzed
     description: >
-      TODO
-    norms:
-      enabled: True
+      Kubernetes ID of the pod.
 
   - name: namespace_name
     type: string
-    index: not_analyzed
     description: >
-      The name of the namespace
-    norms:
-      enabled: True
+      The name of the namespace in Kubernetes.
 
   - name: namespace_id
     type: string
-    index: not_analyzed
     description: >
-      The name of the namespace
-    norms:
-      enabled: True
+      ID of the namespace in Kubernetes.
 
   - name: host
     type: string
-    index: not_analyzed
     description: >
       Kubernetes node name
-    norms:
-      enabled: True
 
 doc_sections:
   - ["pod_log", "Openshift logging metadata"]

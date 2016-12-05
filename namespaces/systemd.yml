@@ -3,14 +3,10 @@ namespace:
   name: systemd
   type: group
   description: >
-    Contains common fields specific to systemd journal
+    Contains common fields specific to systemd journal.
+    For more information please see
+    https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html
   fields:
-  - name: CEE
-    type: group
-    product_subgroup: True
-    description: >
-      Previously a CEE structure as it comes from rsyslog.
-      TODO: come up with a good name as CEE is very specific to syslog
   - name: k
     type: group
     description: >

@@ -117,41 +117,26 @@
             "host": {
               "doc_values": true,
               "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
               "type": "string"
             },
             "namespace_id": {
               "doc_values": true,
               "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
               "type": "string"
             },
             "namespace_name": {
               "doc_values": true,
               "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
               "type": "string"
             },
             "pod_id": {
               "doc_values": true,
               "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
               "type": "string"
             },
             "pod_name": {
               "doc_values": true,
               "index": "not_analyzed",
-              "norms": {
-                "enabled": true
-              },
               "type": "string"
             }
           }
