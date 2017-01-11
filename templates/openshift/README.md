@@ -26,11 +26,11 @@ by sections:
 `settings`: various settings  
 `template`: indices that will be matched by this template  
 
-objects.yml
+template.yml
 ----------
 This is the file that contains all the settings information and pointers to the specific mappings.  
 * `skeleton_path`: The path to the `skeleton.json` file that contain the initial JSON structure of the template.
 * `elasticsearch_template`: This section defines the parameters common for the entire template, they are explicitly overwritten in the final template file.
 ** `name`: index pattern matched.
 ** `order`: template order. Lower order is applied first. [details](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html#multiple-templates)
-* `types`: filenames of various document object types to be included in the template
+* `namespaces`: filenames of various namespace definitions to be included in the template
