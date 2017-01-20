@@ -7,7 +7,7 @@ The script is built upon the similar script from libbeats.
 
 Example usage:
 
-   python generate_template.py <template_definition> <template_name> <objects_folder>
+   python generate_template.py <template_definition> <namespaces_directory>
 """
 
 import sys
@@ -221,7 +221,7 @@ def add_index_order(order, template_skeleton):
 if __name__ == "__main__":
 
     if len(sys.argv) != 3:
-        print "Usage: %s template_definition templatename objectsdir" % sys.argv[0]
+        print "Usage: %s template_definition namespacesdir" % sys.argv[0]
         sys.exit(1)
 
     definition_path = sys.argv[1]
