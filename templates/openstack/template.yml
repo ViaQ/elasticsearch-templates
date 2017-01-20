@@ -1,0 +1,12 @@
+skeleton_path: ../skeleton.json
+
+elasticsearch_template:
+  name: com.redhat.viaq-openstack
+  index_pattern: "*"
+  order: 10
+
+namespaces:
+  - rsyslog.yml
+  - systemd.yml
+  - http.yml
+  - openstack.yml

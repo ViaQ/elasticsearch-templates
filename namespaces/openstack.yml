@@ -1,0 +1,204 @@
+version: 2016.03.10.0
+
+defaults:
+  type: string
+  doc_values: true
+  index: not_analyzed
+
+namespace:
+  name: openstack
+  type: group
+  description: >-
+    Mapping specifically for openstack. Inherits all the fields from
+    __default__.
+  fields:
+
+    - name: component_name
+      type: string
+      description: >-
+        The name of the component that produced this log message.  For
+        example, "neutron.agent.linux.utils" or "nova.compute.api" or
+        "nova.policy".
+      norms:
+        enabled: True
+
+    # BEGIN oslo context
+    #
+    # Most openstack services log a standard context string that
+    # includes the follow fields.  See the defaults for
+    # logging_context_format_string and logging_user_identity_format
+    # in http://docs.openstack.org/developer/oslo.log/opts.html
+
+    - name: request_id
+      type: string
+      description: >-
+        Request id.  This identifier can be used to track a request
+        across multiple services.
+      norms:
+        enabled: True
+
+    - name: user_uuid
+      type: string
+      description: >-
+        The UUID of the user associated with this request.
+      norms:
+        enabled: True
+
+    - name: project_uuid
+      type: string
+      description: >-
+        The UUID of the project (formerly "tenant") associated with this
+        request.
+      norms:
+        enabled: True
+
+    - name: domain
+      type: string
+      description: >-
+        This will be a domain name for a domain-scoped token, or "-"
+        otherwise.
+      norms:
+        enabled: True
+
+    - name: user_domain
+      type: string
+      description: >-
+        Domain name of the user.
+      norms:
+        enabled: True
+
+    - name: project_domain
+      type: string
+      description: >-
+        Domain name of the project.
+      norms:
+        enabled: True
+
+    # END oslo context
+
+    # BEGIN generated_fields
+
+    - name: server_uuid
+      type: string
+      description: >
+        server resource uuid
+      norms:
+        enabled: True
+
+    - name: volume_uuid
+      type: string
+      description: >
+        volume resource uuid
+      norms:
+        enabled: True
+
+    - name: snapshot_uuid
+      type: string
+      description: >
+        snapshot resource uuid
+      norms:
+        enabled: True
+
+    - name: backup_uuid
+      type: string
+      description: >
+        backup resource uuid
+      norms:
+        enabled: True
+
+    - name: image_uuid
+      type: string
+      description: >
+        image resource uuid
+      norms:
+        enabled: True
+
+    - name: network_uuid
+      type: string
+      description: >
+        network resource uuid
+      norms:
+        enabled: True
+
+    - name: subnet_uuid
+      type: string
+      description: >
+        subnet resource uuid
+      norms:
+        enabled: True
+
+    - name: router_uuid
+      type: string
+      description: >
+        router resource uuid
+      norms:
+        enabled: True
+
+    - name: port_uuid
+      type: string
+      description: >
+        port resource uuid
+      norms:
+        enabled: True
+
+    - name: security_group_uuid
+      type: string
+      description: >
+        security_group resource uuid
+      norms:
+        enabled: True
+
+    - name: stack_uuid
+      type: string
+      description: >
+        stack resource uuid
+      norms:
+        enabled: True
+
+    - name: stack_resource_uuid
+      type: string
+      description: >
+        stack_resource resource uuid
+      norms:
+        enabled: True
+
+    - name: share_uuid
+      type: string
+      description: >
+        share resource uuid
+      norms:
+        enabled: True
+
+    - name: share_network_uuid
+      type: string
+      description: >
+        share_network resource uuid
+      norms:
+        enabled: True
+
+    - name: node_uuid
+      type: string
+      description: >
+        node resource uuid
+      norms:
+        enabled: True
+
+    - name: chassis_uuid
+      type: string
+      description: >
+        chassis resource uuid
+      norms:
+        enabled: True
+
+    - name: domain_name
+      type: string
+      description: >
+        domain resource name
+      norms:
+        enabled: True
+
+    # END generated_fields
+
+doc_sections:
+  - ["_default_", "Common logging metadata"]
+  - ["openstack", "OpenStack-specific information"]
