@@ -1,0 +1,453 @@
+
+namespace:
+  name: collectd
+  type: group
+  description: >
+    Namespace metrics metadata
+  fields:
+  - name: vm_name
+    type: string
+    description: >
+      Virtual Machine name is in plugin_instance for virt plugin records.
+
+  - name: interval
+    type: float
+    description: >
+      Collectd's interval
+
+  - name: processes
+    type: group
+    description: >
+      Corresponds to collectd's processes plugin.
+    fields:
+    - name: process_name
+      type: string
+      description: >
+        collectd's plugin_instance usually contains process name.
+
+    - name: process_state
+      type: string
+      description: >
+        collectd's type_instance contains process state for ps_state records.
+
+    - name: ps_state
+      type: integer
+      description: >
+        collectd's ps_state type of processes plugin.
+
+    - name: ps_disk_ops
+      type: group
+      description: >
+        collectd's ps_disk_ops type of processes plugin.
+      fields:
+      - name: read
+        type: float
+        description: >
+          TODO
+
+      - name: write
+        type: float
+        description: >
+          TODO
+
+    - name: ps_vm
+      type: integer
+      description: >
+        collectd's ps_vm type of processes plugin.
+
+    - name: ps_rss
+      type: integer
+      description: >
+        collectd's ps_rss type of processes plugin.
+
+    - name: ps_data
+      type: integer
+      description: >
+        collectd's ps_data type of processes plugin.
+
+    - name: ps_code
+      type: integer
+      description: >
+        collectd's ps_code type of processes plugin.
+
+    - name: ps_stacksize
+      type: integer
+      description: >
+        collectd's ps_stacksize type of processes plugin.
+
+    - name: ps_cputime
+      type: group
+      description: >
+        collectd's ps_cputime type of processes plugin.
+      fields:
+      - name: user
+        type: float
+        description: >
+          TODO
+
+      - name: syst
+        type: float
+        description: >
+          TODO
+
+    - name: ps_count
+      type: group
+      description: >
+        collectd's ps_cputime type of processes plugin.
+      fields:
+      - name: processes
+        type: integer
+        description: >
+          TODO
+
+      - name: threads
+        type: integer
+        description: >
+          TODO
+
+    - name: ps_pagefaults
+      type: group
+      description: >
+        collectd's ps_disk_octets type of processes plugin.
+      fields:
+      - name: majflt
+        type: float
+        description: >
+          TODO
+
+      - name: minflt
+        type: float
+        description: >
+          TODO
+
+    - name: ps_disk_octets
+      type: group
+      description: >
+        collectd's ps_disk_octets type of processes plugin.
+      fields:
+      - name: read
+        type: float
+        description: >
+          TODO
+
+      - name: write
+        type: float
+        description: >
+          TODO
+
+    - name: fork_rate
+      type: float
+      description: >
+        collectd's fork_rate type of processes plugin.
+
+  - name: disk
+    type: group
+    description: >
+      Corresponds to collectd's disk plugin.
+      Or virt plugin with types:disk_octets/disk_ops.
+    fields:
+    - name: disk_name
+      type: string
+      description: >
+        collectd's plugin_instance usually contains disk name.
+
+    - name: disk_merged
+      type: group
+      description: >
+        collectd's disk_merged type of disk plugin.
+      fields:
+      - name: read
+        type: float
+        description: >
+          TODO
+
+      - name: write
+        type: float
+        description: >
+          TODO
+
+    - name: disk_octets
+      type: group
+      description: >
+        collectd's disk_octets type of disk/virt plugin.
+      fields:
+      - name: read
+        type: float
+        description: >
+          TODO
+
+      - name: write
+        type: float
+        description: >
+          TODO
+
+    - name: disk_time
+      type: group
+      description: >
+        collectd's disk_time type of disk plugin.
+      fields:
+      - name: read
+        type: float
+        description: >
+          TODO
+
+      - name: write
+        type: float
+        description: >
+          TODO
+
+    - name: disk_ops
+      type: group
+      description: >
+        collectd's disk_ops type of disk/virt plugin.
+      fields:
+      - name: read
+        type: float
+        description: >
+          TODO
+
+      - name: write
+        type: float
+        description: >
+          TODO
+
+    - name: pending_operations
+      type: integer
+      description: >
+        collectd's pending_operations type of disk plugin.
+
+    - name: disk_io_time
+      type: group
+      description: >
+        collectd's disk_ops type of disk plugin.
+      fields:
+      - name: io_time
+        type: float
+        description: >
+          TODO
+
+      - name: weighted_io_time
+        type: float
+        description: >
+          TODO
+
+  - name: netlink
+    type: group
+    description: >
+      Corresponds to collectd's netlink plugin.
+    fields:
+    - name: network_name
+      type: string
+      description: >
+        collectd's plugin_instance usually contains network name.
+
+    - name: if_octets
+      type: group
+      description: >
+        collectd's if_octets type of netlink/virt plugin.
+      fields:
+      - name: rx
+        type: float
+        description: >
+          TODO
+
+      - name: tx
+        type: float
+        description: >
+          TODO
+
+    - name: if_packets
+      type: group
+      description: >
+        collectd's if_packets type of netlink/virt plugin.
+      fields:
+      - name: rx
+        type: float
+        description: >
+          TODO
+
+      - name: tx
+        type: float
+        description: >
+          TODO
+
+    - name: if_errors
+      type: group
+      description: >
+        collectd's if_errors type of netlink/virt plugin.
+      fields:
+      - name: rx
+        type: float
+        description: >
+          TODO
+
+      - name: tx
+        type: float
+        description: >
+          TODO
+
+    - name: if_dropped
+      type: group
+      description: >
+        collectd's if_dropped type of virt plugin.
+      fields:
+      - name: rx
+        type: float
+        description: >
+          TODO
+
+      - name: tx
+        type: float
+        description: >
+          TODO
+
+  - name: CPU
+    type: group
+    description: >
+      Corresponds to collectd's CPU plugin.
+    fields:
+    - name: cpu_state
+      type: string
+      description: >
+        collectd's type_instance usually contains the name of the cpu state.
+
+    - name: cpu_number
+      type: string
+      description: >
+        collectd's plugin_instance contains the cpu number.
+
+    - name: percent
+      type: float
+      description: >
+        collectd's type percent of plugin CPU.
+
+  - name: df
+    type: group
+    description: >
+      Corresponds to collectd's df plugin.
+    fields:
+    - name: space_type
+      type: string
+      description: >
+        collectd's type_instance contains type of the sapce: free/used/reserved.
+
+    - name: mounted_volume
+      type: string
+      description: >
+        collectd's plugin_instance contains the name of the mounted volume.
+
+    - name: df_complex
+      type: integer
+      description: >
+        collectd's type df_complex of plugin df.
+
+    - name: percent_bytes
+      type: float
+      description: >
+        collectd's type percent_bytes of plugin df.
+
+  - name: entropy
+    type: group
+    description: >
+      Corresponds to collectd's entropy plugin.
+    fields:
+
+    - name: entropy
+      type: integer
+      description: >
+        collectd's entropy type of entropy plugin.
+
+  - name: memory
+    type: group
+    description: >
+      Corresponds to collectd's memory plugin.
+    fields:
+
+    - name: memory_type
+      type: string
+      description: >
+        collectd's type_instance contains type of memory:
+        used/cached/free/slab_unrecl/slab_recl/buffered.
+        Additionally types available for virt plugin: actual_balloon/rss/total
+
+    - name: memory
+      type: integer
+      description: >
+        collectd's memory type of memory plugin.
+
+    - name: percent
+      type: float
+      description: >
+        collectd's percent type of memory plugin.
+
+  - name: swap
+    type: group
+    description: >
+      Corresponds to collectd's swap plugin.
+    fields:
+    - name: swap_type
+      type: string
+      description: >
+        collectd's type_instance contains type of swap:
+        used/cached/free.
+        and for type swap_io:
+        in/out
+
+    - name: swap
+      type: integer
+      description: >
+        collectd's swap type of swap plugin.
+
+    - name: swap_io
+      type: integer
+      description: >
+        collectd's swap_io type of swap plugin.
+
+  - name: load
+    type: group
+    description: >
+      Corresponds to collectd's load plugin.
+    fields:
+    - name: load
+      type: group
+      description: >
+        collectd's load type of load plugin
+      fields:
+      - name: shortterm
+        type: float
+        description: >
+          TODO
+
+      - name: midterm
+        type: float
+        description: >
+          TODO
+
+      - name: longterm
+        type: float
+        description: >
+          TODO
+
+  - name: aggregation
+    type: group
+    description: >
+      Corresponds to collectd's aggregation plugin.
+    fields:
+    - name: cpu_state
+      type: string
+      description: >
+        collectd's type_instance usually contains the name of the cpu state.
+        interrupt / user / wait / nice / softirq / system / idle / steal
+
+    - name: metric_type
+      type: string
+      description: >
+        type of aggregation metric: cpu-average/cpu-sum/used
+
+    - name: percent
+      type: float
+      description: >
+        TODO
+
+doc_sections:
+  - ["pod_log", "Openshift logging metadata"]

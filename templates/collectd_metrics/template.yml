@@ -1,0 +1,10 @@
+skeleton_path: ../skeleton.json
+
+elasticsearch_template:
+  name: org.ovirt.viaq-collectd
+  index_pattern: "*"
+  order: 10
+
+namespaces:
+  - collectd.yml
+  - pipeline_metadata.yml
