@@ -1,0 +1,22 @@
+
+namespace:
+  name: glusterfs
+  type: group
+  description: >
+    Namespace for glusterfs-specific metadata
+  fields:
+  - name: msgid
+    type: integer
+    description: >
+      GlusterFS msgid.
+
+  - name: repeat_count
+    type: integer
+    description: >
+      Number of times message was repeated in the log.
+
+  - name: repeat_end
+    type: date
+    format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+    description: >
+      Date/time when the message stopped repeating.

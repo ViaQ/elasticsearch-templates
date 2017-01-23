@@ -1,0 +1,22 @@
+
+namespace:
+  name: src
+  type: group
+  description: >
+    Namespace for source code-specific metadata: function names, line numbers,
+    source code filenames.
+  fields:
+  - name: funcname
+    type: string
+    description: >
+      Function name.
+
+  - name: linenum
+    type: string
+    description: >
+      Line number.
+
+  - name: file
+    type: string
+    description: >
+      Source file name.
