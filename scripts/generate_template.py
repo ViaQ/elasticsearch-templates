@@ -10,12 +10,12 @@ Example usage:
    python generate_template.py <template_definition> <namespaces_directory>
 """
 
-import sys
+import argparse
 import yaml
 import json
 
 
-def object_types_to_template(template_definition, output, objects_dir):
+def object_types_to_template(template_definition, output, namespaces_dir):
     """
     Assemble objects for the particular template.
     """
@@ -33,38 +33,34 @@ def object_types_to_template(template_definition, output, objects_dir):
     with open(template_definition['skeleton_path'], 'r') as f:
         skeleton = yaml.load(f)
 
-    res = {}
-    namespaces = []
-
     # Load object_type files
-    with open(objects_dir + '/_default_.yml', 'r') as f:
+    with open(namespaces_dir + '/_default_.yml', 'r') as f:
         default_mapping_yml = yaml.load(f)
-    map_types = [('_default_', '_default_')]
     default_mapping = default_mapping_yml['_default_']
 
     for ns_file in template_definition['namespaces']:
-        with open(objects_dir + ns_file, 'r') as f:
+        with open(namespaces_dir + ns_file, 'r') as f:
             cur_ns_yml = yaml.load(f)
         if 'namespace' not in cur_ns_yml:
             print("namespace section is absent in file {0}".format(ns_file))
             return
-        ns_name = cur_ns_yml['namespace']['name']
 
         default_mapping['fields'].append(cur_ns_yml['namespace'])
 
-    skeleton['mappings']['_default_']['properties'] =\
-         traverse_group_section(default_mapping,
-                               default_mapping_yml['field_defaults'])
+    skeleton['mappings']['_default_']['properties'] = (traverse_group_section(
+        default_mapping, default_mapping_yml['field_defaults']))
 
     add_type_version(default_mapping_yml["version"],
                      skeleton['mappings']['_default_'])
 
-    add_index_pattern(template_definition['elasticsearch_template']['index_pattern'], skeleton)
-    add_index_order(template_definition['elasticsearch_template']['order'], skeleton)
+    add_index_pattern(
+        template_definition['elasticsearch_template']['index_pattern'],
+        skeleton)
+    add_index_order(template_definition['elasticsearch_template']['order'],
+                    skeleton)
 
-    json.dump(skeleton, output,
-              indent=2, separators=(',', ': '),
-              sort_keys=True)
+    json.dump(
+        skeleton, output, indent=2, separators=(',', ': '), sort_keys=True)
 
 
 def add_mapping_to_skeleton(map_type, skeleton):
@@ -74,8 +70,10 @@ def add_mapping_to_skeleton(map_type, skeleton):
         skeleton(dict): skeleton to update
     """
     if map_type != '_default_':
-        skeleton['mappings'][map_type] = skeleton['mappings']['_default_'].copy()
+        skeleton['mappings'][map_type] = skeleton['mappings'][
+            '_default_'].copy()
         del skeleton['mappings'][map_type]['dynamic_templates']
+
 
 def traverse_group_section(group, defaults):
     """
@@ -202,6 +200,7 @@ def add_type_version(version, obj_type):
     obj_type["_meta"]["version"] = version
     # template["template"] = template["template"].replace("<version>", version)
 
+
 def add_index_pattern(pattern, template_skeleton):
     """Adds index pattern to the template, overwriting the previous index pattern
     Args:
@@ -209,6 +208,7 @@ def add_index_pattern(pattern, template_skeleton):
         template_skeleton(dict): template to operate upon.
     """
     template_skeleton['template'] = pattern
+
 
 def add_index_order(order, template_skeleton):
     """Adds order to the template, overwriting the existing order value.
@@ -218,21 +218,23 @@ def add_index_order(order, template_skeleton):
     """
     template_skeleton['order'] = order
 
+
+def parse_args():
+    p = argparse.ArgumentParser()
+
+    p.add_argument('template_definition',
+                   help='Path to input template')
+    p.add_argument('namespaces_dir',
+                   help='Path to directory with namespace definitions')
+
+    return p.parse_args()
+
 if __name__ == "__main__":
+    args = parse_args()
 
-    if len(sys.argv) != 3:
-        print "Usage: %s template_definition namespacesdir" % sys.argv[0]
-        sys.exit(1)
+    with open(args.template_definition, 'r') as input_template:
+        template_definition = yaml.load(input_template)
 
-    definition_path = sys.argv[1]
-    objects_dir = sys.argv[2]
-
-    input_template = open(definition_path, 'r')
-    template_definition = yaml.load(input_template)
-    try:
-        output = open(template_definition['elasticsearch_template']['name'] + ".template.json",
-                      'w')
-        object_types_to_template(template_definition,  output, objects_dir)
-    finally:
-        input_template.close()
-        output.close()
+    with open('{0[elasticsearch_template][name]}.template.json'.format(
+            template_definition), 'w') as output:
+        object_types_to_template(template_definition, output, args.namespaces_dir)
