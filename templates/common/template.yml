@@ -1,0 +1,15 @@
+skeleton_path: ../skeleton.json
+
+elasticsearch_template:
+  name: com.redhat.viaq-logstash
+  index_pattern: "viaq-logstash-*"
+  order: 10
+
+namespaces:
+  - rsyslog.yml
+  - systemd.yml
+  - pipeline_metadata.yml
+  - glusterfs.yml
+  - src.yml
+  - kubernetes.yml
+  - docker.yml
