@@ -32,3 +32,172 @@ namespace:
     description: >
       syslog's APP-NAME. If APP-NAME is same as programname, we only fill top-level field 'service'.
       If APP-NAME is not equal to programname, this field will hold APP-NAME. See syslog specification for more information
+
+  - name: pstats
+    type: group
+    description: >
+      rsyslog's impstats internal counters
+    fields:
+    - name: bytes!decompressed
+      type: long
+      description: >
+        TODO
+
+    - name: bytes!received
+      type: long
+      description: >
+        TODO
+
+    - name: called!recvmmsg
+      type: long
+      description: >
+        TODO
+
+    - name: called!recvmsg
+      type: long
+      description: >
+        TODO
+
+    - name: discarded!full
+      type: long
+      description: >
+        TODO
+
+    - name: discarded!nf
+      type: long
+      description: >
+        TODO
+
+    - name: enqueued
+      type: long
+      description: >
+        TODO
+
+    - name: failed
+      type: long
+      description: >
+        TODO
+
+    - name: failed!es
+      type: long
+      description: >
+        TODO
+
+    - name: failed!http
+      type: long
+      description: >
+        TODO
+
+    - name: failed!httprequests
+      type: long
+      description: >
+        TODO
+
+    - name: full
+      type: long
+      description: >
+        TODO
+
+    - name: inblock
+      type: long
+      description: >
+        TODO
+
+    - name: majflt
+      type: long
+      description: >
+        TODO
+
+    - name: maxqsize
+      type: long
+      description: >
+        TODO
+
+    - name: maxrss
+      type: long
+      description: >
+        TODO
+
+    - name: minflt
+      type: long
+      description: >
+        TODO
+
+    - name: failed!es
+      type: long
+      description: >
+        TODO
+
+    - name: failed!es
+      type: long
+      description: >
+        TODO
+
+    - name: msgs!received
+      type: long
+      description: >
+        TODO
+
+    - name: name
+      type: string
+      description: >
+        TODO
+
+    - name: nivcsw
+      type: long
+      description: >
+        TODO
+
+    - name: nvcsw
+      type: long
+      description: >
+        TODO
+
+    - name: origin
+      type: string
+      description: >
+
+    - name: oublock
+      type: long
+      description: >
+        TODO
+
+    - name: processed
+      type: long
+      description: >
+        TODO
+
+    - name: resumed
+      type: long
+      description: >
+        TODO
+
+    - name: size
+      type: long
+      description: >
+        TODO
+
+    - name: stime
+      type: long
+      description: >
+        TODO
+
+    - name: submitted
+      type: long
+      description: >
+        TODO
+
+    - name: suspended
+      type: long
+      description: >
+        TODO
+
+    - name: suspended!duration
+      type: long
+      description: >
+        TODO
+
+    - name: utime
+      type: long
+      description: >
+        TODO

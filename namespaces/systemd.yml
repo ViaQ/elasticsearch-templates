@@ -151,6 +151,71 @@ namespace:
       description: >
         TODO
 
+    - name: AUDIT_FIELD_ACCT
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_FIELD_ADDR
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_FIELD_COMM
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_FIELD_EXE
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_FIELD_GRANTORS
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_FIELD_HOSTNAME
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_FIELD_OP
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_FIELD_RES
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_FIELD_SAUID
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_FIELD_TERMINAL
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_FIELD_UNIT
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_ID
+      type: string
+      description: >
+        TODO
+
+    - name: AUDIT_TYPE
+      type: string
+      description: >
+        TODO
+
   - name: u
     type: group
     description: >
@@ -191,6 +256,111 @@ namespace:
         TODO
 
     - name: UNIT
+      type: string
+      description: >
+        TODO
+
+    - name: CONTAINER_ID
+      type: string
+      description: >
+        TODO
+
+    - name: CONTAINER_ID_FULL
+      type: string
+      description: >
+        TODO
+
+    - name: CONTAINER_NAME
+      type: string
+      description: >
+        TODO
+
+    - name: CONTAINER_TAG
+      type: string
+      description: >
+        TODO
+
+    - name: EXIT_CODE
+      type: string
+      description: >
+        TODO
+
+    - name: EXIT_STATUS
+      type: string
+      description: >
+        TODO
+
+    - name: LEADER
+      type: string
+      description: >
+        TODO
+
+    - name: LIBVIRT_CODE
+      type: string
+      description: >
+        TODO
+
+    - name: LIBVIRT_DOMAIN
+      type: string
+      description: >
+        TODO
+
+    - name: LIBVIRT_SOURCE
+      type: string
+      description: >
+        TODO
+
+    - name: NM_LOG_DOMAINS
+      type: string
+      description: >
+        TODO
+
+    - name: NM_LOG_LEVEL
+      type: string
+      description: >
+        TODO
+
+    - name: PACKAGE
+      type: string
+      description: >
+        TODO
+
+    - name: SESSION_ID
+      type: string
+      description: >
+        TODO
+
+    - name: SSSD_DOMAIN
+      type: string
+      description: >
+        TODO
+
+    - name: TIMESTAMP_BOOTTIME
+      type: string
+      description: >
+        TODO
+
+    - name: TIMESTAMP_MONOTONIC
+      type: string
+      description: >
+        TODO
+
+    - name: USERSPACE_USEC
+      type: string
+      description: >
+        TODO
+
+    - name: USER_ID
+      type: string
+      description: >
+        TODO
+
+    - name: USER_UNIT
+      type: string
+      description: >
+        TODO
+
+    - name: SOURCE_MONOTONIC_TIMESTAMP
       type: string
       description: >
         TODO
