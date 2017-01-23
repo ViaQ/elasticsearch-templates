@@ -1,0 +1,11 @@
+skeleton_path: ../skeleton.json
+
+elasticsearch_template:
+  name: com.redhat.viaq-ci
+  index_pattern: "viaq-ci-*"
+  order: 10
+
+namespaces:
+  - ci_job.yml
+  - testcase.yml
+  - pipeline_metadata.yml

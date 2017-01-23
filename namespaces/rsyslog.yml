@@ -3,7 +3,7 @@ namespace:
   name: rsyslog
   type: group
   description: >
-    rsyslog/syslog-specific metadata, excluding systemd metadata
+    RFC5424 based metadata.
   fields:
   - name: facility
     type: string
@@ -25,7 +25,7 @@ namespace:
   - name: msgid
     type: long
     description: >
-       rsyslog protocol version
+       syslog's msgid field
 
   - name: appname
     type: string

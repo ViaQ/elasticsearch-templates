@@ -7,6 +7,13 @@ namespace:
     Everything about log collector, normalizers, mappings goes here.
     Data in this subgroup is stored for troublehsooting purposes mostly.
   fields:
+  - name: "@version"
+    type: string
+    example: TODO
+    description: >
+      Version of “com.redhat.viaq” mapping the document is intended to adhere by the normalizer. It must be set by the normalizer.
+      The value must correspond to the [_meta][version].
+
   - name: collector
     type: group
     description: >
@@ -122,14 +129,6 @@ namespace:
       - name: raw
         type: string
         ignore_above: 256
-
-  - name: "@version"
-    type: string
-    example: TODO
-    description: >
-      Version of “com.redhat.viaq” mapping the document is intended to adhere by the normalizer. It must be set by the normalizer.
-      The value must correspond to the [_meta][version].
-
 
   - name: trace
     type: string

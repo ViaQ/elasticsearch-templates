@@ -52,9 +52,63 @@
           "index": "not_analyzed",
           "type": "date"
         },
-        "docker": {
+        "ci_job": {
           "properties": {
-            "container_id": {
+            "artifacts": {
+              "properties": {
+                "name": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "original_url": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "url": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                }
+              }
+            },
+            "build_id": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "integer"
+            },
+            "build_timestamp": {
+              "doc_values": true,
+              "format": "yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime",
+              "index": "not_analyzed",
+              "type": "date"
+            },
+            "duration": {
+              "doc_values": "true",
+              "type": "float"
+            },
+            "master": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "name": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "phase": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "result": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "url": {
               "doc_values": true,
               "index": "not_analyzed",
               "type": "string"
@@ -111,35 +165,6 @@
           "doc_values": true,
           "index": "not_analyzed",
           "type": "string"
-        },
-        "kubernetes": {
-          "properties": {
-            "host": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "string"
-            },
-            "namespace_id": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "string"
-            },
-            "namespace_name": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "string"
-            },
-            "pod_id": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "string"
-            },
-            "pod_name": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "string"
-            }
-          }
         },
         "level": {
           "doc_values": true,
@@ -307,241 +332,119 @@
             }
           }
         },
-        "rsyslog": {
-          "properties": {
-            "appname": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "string"
-            },
-            "facility": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "string"
-            },
-            "msgid": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "long"
-            },
-            "protocol-version": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "string"
-            },
-            "structured-data": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "norms": {
-                "enabled": false
-              },
-              "type": "string"
-            }
-          }
-        },
         "service": {
           "doc_values": true,
           "index": "not_analyzed",
           "type": "string"
-        },
-        "systemd": {
-          "properties": {
-            "k": {
-              "properties": {
-                "KERNEL_DEVICE": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "KERNEL_SUBSYSTEM": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "UDEV_DEVLINK": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "UDEV_DEVNODE": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "UDEV_SYSNAME": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "t": {
-              "properties": {
-                "AUDIT_LOGINUID": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "AUDIT_SESSION": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "BOOT_ID": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "CAP_EFFECTIVE": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "CMDLINE": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "norms": {
-                    "enabled": false
-                  },
-                  "type": "string"
-                },
-                "COMM": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "EXE": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "norms": {
-                    "enabled": false
-                  },
-                  "type": "string"
-                },
-                "GID": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "HOSTNAME": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "MACHINE_ID": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "PID": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "SELINUX_CONTEXT": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "SOURCE_REALTIME_TIMESTAMP": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "SYSTEMD_CGROUP": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "SYSTEMD_OWNER_UID": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "SYSTEMD_SESSION": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "SYSTEMD_SLICE": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "SYSTEMD_UNIT": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "SYSTEMD_USER_UNIT": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "TRANSPORT": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "UID": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            },
-            "u": {
-              "properties": {
-                "CODE_FILE": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "norms": {
-                    "enabled": false
-                  },
-                  "type": "string"
-                },
-                "CODE_FUNCTION": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "CODE_LINE": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "ERRNO": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "MESSAGE_ID": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                },
-                "RESULT": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "norms": {
-                    "enabled": false
-                  },
-                  "type": "string"
-                },
-                "UNIT": {
-                  "doc_values": true,
-                  "index": "not_analyzed",
-                  "type": "string"
-                }
-              }
-            }
-          }
         },
         "tags": {
           "analyzer": "whitespace",
           "doc_values": false,
           "index": "analyzed",
           "type": "string"
+        },
+        "testcase": {
+          "properties": {
+            "classname": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "details": {
+              "doc_values": false,
+              "index": "analyzed",
+              "norms": {
+                "enabled": true
+              },
+              "type": "string"
+            },
+            "file": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "id": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "line": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "integer"
+            },
+            "name": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "status": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "system-out": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "testsuite": {
+              "properties": {
+                "errors": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "integer"
+                },
+                "failures": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "integer"
+                },
+                "id": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "name": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "string"
+                },
+                "properties": {
+                  "properties": {
+                    "name": {
+                      "doc_values": true,
+                      "index": "not_analyzed",
+                      "type": "string"
+                    }
+                  }
+                },
+                "skips": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "integer"
+                },
+                "tests": {
+                  "doc_values": true,
+                  "index": "not_analyzed",
+                  "type": "integer"
+                },
+                "time": {
+                  "doc_values": "true",
+                  "type": "float"
+                }
+              }
+            },
+            "time": {
+              "doc_values": "true",
+              "type": "float"
+            },
+            "type": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "string"
+            }
+          }
         }
       }
     }
@@ -550,5 +453,5 @@
   "settings": {
     "index.refresh_interval": "5s"
   },
-  "template": "*"
+  "template": "viaq-ci-*"
 }
