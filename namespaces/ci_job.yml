@@ -16,7 +16,7 @@ namespace:
     description: >
       Name of the CI job.
 
-  - name: build_id
+  - name: number
     type: integer
     description: >
       Build ID of the CI job.
@@ -54,7 +54,7 @@ namespace:
       The console output in case of Jenkins is considered an artifact with name
       `consoleText`.
     fields:
-    - name: name
+    - name: file
       type: string
       description: >
        file name of the artifact
@@ -64,7 +64,7 @@ namespace:
       description: >
         URL to the html log of the CI job on cold storage.
 
-    - name: original_url
+    - name: jenkins_url
       type: string
       description: >
         URL to the html log of the CI job on the CI server.

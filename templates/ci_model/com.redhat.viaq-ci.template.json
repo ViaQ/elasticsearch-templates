@@ -56,12 +56,12 @@
           "properties": {
             "artifacts": {
               "properties": {
-                "name": {
+                "file": {
                   "doc_values": true,
                   "index": "not_analyzed",
                   "type": "string"
                 },
-                "original_url": {
+                "jenkins_url": {
                   "doc_values": true,
                   "index": "not_analyzed",
                   "type": "string"
@@ -72,11 +72,6 @@
                   "type": "string"
                 }
               }
-            },
-            "build_id": {
-              "doc_values": true,
-              "index": "not_analyzed",
-              "type": "integer"
             },
             "build_timestamp": {
               "doc_values": true,
@@ -97,6 +92,11 @@
               "doc_values": true,
               "index": "not_analyzed",
               "type": "string"
+            },
+            "number": {
+              "doc_values": true,
+              "index": "not_analyzed",
+              "type": "integer"
             },
             "phase": {
               "doc_values": true,
