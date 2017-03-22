@@ -1,4 +1,4 @@
-viaq openshift index templates for ElasticSearch
+viaq openshift index templates for ElasticSearch and index patterns for Kibana
 =================================
 
 The template files are automatically generated.
@@ -9,7 +9,7 @@ In order to edit the template please modify [objects.yml](objects.yml) and the r
 To rebuild the template, run:
 > python ../scripts/generate_template.py . ../../objects_dir
 
-For details about the mapping please see [ElasticSearch reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html)
+For details about the mapping please see [ElasticSearch reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html) and [Kibana reference](https://www.elastic.co/guide/en/kibana/current/index-patterns.html)
 
 skeleton.json
 -------------
@@ -24,7 +24,24 @@ by sections:
   `properties`: empty section that is populated with the content from [fields.yml](fields.yml)  
 `order`: order of the template. lower order templates are applied first.  
 `settings`: various settings  
-`template`: indices that will be matched by this template  
+`template`: indices that will be matched by this template
+
+skeleton-index-pattern.json
+---------------------------
+This file the skeleton of the index pattern file.
+
+by sections:
+`title`: Filled in by the openshift-elasticseach-plugin [index pattern loader](https://github.com/fabric8io/openshift-elasticsearch-plugin/blob/master/src/main/java/io/fabric8/elasticsearch/plugin/kibana/KibanaSeed.java#L371)
+`timeFieldName`: Name of the time field - the script will look for the first field in the `default` namespace that has `type: date`
+`description`: The script will fill in the type of pattern
+`fields`: The script will fill this in based on the namespace
+* `name`: The name of the field from the namespace
+* `type`: Field data type (string, date, etc.) - this is the `type` parameter from the namespace
+* `count`: Always has value of 0
+* `scripted`: `true` or `false` - all of our fields are not scripted, so `false`
+* `indexed`: `true` or `false` - all of our fields are indexed, so `true`
+* `analyzed`: `true` or `false` - `true` if the namespace field has `index: analyzed`, `false` otherwise
+* `doc_values`: `true` or `false` - taken from the namespace `doc_values` field
 
 template.yml
 ----------
