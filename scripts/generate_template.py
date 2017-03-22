@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 """
-This script generates the ES template file (*.template.json) from
-the fields.yml file and skeleton.json.
+This script generates both the Elasticsearch template file (*.template.json)
+and the Kibana index pattern setting file (*.index-pattern.json) from the
+fields.yml file and skeleton.json.
 The script is built upon the similar script from libbeats.
 
 Example usage:
@@ -15,7 +16,7 @@ import yaml
 import json
 
 
-def object_types_to_template(template_definition, output, namespaces_dir):
+def object_types_to_template(template_definition, output, output_index_pattern, namespaces_dir):
     """
     Assemble objects for the particular template.
     """
@@ -33,6 +34,14 @@ def object_types_to_template(template_definition, output, namespaces_dir):
     with open(template_definition['skeleton_path'], 'r') as f:
         skeleton = yaml.load(f)
 
+    if 'skeleton_index_pattern_path' not in template_definition:
+        print "skeleton_index_pattern_path is not defined. Cannot generate template."
+        return
+
+    # Load skeleton of the template
+    with open(template_definition['skeleton_index_pattern_path'], 'r') as f:
+        skeleton_index_pattern = yaml.load(f)
+
     # Load object_type files
     with open(namespaces_dir + '/_default_.yml', 'r') as f:
         default_mapping_yml = yaml.load(f)
@@ -48,7 +57,7 @@ def object_types_to_template(template_definition, output, namespaces_dir):
         default_mapping['fields'].append(cur_ns_yml['namespace'])
 
     skeleton['mappings']['_default_']['properties'] = (traverse_group_section(
-        default_mapping, default_mapping_yml['field_defaults']))
+        default_mapping, default_mapping_yml['field_defaults'], process_leaf))
 
     add_type_version(default_mapping_yml["version"],
                      skeleton['mappings']['_default_'])
@@ -62,6 +71,20 @@ def object_types_to_template(template_definition, output, namespaces_dir):
     json.dump(
         skeleton, output, indent=2, separators=(',', ': '), sort_keys=True)
 
+    # index pattern stuff
+    time_field_name = "time"
+    for ii in default_mapping["fields"]:
+        if ii['type'] == 'date':
+            time_field_name = ii['name']
+            break
+    skeleton_index_pattern["timeFieldName"] = time_field_name
+    skeleton_index_pattern["description"] = skeleton_index_pattern["description"].replace("<the_index_type>", template_definition['elasticsearch_template']['index_pattern'])
+    # get fields
+    index_pattern_fields = (traverse_group_section_index_pattern(
+        default_mapping, default_mapping_yml['field_defaults'], process_leaf_index_pattern))
+    skeleton_index_pattern["fields"] = json.dumps(index_pattern_fields)
+    json.dump(
+        skeleton_index_pattern, output_index_pattern, indent=2, separators=(',', ': '), sort_keys=True)
 
 def add_mapping_to_skeleton(map_type, skeleton):
     """Add mapping type to the skeleton by cloning '_default_' section.
@@ -75,12 +98,12 @@ def add_mapping_to_skeleton(map_type, skeleton):
         del skeleton['mappings'][map_type]['dynamic_templates']
 
 
-def traverse_group_section(group, defaults):
+def traverse_group_section(group, defaults, leaf_handler, groupname=None):
     """
     Traverse the sections tree and fill in the properties
     map.
     Args:
-        group(dict): field of type group, that has mutiple subfields under
+        group(dict): field of type group, that has multiple subfields under
     'fields' key.
         defaults(dict): dict with the defaults for all fields
     Returns:
@@ -91,7 +114,11 @@ def traverse_group_section(group, defaults):
     # print "Trying to fill section properties of section %s" % (group)
     try:
         for field in group["fields"]:
-            prop = traverse_field(field, defaults)
+            if groupname:
+                subgroupname = groupname + "." + group["name"]
+            else:
+                subgroupname = group.get("name", None)
+            prop = traverse_field(field, defaults, leaf_handler, subgroupname)
             properties.update(prop)
     except KeyError:
         print "Skipping empty section %s" % (group)
@@ -99,7 +126,39 @@ def traverse_group_section(group, defaults):
     return properties
 
 
-def traverse_field(field, defaults):
+def traverse_group_section_index_pattern(group, defaults, leaf_handler, groupname=None):
+    """
+    Traverse the sections tree and fill in the index pattern fields
+    map.
+    Args:
+        group(dict): field of type group, that has multiple subfields under
+    'fields' key.
+        defaults(dict): dict with the defaults for all fields
+    Returns:
+        array of field definitions.
+    """
+    fields = []
+
+    # print "Trying to fill section properties of section %s" % (group)
+    try:
+        for field in group["fields"]:
+            if groupname:
+                subgroupname = groupname + "." + group["name"]
+            else:
+                subgroupname = group.get("name", None)
+            if field.get("type") == "group":
+                more_fields = traverse_group_section_index_pattern(field, defaults, leaf_handler, subgroupname)
+                fields.extend(more_fields)
+            else:
+                out_field = leaf_handler(field, defaults, subgroupname)
+                fields.append(out_field)
+    except KeyError:
+        print "Skipping empty section %s" % (group)
+    # print "Section filled with properties: %s" % (properties)
+    return fields
+
+
+def traverse_field(field, defaults, leaf_handler, groupname):
     """
     Add data about a particular field in the properties
     map.
@@ -113,23 +172,23 @@ def traverse_field(field, defaults):
     properties = {}
     # print "current field is %s" % (field)
 
-    # TODO: Make this more dyanmic
+    # TODO: Make this more dynamic
 
     if field.get("type") == "group":
-        prop = traverse_group_section(field, defaults)
+        prop = traverse_group_section(field, defaults, leaf_handler, groupname)
 
         # Only add properties if they have a content
         if len(prop) is not 0:
             properties[field.get("name")] = {"properties": {}}
             properties[field.get("name")]["properties"] = prop
     else:
-        properties = process_leaf(field, defaults)
+        properties = leaf_handler(field, defaults, groupname)
 
     # print "Result of traversing field is : %s" % (properties)
     return properties
 
 
-def process_leaf(field, defaults):
+def process_leaf(field, defaults, groupname=None):
     """Process field that is not a group. Fill the template copy with the actual
     data.
     Args:
@@ -184,10 +243,52 @@ def process_subleaf(field, defaults):
     """
     properties = {}
     if field.get("fields"):
-        prop = traverse_group_section(field, defaults)
+        prop = traverse_group_section(field, defaults, process_leaf)
         if len(prop) is not 0:
             properties["fields"] = prop
     return properties
+
+
+def process_leaf_index_pattern(field, defaults, groupname):
+    """Process field that is not a group. Fill the template copy with the actual
+    data.
+    Args:
+        field(dict): contents of the field.
+        defaults(dict): default values.
+        groupname(string): name of group this field belongs to e.g. "systemd.u"
+    Returns:
+        dict corresponding to the data in the particular field.
+    """
+    if groupname:
+        fieldname = groupname + "." + field["name"]
+    else:
+        fieldname = field["name"]
+    # Kibana field types:
+    # https://github.com/elastic/kibana/blob/master/src/ui/public/index_patterns/_field_types.js
+    if field.get("type") in ["string", "date", "ip", "boolean"]:
+        fieldtype = field.get("type")
+    elif field.get("type") in ["integer", "long", "float"]:
+        fieldtype = "number"
+    elif field.get("type") == "object":
+        if "geo_point" == field.get("object_struct", {}).get("properties", {}).get("location", {}).get("type", ''):
+            fieldtype = "geo_point"
+        else:
+            fieldtype = "string"
+    elif field.get("type") == "nested":
+        fieldtype = "string"
+    else:
+        print "Unknown field type. Skipped adding field %s" % (field)
+    analyzed = field.get("index", "") == "analyzed"
+    res = {
+        "name": fieldname,
+        "type": fieldtype,
+        "count": 0,
+        "scripted": False,
+        "indexed": True,
+        "analyzed": analyzed,
+        "doc_values": field.get("doc_values", True)
+    }
+    return res
 
 
 def add_type_version(version, obj_type):
@@ -237,4 +338,6 @@ if __name__ == "__main__":
 
     with open('{0[elasticsearch_template][name]}.template.json'.format(
             template_definition), 'w') as output:
-        object_types_to_template(template_definition, output, args.namespaces_dir)
+        with open('{0[elasticsearch_template][name]}.index-pattern.json'.format(
+                template_definition), 'w') as output_index_pattern:
+            object_types_to_template(template_definition, output, output_index_pattern, args.namespaces_dir)
