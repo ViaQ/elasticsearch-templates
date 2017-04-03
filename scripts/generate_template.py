@@ -164,13 +164,14 @@ def process_leaf(field, defaults):
         dict corresponding to the data in the particular field.
     """
     other_known_types = ["string", "date", "ip", "integer", "long",
-                         "boolean", "nested"]
+                         "boolean", "short", "byte"]
 
     for key in defaults.keys():
         if key not in field:
             field[key] = defaults[key]
 
-    if field.get("type") == "object":
+    if field.get("type") in ["object", "nested"]:
+        fieldtype = field.get("type")
         if "object_struct" in field:
             # just replace field with contents of 'object_struct'
             tmp = field['object_struct'].copy()
@@ -179,7 +180,7 @@ def process_leaf(field, defaults):
         else:
             # just clear the field
             field.clear()
-        field['type'] = 'object'
+        field['type'] = fieldtype
     elif field.get("type") == "float":
         field["doc_values"] = "true"
     elif not field.get("type") in other_known_types:
@@ -236,7 +237,7 @@ def process_leaf_index_pattern(field, defaults, groupname):
     # https://github.com/elastic/kibana/blob/master/src/ui/public/index_patterns/_field_types.js
     if field.get("type") in ["string", "date", "ip", "boolean"]:
         fieldtype = field.get("type")
-    elif field.get("type") in ["integer", "long", "float"]:
+    elif field.get("type") in ["integer", "long", "short", "byte", "float"]:
         fieldtype = "number"
     elif field.get("type") == "object":
         if "geo_point" == field.get("object_struct", {}).get("properties", {}).get("location", {}).get("type", ''):
