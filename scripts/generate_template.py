@@ -217,7 +217,7 @@ def process_leaf(field, defaults, groupname=None):
 
     res = {}
     if field.get("type") in ["string", "date", "ip", "integer", "long",
-                             "boolean", "nested"]:
+                             "short", "byte", "boolean", "nested"]:
         res[field["name"]] = working_field.copy()
         res[field.get("name")].update(process_subleaf(field, defaults))
     elif field.get("type") == "object":
@@ -267,7 +267,7 @@ def process_leaf_index_pattern(field, defaults, groupname):
     # https://github.com/elastic/kibana/blob/master/src/ui/public/index_patterns/_field_types.js
     if field.get("type") in ["string", "date", "ip", "boolean"]:
         fieldtype = field.get("type")
-    elif field.get("type") in ["integer", "long", "float"]:
+    elif field.get("type") in ["integer", "long", "short", "byte", "float"]:
         fieldtype = "number"
     elif field.get("type") == "object":
         if "geo_point" == field.get("object_struct", {}).get("properties", {}).get("location", {}).get("type", ''):
