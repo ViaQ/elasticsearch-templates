@@ -1,0 +1,55 @@
+
+namespace:
+  name: aushape
+  type: group
+  description: >
+    Audit events converted with aushape
+    For more information please see
+    https://github.com/Scribery/aushape
+  fields:
+  - name: serial
+    type: long
+    description: >
+      Audit event serial number
+  - name: time
+    type: date
+    description: >
+      Audit event timestamp
+  - name: node
+    type: string
+    description: >
+      Name of the host where the audit event occurred
+  - name: error
+    type: string
+    description: >
+      The error aushape encountered while converting the event
+  - name: trimmed
+    type: string
+    description: >
+      An array of JSONPath expressions relative to the event object,
+      specifying objects/arrays with (some) contents removed as the result of
+      event size limiting. Empty string means event itself. Empty array means
+      trimming occurred at unspecified objects/arrays.
+  - name: text
+    type: string
+    index: analyzed
+    doc_values: false
+    description: >
+      An array log record strings representing the original audit event
+  - name: data
+    type: group
+    description: >
+      Parsed audit event data
+    fields:
+    - name: avc
+      type: nested
+    - name: execve
+      type: string
+      index: analyzed
+      doc_values: false
+    - name: netfilter_cfg
+      type: nested
+    - name: obj_pid
+      type: nested
+    - name: path
+      type: nested
