@@ -13,4 +13,6 @@ namespaces:
   - docker.yml
   - pipeline_metadata.yml
   - ovirt.yml
+  - aushape.yml
+  - tlog.yml
 #  - openshift/app_log.yml

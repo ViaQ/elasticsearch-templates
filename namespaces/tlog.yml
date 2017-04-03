@@ -1,0 +1,61 @@
+
+namespace:
+  name: tlog
+  type: group
+  description: >
+    Tlog terminal I/O recording messages
+    For more information please see
+    https://github.com/Scribery/tlog
+  fields:
+  - name: ver
+    type: long
+    description: >
+      Message format version number
+  - name: host
+    type: string
+    description: >
+      Name of the host recording was made on
+  - name: user
+    type: string
+    description: >
+      Recorded user name
+  - name: term
+    type: string
+    description: >
+      Terminal type name
+  - name: session
+    type: long
+    description: >
+      Audit session ID of the recorded session
+  - name: id
+    type: long
+    description: >
+      ID of the message within the session
+  - name: pos
+    type: long
+    description: >
+      Message position in the session, milliseconds
+  - name: timing
+    type: string
+    description: >
+      Distribution of this message's events in time
+  - name: in_txt
+    type: string
+    index: analyzed
+    doc_values: false
+    description: >
+      Input text with invalid characters scrubbed
+  - name: in_bin
+    type: short
+    description: >
+      Scrubbed invalid input characters as bytes
+  - name: out_txt
+    type: string
+    index: analyzed
+    doc_values: false
+    description: >
+      Output text with invalid characters scrubbed
+  - name: out_bin
+    type: short
+    description: >
+      Scrubbed invalid output characters as bytes
