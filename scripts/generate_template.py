@@ -217,15 +217,15 @@ def process_leaf(field, defaults, groupname=None):
 
     res = {}
     if field.get("type") in ["string", "date", "ip", "integer", "long",
-                             "short", "byte", "boolean", "nested"]:
+                             "short", "byte", "boolean"]:
         res[field["name"]] = working_field.copy()
         res[field.get("name")].update(process_subleaf(field, defaults))
-    elif field.get("type") == "object":
+    elif field.get("type") in ["object", "nested"]:
         if "object_struct" in field:
             res[field["name"]] = working_field["object_struct"].copy()
         else:
             res[field["name"]] = {}
-        res[field["name"]]["type"] = "object"
+        res[field["name"]]["type"] = field.get("type")
     elif field.get("type") == "float":
         res[field["name"]] = {
             "type": "float",
