@@ -63,7 +63,19 @@ _default_:
       description: >
         Logging level as provided by: rsyslog(severitytext property), python's
         logging module, etc.
-        Possible values: trace, crit, alert, emerg
+        Possible values are as listed here: http://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/syslog.h;h=ee01478c4b19a954426a96448577c5a76e6647c0;hb=HEAD#l74 plus trace
+        That is: alert crit debug emerg err info notice trace warning
+        Note that `trace` isn't in the syslog.h list but many applications use it
+        `trace` should be considered the highest (most verbose) level, higher than `debug`
+        `error` should be converted to `err`
+        `panic` should be converted to `emerg`
+        `warn` should be converted to `warning`
+        Numeric values from syslog/journal PRIORITY can usually be mapped using the priority values as listed here:
+        http://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/syslog.h;h=ee01478c4b19a954426a96448577c5a76e6647c0;hb=HEAD#l51
+        That is, 0 -> emerg, 1 -> alert, ..., 7 -> debug
+        Log levels/priorities from other logging systems should be mapped to the nearest match
+        For example, from python logging: https://docs.python.org/2.7/library/logging.html#logging-levels
+        CRITICAL -> crit, ERROR -> err, ...., DEBUG -> debug
 
     - name: message
       type: string
