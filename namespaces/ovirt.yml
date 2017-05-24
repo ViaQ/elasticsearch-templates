@@ -1,0 +1,27 @@
+
+namespace:
+  name: ovirt
+  type: group
+  description: >
+    Namespace for ovirt metadata.
+  fields:
+  - name: entity
+    type: string
+    description: >
+      The type of the data source, hosts, vms, engine etc.
+
+  - name: host_id
+    type: string
+    description: >
+      The oVirt host UUID.
+
+  - name: engine
+    type: group
+    description: >
+      Namespace for oVirt engine related metadata.
+    fields:
+
+    - name: fqdn
+      type: string
+      description: >
+        FQDN of the oVirt engine.

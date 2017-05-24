@@ -1,34 +1,44 @@
-
 namespace:
   name: collectd
   type: group
   description: >
-    Namespace metrics metadata
+    Namespace metrics metadata.
   fields:
-  - name: vm_name
-    type: string
-    description: >
-      Virtual Machine name is in plugin_instance for virt plugin records.
-
   - name: interval
     type: float
     description: >
-      Collectd's interval
+      Collectd's interval.
+
+  - name: plugin
+    type: string
+    description: >
+      Collectd's plugin.
+
+  - name: plugin_instance
+    type: string
+    description: >
+      Collectd's plugin_instance.
+
+  - name: type_instance
+    type: string
+    description: >
+      Collectd's type_instance.
+
+  - name: type
+    type: string
+    description: >
+      Collectd's type.
+
+  - name: dstypes
+    type: string
+    description: >
+      Collectd's dstypes.
 
   - name: processes
     type: group
     description: >
       Corresponds to collectd's processes plugin.
     fields:
-    - name: process_name
-      type: string
-      description: >
-        collectd's plugin_instance usually contains process name.
-
-    - name: process_state
-      type: string
-      description: >
-        collectd's type_instance contains process state for ps_state records.
 
     - name: ps_state
       type: integer
@@ -93,7 +103,7 @@ namespace:
     - name: ps_count
       type: group
       description: >
-        collectd's ps_cputime type of processes plugin.
+        collectd's ps_count type of processes plugin.
       fields:
       - name: processes
         type: integer
@@ -108,7 +118,7 @@ namespace:
     - name: ps_pagefaults
       type: group
       description: >
-        collectd's ps_disk_octets type of processes plugin.
+        collectd's ps_pagefaults type of processes plugin.
       fields:
       - name: majflt
         type: float
@@ -144,13 +154,7 @@ namespace:
     type: group
     description: >
       Corresponds to collectd's disk plugin.
-      Or virt plugin with types:disk_octets/disk_ops.
     fields:
-    - name: disk_name
-      type: string
-      description: >
-        collectd's plugin_instance usually contains disk name.
-
     - name: disk_merged
       type: group
       description: >
@@ -169,7 +173,7 @@ namespace:
     - name: disk_octets
       type: group
       description: >
-        collectd's disk_octets type of disk/virt plugin.
+        collectd's disk_octets type of disk plugin.
       fields:
       - name: read
         type: float
@@ -199,7 +203,7 @@ namespace:
     - name: disk_ops
       type: group
       description: >
-        collectd's disk_ops type of disk/virt plugin.
+        collectd's disk_ops type of disk plugin.
       fields:
       - name: read
         type: float
@@ -219,7 +223,7 @@ namespace:
     - name: disk_io_time
       type: group
       description: >
-        collectd's disk_ops type of disk plugin.
+        collectd's disk_io_time type of disk plugin.
       fields:
       - name: io_time
         type: float
@@ -231,20 +235,15 @@ namespace:
         description: >
           TODO
 
-  - name: netlink
+  - name: interface
     type: group
     description: >
-      Corresponds to collectd's netlink plugin.
+      Corresponds to collectd's interface plugin.
     fields:
-    - name: network_name
-      type: string
-      description: >
-        collectd's plugin_instance usually contains network name.
-
     - name: if_octets
       type: group
       description: >
-        collectd's if_octets type of netlink/virt plugin.
+        collectd's if_octets type of interface plugin.
       fields:
       - name: rx
         type: float
@@ -259,7 +258,7 @@ namespace:
     - name: if_packets
       type: group
       description: >
-        collectd's if_packets type of netlink/virt plugin.
+        collectd's if_packets type of interface plugin.
       fields:
       - name: rx
         type: float
@@ -274,7 +273,72 @@ namespace:
     - name: if_errors
       type: group
       description: >
-        collectd's if_errors type of netlink/virt plugin.
+        collectd's if_errors type of interface plugin.
+      fields:
+      - name: rx
+        type: float
+        description: >
+          TODO
+
+      - name: tx
+        type: float
+        description: >
+          TODO
+
+    - name: if_dropped
+      type: group
+      description: >
+        collectd's if_dropped type of interface plugin.
+      fields:
+      - name: rx
+        type: float
+        description: >
+          TODO
+
+      - name: tx
+        type: float
+        description: >
+          TODO
+
+  - name: virt
+    type: group
+    description: >
+      Corresponds to collectd's virt plugin.
+    fields:
+    - name: if_octets
+      type: group
+      description: >
+        collectd's if_octets type of virt plugin.
+      fields:
+      - name: rx
+        type: float
+        description: >
+          TODO
+
+      - name: tx
+        type: float
+        description: >
+          TODO
+
+    - name: if_packets
+      type: group
+      description: >
+        collectd's if_packets type of virt plugin.
+      fields:
+      - name: rx
+        type: float
+        description: >
+          TODO
+
+      - name: tx
+        type: float
+        description: >
+          TODO
+
+    - name: if_errors
+      type: group
+      description: >
+        collectd's if_errors type of virt plugin.
       fields:
       - name: rx
         type: float
@@ -301,21 +365,56 @@ namespace:
         description: >
           TODO
 
+    - name: disk_ops
+      type: group
+      description: >
+        collectd's disk_ops type of virt plugin.
+      fields:
+      - name: read
+        type: float
+        description: >
+          TODO
+
+      - name: write
+        type: float
+        description: >
+          TODO
+
+    - name: disk_octets
+      type: group
+      description: >
+        collectd's disk_octets type of virt plugin.
+      fields:
+      - name: read
+        type: float
+        description: >
+          TODO
+
+      - name: write
+        type: float
+        description: >
+          TODO
+
+    - name: memory
+      type: float
+      description: >
+        collectd's memory type of virt plugin.
+
+    - name: virt_vcpu
+      type: float
+      description: >
+        collectd's virt_vcpu type of virt plugin.
+
+    - name: virt_cpu_total
+      type: float
+      description: >
+        collectd's virt_cpu_total type of virt plugin.
+
   - name: CPU
     type: group
     description: >
       Corresponds to collectd's CPU plugin.
     fields:
-    - name: cpu_state
-      type: string
-      description: >
-        collectd's type_instance usually contains the name of the cpu state.
-
-    - name: cpu_number
-      type: string
-      description: >
-        collectd's plugin_instance contains the cpu number.
-
     - name: percent
       type: float
       description: >
@@ -326,18 +425,9 @@ namespace:
     description: >
       Corresponds to collectd's df plugin.
     fields:
-    - name: space_type
-      type: string
-      description: >
-        collectd's type_instance contains type of the sapce: free/used/reserved.
-
-    - name: mounted_volume
-      type: string
-      description: >
-        collectd's plugin_instance contains the name of the mounted volume.
 
     - name: df_complex
-      type: integer
+      type: float
       description: >
         collectd's type df_complex of plugin df.
 
@@ -357,21 +447,25 @@ namespace:
       description: >
         collectd's entropy type of entropy plugin.
 
+  - name: nfs
+    type: group
+    description: >
+      Corresponds to collectd's nfs plugin.
+    fields:
+
+    - name: nfs_procedure
+      type: integer
+      description: >
+        collectd's nfs_procedure type of nfs plugin.
+
   - name: memory
     type: group
     description: >
       Corresponds to collectd's memory plugin.
     fields:
 
-    - name: memory_type
-      type: string
-      description: >
-        collectd's type_instance contains type of memory:
-        used/cached/free/slab_unrecl/slab_recl/buffered.
-        Additionally types available for virt plugin: actual_balloon/rss/total
-
     - name: memory
-      type: integer
+      type: float
       description: >
         collectd's memory type of memory plugin.
 
@@ -385,13 +479,6 @@ namespace:
     description: >
       Corresponds to collectd's swap plugin.
     fields:
-    - name: swap_type
-      type: string
-      description: >
-        collectd's type_instance contains type of swap:
-        used/cached/free.
-        and for type swap_io:
-        in/out
 
     - name: swap
       type: integer
@@ -433,21 +520,245 @@ namespace:
     description: >
       Corresponds to collectd's aggregation plugin.
     fields:
-    - name: cpu_state
-      type: string
-      description: >
-        collectd's type_instance usually contains the name of the cpu state.
-        interrupt / user / wait / nice / softirq / system / idle / steal
-
-    - name: metric_type
-      type: string
-      description: >
-        type of aggregation metric: cpu-average/cpu-sum/used
 
     - name: percent
       type: float
       description: >
         TODO
 
-doc_sections:
-  - ["pod_log", "Openshift logging metadata"]
+  - name: statsd
+    type: group
+    description: >
+      Corresponds to collectd's statsd plugin.
+    fields:
+
+    - name: host_cpu
+      type: integer
+      description: >
+        collectd's cpu type of statsd plugin.
+
+    - name: host_elapsed_time
+      type: integer
+      description: >
+        collectd's elapsed_time type of statsd plugin.
+
+    - name: host_memory
+      type: integer
+      description: >
+        collectd's memory type of statsd plugin.
+
+    - name: host_nic_speed
+      type: integer
+      description: >
+        collectd's nic_speed type of statsd plugin.
+
+    - name: host_nic_rx
+      type: integer
+      description: >
+        collectd's nic_rx type of statsd plugin.
+
+    - name: host_nic_tx
+      type: integer
+      description: >
+        collectd's nic_tx type of statsd plugin.
+
+    - name: host_nic_rx_dropped
+      type: integer
+      description: >
+        collectd's nic_rx_dropped type of statsd plugin.
+
+    - name: host_nic_tx_dropped
+      type: integer
+      description: >
+        collectd's nic_tx_dropped type of statsd plugin.
+
+    - name: host_nic_rx_errors
+      type: integer
+      description: >
+        collectd's nic_rx_errors type of statsd plugin.
+
+    - name: host_nic_tx_errors
+      type: integer
+      description: >
+        collectd's nic_tx_errors type of statsd plugin.
+
+    - name: host_storage
+      type: integer
+      description: >
+        collectd's storage type of statsd plugin.
+
+    - name: host_swap
+      type: integer
+      description: >
+        collectd's swap type of statsd plugin.
+
+    - name: host_vdsm
+      type: integer
+      description: >
+        collectd's vdsm type of statsd plugin.
+
+    - name: host_vms
+      type: integer
+      description: >
+        collectd's vms type of statsd plugin.
+
+    - name: vm_nic_tx_dropped
+      type: integer
+      description: >
+        collectd's nic_tx_dropped type of statsd plugin.
+
+    - name: vm_nic_rx_bytes
+      type: integer
+      description: >
+        collectd's nic_rx_bytes type of statsd plugin.
+
+    - name: vm_nic_tx_bytes
+      type: integer
+      description: >
+        collectd's nic_tx_bytes type of statsd plugin.
+
+    - name: vm_balloon_min
+      type: integer
+      description: >
+        collectd's balloon_min type of statsd plugin.
+
+    - name: vm_balloon_max
+      type: integer
+      description: >
+        collectd's balloon_max type of statsd plugin.
+
+    - name: vm_balloon_target
+      type: integer
+      description: >
+        collectd's balloon_target type of statsd plugin.
+
+    - name: vm_balloon_cur
+      type: integer
+      description: >
+        collectd's balloon_cur type of statsd plugin.
+
+    - name: vm_cpu_sys
+      type: integer
+      description: >
+        collectd's cpu_sys type of statsd plugin.
+
+    - name: vm_cpu_usage
+      type: integer
+      description: >
+        collectd's cpu_usage type of statsd plugin.
+
+    - name: vm_disk_read_ops
+      type: integer
+      description: >
+        collectd's disk_read_ops type of statsd plugin.
+
+    - name: vm_disk_write_ops
+      type: integer
+      description: >
+        collectd's disk_write_ops type of statsd plugin.
+
+    - name: vm_disk_flush_latency
+      type: integer
+      description: >
+        collectd's disk_flush_latency type of statsd plugin.
+
+    - name: vm_disk_apparent_size
+      type: integer
+      description: >
+        collectd's disk_apparent_size type of statsd plugin.
+
+    - name: vm_disk_write_bytes
+      type: integer
+      description: >
+        collectd's disk_write_bytes type of statsd plugin.
+
+    - name: vm_disk_write_rate
+      type: integer
+      description: >
+        collectd's disk_write_rate type of statsd plugin.
+
+    - name: vm_disk_true_size
+      type: integer
+      description: >
+        collectd's disk_true_size type of statsd plugin.
+
+    - name: vm_disk_read_rate
+      type: integer
+      description: >
+        collectd's disk_read_rate type of statsd plugin.
+
+    - name: vm_disk_write_latency
+      type: integer
+      description: >
+        collectd's disk_write_latency type of statsd plugin.
+
+    - name: vm_disk_read_latency
+      type: integer
+      description: >
+        collectd's disk_read_latency type of statsd plugin.
+
+    - name: vm_disk_read_bytes
+      type: integer
+      description: >
+        collectd's disk_read_bytes type of statsd plugin.
+
+    - name: vm_nic_rx_dropped
+      type: integer
+      description: >
+        collectd's nic_rx_dropped type of statsd plugin.
+
+    - name: vm_cpu_user
+      type: integer
+      description: >
+        collectd's cpu_user type of statsd plugin.
+
+    - name: vm_nic_rx_errors
+      type: integer
+      description: >
+        collectd's nic_rx_errors type of statsd plugin.
+
+    - name: vm_nic_tx_errors
+      type: integer
+      description: >
+        collectd's nic_tx_errors type of statsd plugin.
+
+    - name: vm_nic_speed
+      type: integer
+      description: >
+        collectd's nic_speed type of statsd plugin.
+
+  - name: postgresql
+    type: group
+    description: >
+      Corresponds to collectd's postgresql plugin.
+    fields:
+
+    - name: pg_n_tup_g
+      type: integer
+      description: >
+        collectd's type pg_n_tup_g of plugin postgresql.
+
+    - name: pg_n_tup_c
+      type: integer
+      description: >
+        collectd's type pg_n_tup_c of plugin postgresql.
+
+    - name: pg_numbackends
+      type: integer
+      description: >
+        collectd's type pg_numbackends of plugin postgresql.
+
+    - name: pg_xact
+      type: integer
+      description: >
+        collectd's type pg_xact of plugin postgresql.
+
+    - name: pg_db_size
+      type: integer
+      description: >
+        collectd's type pg_db_size of plugin postgresql.
+
+    - name: pg_blks
+      type: integer
+      description: >
+        collectd's type pg_blks of plugin postgresql.
