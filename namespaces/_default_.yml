@@ -14,7 +14,7 @@ _default_:
   fields:
     - name: "@timestamp"
       type: date
-      format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+      format: yyyy-MM-dd HH:mm:ss,SSSZ||yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
       example: 2015-01-24T14:06:05.071Z
       description: >
         UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known;
