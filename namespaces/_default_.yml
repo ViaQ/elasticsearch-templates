@@ -136,11 +136,11 @@ _default_:
 
     - name: namespace_name
       type: string
-      format: "[a-zA-Z][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]"
       example: my-cool-project-in-lab04
       doc_values: false
       index: not_analyzed
       description: >
+        format [a-zA-Z][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]
         Associate this record with the namespace with this name.
         This value will not be stored.  It is only used to associate the
         record with the appropriate namespace for access control and
@@ -153,9 +153,9 @@ _default_:
 
     - name: namespace_uuid
       type: string
-      format: "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"
       example: 82f13a8e-882a-4344-b103-f0a6f30fd218
       description: >
+        format [a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}
         The uuid associated with the namespace_name.
         This value will not be stored.  It is only used to associate the
         record with the appropriate namespace for access control and
