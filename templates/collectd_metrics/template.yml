@@ -3,7 +3,7 @@ skeleton_index_pattern_path: ../skeleton-index-pattern.json
 
 elasticsearch_template:
   name: org.ovirt.viaq-collectd
-  index_pattern: "*"
+  index_pattern: "project.ovirt-metrics-*"
   order: 10
 
 namespaces:
