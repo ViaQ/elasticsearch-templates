@@ -12,4 +12,5 @@ namespaces:
   - kubernetes.yml
   - docker.yml
   - pipeline_metadata.yml
+  - ovirt.yml
 #  - openshift/app_log.yml
