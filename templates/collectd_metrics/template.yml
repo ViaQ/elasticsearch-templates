@@ -9,3 +9,4 @@ elasticsearch_template:
 namespaces:
   - collectd.yml
   - pipeline_metadata.yml
+  - kubernetes.yml
