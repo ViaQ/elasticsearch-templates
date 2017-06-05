@@ -11,10 +11,6 @@ namespace:
     type: long
     description: >
       Audit event serial number
-  - name: time
-    type: date
-    description: >
-      Audit event timestamp
   - name: node
     type: string
     description: >
