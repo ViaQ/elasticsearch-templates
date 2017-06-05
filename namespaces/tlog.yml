@@ -11,10 +11,6 @@ namespace:
     type: long
     description: >
       Message format version number
-  - name: host
-    type: string
-    description: >
-      Name of the host recording was made on
   - name: user
     type: string
     description: >
