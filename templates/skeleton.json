@@ -35,6 +35,32 @@
                         "match": "*",
                         "match_mapping_type": "string"
                     }
+                },
+                {
+                    "aushape_generic_nested_fields": {
+                        "path_match": "aushape.data.*.*.*",
+                        "mapping": {
+                            "type": "string",
+                            "index": "analyzed"
+                        }
+                    }
+                },
+                {
+                    "aushape_generic_fields": {
+                        "path_match": "aushape.data.*.*",
+                        "mapping": {
+                            "type": "string",
+                            "index": "analyzed"
+                        }
+                    }
+                },
+                {
+                    "aushape_generic_records": {
+                        "path_match": "aushape.data.*",
+                        "mapping": {
+                            "type": "object"
+                        }
+                    }
                 }
             ],
             "properties": {}
