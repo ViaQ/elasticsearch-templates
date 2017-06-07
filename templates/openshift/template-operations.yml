@@ -1,0 +1,18 @@
+skeleton_path: ../skeleton.json
+skeleton_index_pattern_path: ../skeleton-index-pattern.json
+
+elasticsearch_template:
+  name: com.redhat.viaq-openshift-operations
+  index_pattern: ".operations.*"
+  order: 10
+
+namespaces:
+  - rsyslog.yml
+  - systemd.yml
+  - kubernetes.yml
+  - docker.yml
+  - pipeline_metadata.yml
+  - ovirt.yml
+  - aushape.yml
+  - tlog.yml
+#  - openshift/app_log.yml
