@@ -14,7 +14,7 @@ Example usage:
 import argparse
 import yaml
 import json
-
+import sys
 
 def object_types_to_template(template_definition, output, output_index_pattern, namespaces_dir):
     """
@@ -288,6 +288,118 @@ def add_index_order(order, template_skeleton):
     """
     template_skeleton['order'] = order
 
+def object_types_to_asciidoc(template_definition, output, namespaces_dir):
+    """
+    Assemble asciidoc for the particular template.
+    """
+
+    if template_definition is None:
+        print "template.yml is empty. Cannot generate asciidoc."
+        return
+
+    if 'namespaces' not in template_definition:
+        print "namespaces not defined. Cannot generate asciidoc."
+        return
+
+    if 'skeleton_index_pattern_path' not in template_definition:
+        print "skeleton_index_pattern_path is not defined. Cannot generate template."
+        return
+
+    # Load skeleton of the template
+    with open(template_definition['skeleton_index_pattern_path'], 'r') as f:
+        skeleton_index_pattern = yaml.load(f)
+
+    # Load object_type files
+    with open(namespaces_dir + '/_default_.yml', 'r') as f:
+        default_mapping_yml = yaml.load(f)
+    sections = [default_mapping_yml['_default_']]
+
+    for ns_file in template_definition['namespaces']:
+        with open(namespaces_dir + ns_file, 'r') as f:
+            cur_ns_yml = yaml.load(f)
+        if 'namespace' not in cur_ns_yml:
+            print("namespace section is absent in file {0}".format(ns_file))
+            return
+
+        sections.append(cur_ns_yml['namespace'])
+
+    dict = {'product': template_definition['elasticsearch_template']['name']}
+
+    output.write("""
+////
+This file is generated! See fields.yml and scripts/generate_field_docs.py
+////
+
+[[exported-fields]]
+== Exported Fields
+
+This document describes the fields that are exported by {product}. They are
+grouped in the following categories:
+
+""".encode("UTF-8").format(**dict))
+
+    # Generate table of contents
+    for doc in sections:
+        output.write("* <<exported-fields-{}>>\n".format(doc['name']).encode('utf-8'))
+    output.write("\n".encode('utf-8'))
+
+    for field in sections:
+#        print('Working on section: {}'.format(field))
+
+        if field["name"] == "Default":
+            document_fields(output, field, [])
+        else:
+            document_fields(output, field, [])
+
+def document_fields(output, section, heir_path=[]):
+
+    output.write("[[exported-fields-{}]]\n".format(section["name"]).encode('utf-8'))
+
+    if section['name'] == "Default":
+        str_path = ""
+        output.write("=== Top Level Fields\n\n")
+    else:
+        heir_path.append(section['name'])
+        str_path = ".".join(heir_path)
+        output.write("=== {} Fields\n\n".format(str_path).encode('utf-8'))
+
+
+    if "description" in section:
+        output.write("{}\n\n".format(section["description"]).encode('utf-8'))
+
+    if "fields" not in section or not section["fields"]:
+        return
+
+    output.write("\n".encode('utf-8'))
+    for field in section["fields"]:
+
+        if "type" in field and field["type"] == "group":
+            document_fields(output, field, heir_path[:])
+        else:
+            document_field(output, field, str_path)
+
+
+def document_field(output, field, str_path):
+
+    if len(str_path) == 0:
+        path = field["name"]
+    else:
+        path = str_path + '.' + field["name"]
+
+    output.write("==== {}\n\n".format(path))
+
+    if "type" in field:
+        output.write("type: {}\n\n".format(field["type"]))
+    if "example" in field:
+        output.write("example: {}\n\n".format(field["example"]))
+    if "format" in field:
+        output.write("format: {}\n\n".format(field["format"].encode('utf-8')))
+    if "required" in field:
+        output.write("required: {}\n\n".format(field["required"].encode('utf-8')))
+
+    if "description" in field:
+        output.write("{}\n\n".format(field["description"].encode("utf-8")))
+
 
 def parse_args():
     p = argparse.ArgumentParser()
@@ -296,6 +408,8 @@ def parse_args():
                    help='Path to input template')
     p.add_argument('namespaces_dir',
                    help='Path to directory with namespace definitions')
+    p.add_argument('--docs', action="store_true", default=False,
+                   help='Generate field documentation')
 
     return p.parse_args()
 
@@ -304,6 +418,13 @@ if __name__ == "__main__":
 
     with open(args.template_definition, 'r') as input_template:
         template_definition = yaml.load(input_template)
+
+    if args.docs:
+        with open('{0[elasticsearch_template][name]}.asciidoc'.format(
+            template_definition), 'w') as output:
+            object_types_to_asciidoc(template_definition, output,
+                                     args.namespaces_dir)
+        sys.exit()
 
     with open('{0[elasticsearch_template][name]}.template.json'.format(
             template_definition), 'w') as output:

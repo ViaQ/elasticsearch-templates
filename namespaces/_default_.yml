@@ -7,6 +7,7 @@ field_defaults:
 
 _default_:
   type: group
+  name: "Default"
   description: >
     Contains common fields and generic pattern-matched field descriptions; this
     is what populates the actual mappings of _default_ in the template's mapping
