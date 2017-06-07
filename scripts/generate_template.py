@@ -77,6 +77,7 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
 
     json.dump(
         skeleton, output, indent=2, separators=(',', ': '), sort_keys=True)
+    output.write('\n')
 
     # index pattern stuff
     time_field_name = "time"
@@ -92,6 +93,7 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
     skeleton_index_pattern["fields"] = json.dumps(index_pattern_fields)
     json.dump(
         skeleton_index_pattern, output_index_pattern, indent=2, separators=(',', ': '), sort_keys=True)
+    output_index_pattern.write('\n')
 
 
 def add_mapping_to_skeleton(map_type, skeleton):
