@@ -27,3 +27,4 @@ for filename in sys.argv[1:]:
             docfieldary = removedupnames(json.loads(doc['fields']))
             doc['fields'] = json.dumps(docfieldary)
 sys.stdout.write(json.dumps(doc, indent=4, sort_keys=True, separators=(',', ': ')))
+sys.stdout.write('\n')

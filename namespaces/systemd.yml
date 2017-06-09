@@ -111,7 +111,7 @@ namespace:
 
     - name: SOURCE_REALTIME_TIMESTAMP
       type: string
-      description: >
+      description: |
         https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SOURCE_REALTIME_TIMESTAMP=
         This is converted to RFC 3339 NS format
 

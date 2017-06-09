@@ -12,14 +12,6 @@ namespace:
     description: >
       The name of the pod
 
-  - name: labels
-    type: group
-    description: >
-      Labels attached to the OpenShift object
-      Each label name is a subfield of labels field.
-      Each label name is de-dotted: dots in the name are replaced with
-      underscores.
-
   - name: pod_id
     type: string
     norms:
@@ -57,6 +49,14 @@ namespace:
     type: group
     description: >
       Annotations associated with the OpenShift object
+
+  - name: labels
+    type: group
+    description: >
+      Labels attached to the OpenShift object
+      Each label name is a subfield of labels field.
+      Each label name is de-dotted: dots in the name are replaced with
+      underscores.
 
 doc_sections:
   - ["pod_log", "Openshift logging metadata"]

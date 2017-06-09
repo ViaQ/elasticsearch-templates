@@ -62,7 +62,7 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
     # in the group, and other settings applicable to groups such as
     # include_in_all, etc.
     skeleton['mappings']['_default_'].update(traverse_group_section(
-        default_mapping, default_mapping_yml['field_defaults'], process_leaf))
+        default_mapping, default_mapping_yml['field_defaults'], process_leaf, True))
 
     add_type_version(default_mapping_yml["version"],
                      skeleton['mappings']['_default_'])
@@ -90,7 +90,7 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
     skeleton_index_pattern["description"] = skeleton_index_pattern["description"].replace("<the_index_type>", template_definition['elasticsearch_template']['index_pattern'])
     # get fields
     index_pattern_fields = (traverse_group_section_index_pattern(
-        default_mapping, default_mapping_yml['field_defaults'], process_leaf_index_pattern))
+        default_mapping, default_mapping_yml['field_defaults'], process_leaf_index_pattern, None, True))
     skeleton_index_pattern["fields"] = json.dumps(index_pattern_fields)
     json.dump(
         skeleton_index_pattern, output_index_pattern, indent=2, separators=(',', ': '), sort_keys=True)
@@ -119,7 +119,7 @@ def add_index_template_fields(rec):
     return ret
 
 
-def traverse_group_section(group, leaf_defaults, leaf_handler):
+def traverse_group_section(group, leaf_defaults, leaf_handler, toplevel=False):
     """
     Traverse the sections tree and fill in the properties
     map.
@@ -135,10 +135,10 @@ def traverse_group_section(group, leaf_defaults, leaf_handler):
         parameters
     """
     field = add_index_template_fields(group)
-    if 'name' in group:
-        ret = {group['name']: field}
-    else:
+    if toplevel or not 'name' in group:
         ret = field
+    else:
+        ret = {group['name']: field}
     if group['type'] == 'group':
         fieldskey = 'properties'
         del field['type']
@@ -190,7 +190,7 @@ def process_leaf(field, defaults):
         print("Unknown field. Skipped adding field {}".format(field))
 
 
-def traverse_group_section_index_pattern(group, defaults, leaf_handler, groupname=None):
+def traverse_group_section_index_pattern(group, defaults, leaf_handler, groupname=None, toplevel=False):
     """
     Traverse the sections tree and fill in the index pattern fields
     map.
@@ -208,6 +208,8 @@ def traverse_group_section_index_pattern(group, defaults, leaf_handler, groupnam
         for field in group["fields"]:
             if groupname:
                 subgroupname = groupname + "." + group["name"]
+            elif toplevel:
+                subgroupname = None
             else:
                 subgroupname = group.get("name", None)
             if field.get("type") == "group":
