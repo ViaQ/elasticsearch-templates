@@ -9,7 +9,7 @@ all: templates index_pattern
 templates:
 	for dir in {$(INDEX_PATTERN_DIRS)}; do \
 		cd $$dir ; \
-		make ; \
+		make all; \
 		cd .. ; \
 	done
 

@@ -8,16 +8,16 @@ field_defaults:
 _default_:
   type: group
   name: "Default"
-  description: >
-    Contains common fields and generic pattern-matched field descriptions; this
-    is what populates the actual mappings of _default_ in the template's mapping
-    section.
+  description: |
+    The top level fields are common to every application, and may be present in every record.
+    For the Elasticsearch template, this is what populates the actual mappings
+    of _default_ in the template's mapping section.
   fields:
     - name: "@timestamp"
       type: date
       format: yyyy-MM-dd HH:mm:ss,SSSZ||yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
       example: 2015-01-24T14:06:05.071Z
-      description: >
+      description: |
         UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known;
         this is the log processing pipeline’s “best effort” determination of when the log payload was generated
         FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
@@ -39,8 +39,10 @@ _default_:
     - name: hostname
       type: string
       description: >
-        FQDN of the entity generating the original payload
-        This field is a best effort attempt to derive this context; sometimes the entity generating it knows it; other times that entity has a restricted namespace itself, and the collector or normalizer knows that
+        FQDN of the entity generating the original payload.  This field is a
+        best effort attempt to derive this context; sometimes the entity
+        generating it knows it; other times that entity has a restricted
+        namespace itself, and the collector or normalizer knows that.
 
     - name: ipaddr4
       type: ip
@@ -61,19 +63,21 @@ _default_:
     - name: level
       type: string
       example: info
-      description: >
+      description: |
         Logging level as provided by: rsyslog(severitytext property), python's
         logging module, etc.
-        Possible values are as listed here: http://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/syslog.h;h=ee01478c4b19a954426a96448577c5a76e6647c0;hb=HEAD#l74 plus trace
-        That is: alert crit debug emerg err info notice trace warning
+        Possible values are as listed here: http://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/syslog.h;h=ee01478c4b19a954426a96448577c5a76e6647c0;hb=HEAD#l74 plus `trace` and `unknown`
+        That is: alert crit debug emerg err info notice trace unknown warning
         Note that `trace` isn't in the syslog.h list but many applications use it
-        `trace` should be considered the highest (most verbose) level, higher than `debug`
+        `unknown` is only used when the logging system gets a value it doesn't understand
+        `unknown` is the highest level
+        `trace` should be considered as higher (more verbose) than `debug`
         `error` should be converted to `err`
         `panic` should be converted to `emerg`
         `warn` should be converted to `warning`
         Numeric values from syslog/journal PRIORITY can usually be mapped using the priority values as listed here:
         http://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/syslog.h;h=ee01478c4b19a954426a96448577c5a76e6647c0;hb=HEAD#l51
-        That is, 0 -> emerg, 1 -> alert, ..., 7 -> debug
+        That is, 0 -> emerg, 1 -> alert, ..., 7 -> debug, 8 -> trace, 9 -> unknown
         Log levels/priorities from other logging systems should be mapped to the nearest match
         For example, from python logging: https://docs.python.org/2.7/library/logging.html#logging-levels
         CRITICAL -> crit, ERROR -> err, ...., DEBUG -> debug
@@ -140,8 +144,9 @@ _default_:
       example: my-cool-project-in-lab04
       doc_values: false
       index: not_analyzed
-      description: >
-        format [a-zA-Z][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]
+      description: |
+        format: [a-zA-Z][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]
+
         Associate this record with the namespace with this name.
         This value will not be stored.  It is only used to associate the
         record with the appropriate namespace for access control and
@@ -155,8 +160,9 @@ _default_:
     - name: namespace_uuid
       type: string
       example: 82f13a8e-882a-4344-b103-f0a6f30fd218
-      description: >
-        format [a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}
+      description: |
+        format: [a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}
+
         The uuid associated with the namespace_name.
         This value will not be stored.  It is only used to associate the
         record with the appropriate namespace for access control and

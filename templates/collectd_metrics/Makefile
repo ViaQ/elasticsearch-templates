@@ -1,9 +1,10 @@
-TEMPLATE_NAME = org.ovirt.viaq-metrics
+.PHONY: all clean docs
 
-.PHONY: all clean
-
-all:
+all: docs
 	python ../../scripts/generate_template.py template.yml ../../namespaces/
 
 clean:
 	rm *.template.json
+
+docs:
+	python ../../scripts/generate_template.py template.yml ../../namespaces/ --docs

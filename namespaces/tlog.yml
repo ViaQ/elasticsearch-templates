@@ -3,8 +3,7 @@ namespace:
   name: tlog
   type: group
   description: >
-    Tlog terminal I/O recording messages
-    For more information please see
+    Tlog terminal I/O recording messages.  For more information please see
     https://github.com/Scribery/tlog
   fields:
   - name: ver

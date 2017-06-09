@@ -3,9 +3,12 @@ namespace:
   name: systemd
   type: group
   description: >
-    Contains common fields specific to systemd journal.
-    For more information please see
+    Contains common fields specific to systemd journal.  For more information
+    please see
     https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html
+    Applications may write their own fields to the journal.  These will be
+    available under the `systemd.u` namespace.  `RESULT` and `UNIT` are two
+    such fields.
   fields:
   - name: k
     type: group
@@ -15,182 +18,183 @@ namespace:
     - name: KERNEL_DEVICE
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_KERNEL_DEVICE=
 
     - name: KERNEL_SUBSYSTEM
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_KERNEL_SUBSYSTEM=
 
     - name: UDEV_DEVLINK
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_UDEV_DEVLINK=
 
     - name: UDEV_DEVNODE
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_UDEV_DEVNODE=
 
     - name: UDEV_SYSNAME
       type: string
       description: >
-         TODO
+         https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_UDEV_SYSNAME=
 
   - name: t
     type: group
     description: >
-      TODO.
+      trusted journal fields, fields that are implicitly added by the journal and cannot be altered by client code.
     fields:
     - name: AUDIT_LOGINUID
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_AUDIT_SESSION=
 
     - name: BOOT_ID
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_BOOT_ID=
 
     - name: AUDIT_SESSION
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_AUDIT_SESSION=
 
     - name: CAP_EFFECTIVE
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_CAP_EFFECTIVE=
 
     - name: CMDLINE
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_COMM=
       norms:
         enabled: false
 
     - name: COMM
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_COMM=
 
     - name: EXE
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_COMM=
       norms:
         enabled: false
 
     - name: GID
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_PID=
 
     - name: HOSTNAME
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_HOSTNAME=
 
     - name: MACHINE_ID
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_MACHINE_ID=
 
     - name: PID
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_PID=
 
     - name: SELINUX_CONTEXT
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SELINUX_CONTEXT=
 
     - name: SOURCE_REALTIME_TIMESTAMP
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SOURCE_REALTIME_TIMESTAMP=
+        This is converted to RFC 3339 NS format
 
     - name: SYSTEMD_CGROUP
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SYSTEMD_CGROUP=
 
     - name: SYSTEMD_OWNER_UID
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SYSTEMD_CGROUP=
 
     - name: SYSTEMD_SESSION
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SYSTEMD_CGROUP=
 
     - name: SYSTEMD_SLICE
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SYSTEMD_CGROUP=
 
     - name: SYSTEMD_UNIT
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SYSTEMD_CGROUP=
 
     - name: SYSTEMD_USER_UNIT
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SYSTEMD_CGROUP=
 
     - name: TRANSPORT
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_TRANSPORT=
 
     - name: UID
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_PID=
 
   - name: u
     type: group
     description: >
-      TODO.
+      fields that are directly passed from clients and stored in the journal.
     fields:
     - name: CODE_FILE
       type: string
       norms:
         enabled: false
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#CODE_FILE=
 
     - name: CODE_FUNCTION
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#CODE_FILE=
 
     - name: CODE_LINE
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#CODE_FILE=
 
     - name: ERRNO
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#ERRNO=
 
     - name: MESSAGE_ID
       type: string
       description: >
-        TODO
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#MESSAGE_ID=
 
     - name: RESULT
       type: string
       norms:
         enabled: false
       description: >
-        TODO
+        For private use only.
 
     - name: UNIT
       type: string
       description: >
-        TODO
+        For private use only.

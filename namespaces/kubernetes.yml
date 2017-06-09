@@ -48,5 +48,15 @@ namespace:
     description: >
       Kubernetes node name
 
+  - name: master_url
+    type: string
+    description: >
+      Kubernetes Master URL
+
+  - name: annotations
+    type: group
+    description: >
+      Annotations associated with the OpenShift object
+
 doc_sections:
   - ["pod_log", "Openshift logging metadata"]

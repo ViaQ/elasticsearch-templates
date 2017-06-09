@@ -15,6 +15,7 @@ import argparse
 import yaml
 import json
 import sys
+import io
 
 def object_types_to_template(template_definition, output, output_index_pattern, namespaces_dir):
     """
@@ -22,12 +23,12 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
     """
 
     if template_definition is None:
-        print "template.yml is empty. Cannot generate template."
+        print("template.yml is empty. Cannot generate template.")
         return
 
     if 'skeleton_path' not in template_definition or\
        'namespaces' not in template_definition:
-        print "skeleton_path is not defined. Cannot generate template."
+        print("skeleton_path is not defined. Cannot generate template.")
         return
 
     # Load skeleton of the template
@@ -35,7 +36,7 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
         skeleton = yaml.load(f)
 
     if 'skeleton_index_pattern_path' not in template_definition:
-        print "skeleton_index_pattern_path is not defined. Cannot generate template."
+        print("skeleton_index_pattern_path is not defined. Cannot generate template.")
         return
 
     # Load skeleton of the template
@@ -186,7 +187,7 @@ def process_leaf(field, defaults):
     elif field.get("type") == "float":
         field["doc_values"] = "true"
     elif not field.get("type") in other_known_types:
-        print "Unknown field. Skipped adding field %s" % (field)
+        print("Unknown field. Skipped adding field {}".format(field))
 
 
 def traverse_group_section_index_pattern(group, defaults, leaf_handler, groupname=None):
@@ -216,7 +217,7 @@ def traverse_group_section_index_pattern(group, defaults, leaf_handler, groupnam
                 out_field = leaf_handler(field, defaults, subgroupname)
                 fields.append(out_field)
     except KeyError:
-        print "Skipping empty section %s" % (group)
+        print("Skipping empty section {}".format(group))
     # print "Section filled with properties: %s" % (properties)
     return fields
 
@@ -249,7 +250,7 @@ def process_leaf_index_pattern(field, defaults, groupname):
     elif field.get("type") == "nested":
         fieldtype = "string"
     else:
-        print "Unknown field type. Skipped adding field %s" % (field)
+        print("Unknown field type. Skipped adding field {}".format(field))
     analyzed = field.get("index", "") == "analyzed"
     res = {
         "name": fieldname,
@@ -297,15 +298,15 @@ def object_types_to_asciidoc(template_definition, output, namespaces_dir):
     """
 
     if template_definition is None:
-        print "template.yml is empty. Cannot generate asciidoc."
+        print('template.yml is empty. Cannot generate asciidoc.')
         return
 
     if 'namespaces' not in template_definition:
-        print "namespaces not defined. Cannot generate asciidoc."
+        print('namespaces not defined. Cannot generate asciidoc.')
         return
 
     if 'skeleton_index_pattern_path' not in template_definition:
-        print "skeleton_index_pattern_path is not defined. Cannot generate template."
+        print('skeleton_index_pattern_path is not defined. Cannot generate template.')
         return
 
     # Load skeleton of the template
@@ -321,63 +322,67 @@ def object_types_to_asciidoc(template_definition, output, namespaces_dir):
         with open(namespaces_dir + ns_file, 'r') as f:
             cur_ns_yml = yaml.load(f)
         if 'namespace' not in cur_ns_yml:
-            print("namespace section is absent in file {0}".format(ns_file))
+            print('namespace section is absent in file {0}'.format(ns_file))
             return
 
         sections.append(cur_ns_yml['namespace'])
 
     dict = {'product': template_definition['elasticsearch_template']['name']}
 
-    output.write("""
+    output.write(u"""
 ////
-This file is generated! See fields.yml and scripts/generate_field_docs.py
+This file is generated! See scripts/generate_template.py --docs
 ////
 
 [[exported-fields]]
 == Exported Fields
 
-This document describes the fields that are exported by {product}. They are
-grouped in the following categories:
+These are the fields exported by the logging system and available for searching
+from Elasticsearch and Kibana.  Use the full, dotted field name when searching.
+For example, for an Elasticsearch /_search URL, to look for a Kubernetes pod name,
+use `/_search/q=kubernetes.pod_name:name-of-my-pod`
+This document describes fields that may not be present in your logging store.
+Not all of these fields are present in every record.
+The fields are grouped in the following categories:
 
-""".encode("UTF-8").format(**dict))
+""".format(**dict))
 
     # Generate table of contents
     for doc in sections:
-        output.write("* <<exported-fields-{}>>\n".format(doc['name']).encode('utf-8'))
-    output.write("\n".encode('utf-8'))
+        output.write(u'* <<exported-fields-{}>>\n'.format(doc['name']))
+    output.write(u'\n')
 
     for field in sections:
 #        print('Working on section: {}'.format(field))
 
-        if field["name"] == "Default":
-            document_fields(output, field, [])
-        else:
-            document_fields(output, field, [])
+        document_fields(output, field, [])
 
-def document_fields(output, section, heir_path=[]):
+def document_fields(output, section, hier_path=[]):
 
-    output.write("[[exported-fields-{}]]\n".format(section["name"]).encode('utf-8'))
-
-    if section['name'] == "Default":
-        str_path = ""
-        output.write("=== Top Level Fields\n\n")
+    if section['name'] == 'Default':
+        str_path = u''
+        secname = 'Top Level'
+        linkname = section['name']
     else:
-        heir_path.append(section['name'])
-        str_path = ".".join(heir_path)
-        output.write("=== {} Fields\n\n".format(str_path).encode('utf-8'))
+        hier_path.append(section['name'])
+        str_path = '.'.join(hier_path)
+        secname = str_path
+        linkname = str_path
 
+    output.write(u'[[exported-fields-{}]]\n'.format(linkname))
+    output.write(u'=== {} Fields\n\n'.format(secname))
 
-    if "description" in section:
-        output.write("{}\n\n".format(section["description"]).encode('utf-8'))
+    if 'description' in section:
+        output.write(u'{}\n\n'.format(section['description']))
 
-    if "fields" not in section or not section["fields"]:
+    if 'fields' not in section or not section['fields']:
         return
 
-    output.write("\n".encode('utf-8'))
-    for field in section["fields"]:
+    output.write(u'\n')
+    for field in section['fields']:
 
-        if "type" in field and field["type"] == "group":
-            document_fields(output, field, heir_path[:])
+        if 'type' in field and field['type'] == 'group':
+            document_fields(output, field, hier_path[:])
         else:
             document_field(output, field, str_path)
 
@@ -385,23 +390,23 @@ def document_fields(output, section, heir_path=[]):
 def document_field(output, field, str_path):
 
     if len(str_path) == 0:
-        path = field["name"]
+        path = field['name']
     else:
-        path = str_path + '.' + field["name"]
+        path = str_path + u'.' + field['name']
 
-    output.write("==== {}\n\n".format(path))
+    output.write(u'==== {}\n\n'.format(path))
 
-    if "type" in field:
-        output.write("type: {}\n\n".format(field["type"]))
-    if "example" in field:
-        output.write("example: {}\n\n".format(field["example"]))
-    if "format" in field:
-        output.write("format: {}\n\n".format(field["format"].encode('utf-8')))
-    if "required" in field:
-        output.write("required: {}\n\n".format(field["required"].encode('utf-8')))
+    if 'type' in field:
+        output.write(u'type: {}\n\n'.format(field['type']))
+    if 'example' in field:
+        output.write(u'example: {}\n\n'.format(field['example']))
+    if 'format' in field:
+        output.write(u'format: {}\n\n'.format(field['format']))
+    if 'required' in field:
+        output.write(u'required: {}\n\n'.format(field['required']))
 
-    if "description" in field:
-        output.write("{}\n\n".format(field["description"].encode("utf-8")))
+    if 'description' in field:
+        output.write(u'{}\n\n'.format(field['description']))
 
 
 def parse_args():
@@ -411,20 +416,20 @@ def parse_args():
                    help='Path to input template')
     p.add_argument('namespaces_dir',
                    help='Path to directory with namespace definitions')
-    p.add_argument('--docs', action="store_true", default=False,
+    p.add_argument('--docs', action='store_true', default=False,
                    help='Generate field documentation')
 
     return p.parse_args()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     args = parse_args()
 
     with open(args.template_definition, 'r') as input_template:
         template_definition = yaml.load(input_template)
 
     if args.docs:
-        with open('{0[elasticsearch_template][name]}.asciidoc'.format(
-            template_definition), 'w') as output:
+        with io.open('{0[elasticsearch_template][name]}.asciidoc'.format(
+                template_definition), mode='w', encoding='utf8') as output:
             object_types_to_asciidoc(template_definition, output,
                                      args.namespaces_dir)
         sys.exit()

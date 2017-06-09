@@ -3,8 +3,7 @@ namespace:
   name: aushape
   type: group
   description: >
-    Audit events converted with aushape
-    For more information please see
+    Audit events converted with aushape.  For more information please see
     https://github.com/Scribery/aushape
   fields:
   - name: serial
