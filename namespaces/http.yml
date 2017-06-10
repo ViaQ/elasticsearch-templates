@@ -1,0 +1,60 @@
+version: 2016.03.10.0
+
+defaults:
+  type: string
+  doc_values: true
+  index: not_analyzed
+
+namespace:
+  name: http
+  type: group
+  description: >
+    Attributes common to http requests.
+  fields:
+
+    - name: client_ip
+      type: ip
+      description: >
+        IP address of the remote client.
+      norms:
+        enabled: True
+
+    - name: request_method
+      type: string
+      description: >
+        HTTP request method (GET, POST, PUT, etc)
+      norms:
+        enabled: True
+
+    - name: request_path
+      type: string
+      description: >
+        HTTP request path
+      norms:
+        enabled: True
+
+    - name: request_status
+      type: string
+      description: >
+        Status of the HTTP request (a 3-digit numeric code, like 200 or
+        404 or 302, etc)
+      norms:
+        enabled: True
+
+    - name: request_bytes_sent
+      type: long
+      description: >
+        The number of bytes sent to the remote client.
+      norms:
+        enabled: True
+
+    - name: request_time
+      type: float
+      description: >
+        Time taken to complete the request.
+      norms:
+        enabled: True
+
+doc_sections:
+  - ["_default_", "Common logging metadata"]
+  - ["http", "Common http request metadata"]
