@@ -39,6 +39,13 @@ openstack:
             TODO.
           norms:
             enabled: True
+            
+        - name: region
+          type: string
+          description: >
+            Region mapping  
+          norms:
+            enabled: True
 
 doc_sections:
   - ["_default_", "Common logging metadata"]
