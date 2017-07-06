@@ -1,3 +1,4 @@
 *.index-pattern.json
 *.template.json
 *~
+templates/*/*.asciidoc
