@@ -45,6 +45,17 @@ namespace:
     description: >
       Kubernetes Master URL
 
+  - name: container_name
+    type: string
+    norms:
+      enabled: true
+    description: >
+      The name of the container in Kubernetes.
+    fields:
+      - name: raw
+        ignore_above: 256
+        type: string
+
   - name: annotations
     type: group
     description: >
@@ -57,6 +68,32 @@ namespace:
       Each label name is a subfield of labels field.
       Each label name is de-dotted: dots in the name are replaced with
       underscores.
+    fields:
+      - name: deployment
+        type: string
+        example: logging-kibana-3
+        description: >
+          The deployment associated with this Kubernetes object
+      - name: deploymentconfig
+        type: string
+        example: logging-kibana
+        description: >
+          The deploymentconfig associated with this Kubernetes object
+        fields:
+          - name: raw
+            ignore_above: 64
+            type: string
+      - name: component
+        type: string
+        example: kibana
+        description: >
+          The component associated with this Kubernetes object
+      - name: provider
+        type: string
+        example: openshift
+        description: >
+          The provider associated with this Kubernetes object
+
 
 doc_sections:
   - ["pod_log", "Openshift logging metadata"]

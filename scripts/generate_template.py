@@ -212,7 +212,10 @@ def traverse_group_section_index_pattern(group, defaults, leaf_handler, groupnam
                 subgroupname = None
             else:
                 subgroupname = group.get("name", None)
-            if field.get("type") == "group":
+            if field.get("type") == "group" or "fields" in field:
+                if not field.get("type") == "group": # assume leaf
+                    out_field = leaf_handler(field, defaults, subgroupname)
+                    fields.append(out_field)
                 more_fields = traverse_group_section_index_pattern(field, defaults, leaf_handler, subgroupname)
                 fields.extend(more_fields)
             else:
