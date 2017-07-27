@@ -187,6 +187,21 @@ namespace:
       description: >
         https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#MESSAGE_ID=
 
+    - name: SYSLOG_FACILITY
+      type: string
+      description: >
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#SYSLOG_FACILITY=
+
+    - name: SYSLOG_IDENTIFIER
+      type: string
+      description: >
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#SYSLOG_FACILITY=
+
+    - name: SYSLOG_PID
+      type: string
+      description: >
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#SYSLOG_FACILITY=
+
     - name: RESULT
       type: string
       norms:
