@@ -92,6 +92,10 @@ _default_:
         pulled out of it by collector/normalizer, UTF-8 encoded.
       norms:
         enabled: false
+      fields:
+        - name: raw
+          ignore_above: 256
+          type: string
 
     - name: pid
       type: string
