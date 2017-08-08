@@ -94,6 +94,131 @@ namespace:
         description: >
           The provider associated with this Kubernetes object
 
+  - name: event
+    type: group
+    description: >
+      The kubernetes event obtained from kubernetes master API
+      The event is already JSON object and as whole nested under kubernetes field
+      This description should loosely follow 'type Event' in https://github.com/kubernetes/kubernetes/blob/master/pkg/api/types.go
+    fields:
+      - name: verb
+        type: string
+        example: ADDED
+        description: >
+          The type of event, can be ADDED, MODIFIED, DELETED
+      - name: metadata
+        type: group
+        description: >
+          Information related to the location and time of the event creation
+        fields:
+          - name: name
+            type: string
+            example: java-mainclass-1.14d888a4cfc24890
+            description: >
+              Name of the entity that induced the event creation
+          - name: namespace
+            type: string
+            example: default
+            description: >
+              The name of the namespace which induced the event
+              It differs from namespace_name, which will be in case of every event the 'eventrouter'
+          - name: selfLink
+            type: string
+            example: /api/v1/namespaces/javaj/events/java-mainclass-1.14d888a4cfc24890
+            description: >
+              Link to the event itself
+          - name: uid
+            type: string
+            example: d828ac69-7b58-11e7-9cf5-5254002f560c
+            description: >
+              Event's unique ID
+          - name: resourceVersion
+            type: integer
+            example: 311987
+            description: >
+              String that identifies the server's internal version of the event that can be used by clients to determine when objects have changed
+          - name: creationTimestamp
+            type: date
+            format: yyyy-MM-dd HH:mm:ss,SSSZ||yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+            example: 2017-08-07T10:11:57Z
+            description: >
+              UTC value marking when the event was created
+      - name: involvedObject
+        type: group
+        description: >
+          Description of the object involved in the event creation
+        fields:
+          - name: kind
+            type: string
+            example: ReplicationController
+            description: >
+              Type of the object
+          - name: namespace
+            type: string
+            example: default
+            description: >
+              The name of the namespace which induced the event
+              It differs from namespace_name, which will be in case of every event 'eventrouter'
+          - name: name
+            type: string
+            example: java-mainclass-1
+            description: >
+              Name of the container that triggered the event
+          - name: uid
+            type: string
+            example: e6bff941-76a8-11e7-8193-5254002f560c
+            description: >
+              Object's unique ID
+          - name: apiVersion
+            type: string
+            example: v1
+            description: >
+              Version of kubernetes master API
+          - name: resourceVersion
+            type: string
+            example: 308882
+            description: >
+              String that identifies the server's internal version of the pod triggering the event that can be used by clients to determine when objects have changed
+      - name: reason
+        type: string
+        example: SuccessfulCreate
+        description: >
+          Short, machine understandable string that gives the reason for this event being generated 
+      - name: message
+        type: string
+        example: "Created pod: java-mainclass-1-1wd39"
+        description: >
+          Message carried by the event, a human-readable description of the status of this operation
+      - name: source
+        type: group
+        fields: 
+          - name: component
+            type: string
+            example: replication-controller
+            description: >
+              Component which reported this event
+      - name: firstTimestamp
+        type: date
+        format: yyyy-MM-dd HH:mm:ss,SSSZ||yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+        example: 2017-08-07T10:11:57Z
+        description: >
+          The time at which the event was first recorded
+      - name: lastTimestamp
+        type: date
+        format: yyyy-MM-dd HH:mm:ss,SSSZ||yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+        example: 2017-08-07T10:11:57Z
+        description: >
+          The time at which the most recent occurrence of this event was recorded
+      - name: count
+        type: integer
+        example: 1
+        description: >
+          The number of times this event has occurred
+      - name: type
+        type: string
+        example: Normal 
+        description: >
+          Type of this event (Normal, Warning), new types could be added in the future
 
 doc_sections:
   - ["pod_log", "Openshift logging metadata"]
