@@ -184,19 +184,11 @@ namespace:
         example: SuccessfulCreate
         description: >
           Short, machine understandable string that gives the reason for this event being generated 
-      - name: message
+      - name: source_component
         type: string
-        example: "Created pod: java-mainclass-1-1wd39"
+        example: replication-controller
         description: >
-          Message carried by the event, a human-readable description of the status of this operation
-      - name: source
-        type: group
-        fields: 
-          - name: component
-            type: string
-            example: replication-controller
-            description: >
-              Component which reported this event
+          Component which reported this event
       - name: firstTimestamp
         type: date
         format: yyyy-MM-dd HH:mm:ss,SSSZ||yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime

@@ -90,6 +90,7 @@ _default_:
       description: >
         Typical log entry message, or payload, possibly stripped of metadata
         pulled out of it by collector/normalizer, UTF-8 encoded.
+        In case log carries kube message, it is overriden to the events message
       norms:
         enabled: false
 
