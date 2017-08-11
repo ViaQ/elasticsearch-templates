@@ -21,6 +21,7 @@ _default_:
         UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known;
         this is the log processing pipeline’s “best effort” determination of when the log payload was generated
         FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
+        In case this log carries a kubernetes event that triggered this message, @timestamp carries a time the event last occured
       fields:
         - name: raw
           ignore_above: 256
