@@ -48,7 +48,7 @@ namespace:
     fields:
 
     - name: ps_state
-      type: integer
+      type: long
       description: >
         collectd's ps_state type of processes plugin.
 
@@ -68,27 +68,27 @@ namespace:
           TODO
 
     - name: ps_vm
-      type: integer
+      type: long
       description: >
         collectd's ps_vm type of processes plugin.
 
     - name: ps_rss
-      type: integer
+      type: long
       description: >
         collectd's ps_rss type of processes plugin.
 
     - name: ps_data
-      type: integer
+      type: long
       description: >
         collectd's ps_data type of processes plugin.
 
     - name: ps_code
-      type: integer
+      type: long
       description: >
         collectd's ps_code type of processes plugin.
 
     - name: ps_stacksize
-      type: integer
+      type: long
       description: >
         collectd's ps_stacksize type of processes plugin.
 
@@ -113,12 +113,12 @@ namespace:
         collectd's ps_count type of processes plugin.
       fields:
       - name: processes
-        type: integer
+        type: long
         description: >
           TODO
 
       - name: threads
-        type: integer
+        type: long
         description: >
           TODO
 
@@ -224,7 +224,7 @@ namespace:
           TODO
 
     - name: pending_operations
-      type: integer
+      type: long
       description: >
         collectd's pending_operations type of disk plugin.
 
@@ -456,7 +456,7 @@ namespace:
     fields:
 
     - name: entropy
-      type: integer
+      type: long
       description: >
         collectd's entropy type of entropy plugin.
 
@@ -468,7 +468,7 @@ namespace:
     fields:
 
     - name: nfs_procedure
-      type: integer
+      type: long
       description: >
         collectd's nfs_procedure type of nfs plugin.
 
@@ -497,12 +497,12 @@ namespace:
     fields:
 
     - name: swap
-      type: integer
+      type: long
       description: >
         collectd's swap type of swap plugin.
 
     - name: swap_io
-      type: integer
+      type: long
       description: >
         collectd's swap_io type of swap plugin.
 
@@ -552,197 +552,197 @@ namespace:
     fields:
 
     - name: host_cpu
-      type: integer
+      type: long
       description: >
         collectd's cpu type of statsd plugin.
 
     - name: host_elapsed_time
-      type: integer
+      type: long
       description: >
         collectd's elapsed_time type of statsd plugin.
 
     - name: host_memory
-      type: integer
+      type: long
       description: >
         collectd's memory type of statsd plugin.
 
     - name: host_nic_speed
-      type: integer
+      type: long
       description: >
         collectd's nic_speed type of statsd plugin.
 
     - name: host_nic_rx
-      type: integer
+      type: long
       description: >
         collectd's nic_rx type of statsd plugin.
 
     - name: host_nic_tx
-      type: integer
+      type: long
       description: >
         collectd's nic_tx type of statsd plugin.
 
     - name: host_nic_rx_dropped
-      type: integer
+      type: long
       description: >
         collectd's nic_rx_dropped type of statsd plugin.
 
     - name: host_nic_tx_dropped
-      type: integer
+      type: long
       description: >
         collectd's nic_tx_dropped type of statsd plugin.
 
     - name: host_nic_rx_errors
-      type: integer
+      type: long
       description: >
         collectd's nic_rx_errors type of statsd plugin.
 
     - name: host_nic_tx_errors
-      type: integer
+      type: long
       description: >
         collectd's nic_tx_errors type of statsd plugin.
 
     - name: host_storage
-      type: integer
+      type: long
       description: >
         collectd's storage type of statsd plugin.
 
     - name: host_swap
-      type: integer
+      type: long
       description: >
         collectd's swap type of statsd plugin.
 
     - name: host_vdsm
-      type: integer
+      type: long
       description: >
         collectd's vdsm type of statsd plugin.
 
     - name: host_vms
-      type: integer
+      type: long
       description: >
         collectd's vms type of statsd plugin.
 
     - name: vm_nic_tx_dropped
-      type: integer
+      type: long
       description: >
         collectd's nic_tx_dropped type of statsd plugin.
 
     - name: vm_nic_rx_bytes
-      type: integer
+      type: long
       description: >
         collectd's nic_rx_bytes type of statsd plugin.
 
     - name: vm_nic_tx_bytes
-      type: integer
+      type: long
       description: >
         collectd's nic_tx_bytes type of statsd plugin.
 
     - name: vm_balloon_min
-      type: integer
+      type: long
       description: >
         collectd's balloon_min type of statsd plugin.
 
     - name: vm_balloon_max
-      type: integer
+      type: long
       description: >
         collectd's balloon_max type of statsd plugin.
 
     - name: vm_balloon_target
-      type: integer
+      type: long
       description: >
         collectd's balloon_target type of statsd plugin.
 
     - name: vm_balloon_cur
-      type: integer
+      type: long
       description: >
         collectd's balloon_cur type of statsd plugin.
 
     - name: vm_cpu_sys
-      type: integer
+      type: long
       description: >
         collectd's cpu_sys type of statsd plugin.
 
     - name: vm_cpu_usage
-      type: integer
+      type: long
       description: >
         collectd's cpu_usage type of statsd plugin.
 
     - name: vm_disk_read_ops
-      type: integer
+      type: long
       description: >
         collectd's disk_read_ops type of statsd plugin.
 
     - name: vm_disk_write_ops
-      type: integer
+      type: long
       description: >
         collectd's disk_write_ops type of statsd plugin.
 
     - name: vm_disk_flush_latency
-      type: integer
+      type: long
       description: >
         collectd's disk_flush_latency type of statsd plugin.
 
     - name: vm_disk_apparent_size
-      type: integer
+      type: long
       description: >
         collectd's disk_apparent_size type of statsd plugin.
 
     - name: vm_disk_write_bytes
-      type: integer
+      type: long
       description: >
         collectd's disk_write_bytes type of statsd plugin.
 
     - name: vm_disk_write_rate
-      type: integer
+      type: long
       description: >
         collectd's disk_write_rate type of statsd plugin.
 
     - name: vm_disk_true_size
-      type: integer
+      type: long
       description: >
         collectd's disk_true_size type of statsd plugin.
 
     - name: vm_disk_read_rate
-      type: integer
+      type: long
       description: >
         collectd's disk_read_rate type of statsd plugin.
 
     - name: vm_disk_write_latency
-      type: integer
+      type: long
       description: >
         collectd's disk_write_latency type of statsd plugin.
 
     - name: vm_disk_read_latency
-      type: integer
+      type: long
       description: >
         collectd's disk_read_latency type of statsd plugin.
 
     - name: vm_disk_read_bytes
-      type: integer
+      type: long
       description: >
         collectd's disk_read_bytes type of statsd plugin.
 
     - name: vm_nic_rx_dropped
-      type: integer
+      type: long
       description: >
         collectd's nic_rx_dropped type of statsd plugin.
 
     - name: vm_cpu_user
-      type: integer
+      type: long
       description: >
         collectd's cpu_user type of statsd plugin.
 
     - name: vm_nic_rx_errors
-      type: integer
+      type: long
       description: >
         collectd's nic_rx_errors type of statsd plugin.
 
     - name: vm_nic_tx_errors
-      type: integer
+      type: long
       description: >
         collectd's nic_tx_errors type of statsd plugin.
 
     - name: vm_nic_speed
-      type: integer
+      type: long
       description: >
         collectd's nic_speed type of statsd plugin.
 
@@ -754,31 +754,31 @@ namespace:
     fields:
 
     - name: pg_n_tup_g
-      type: integer
+      type: long
       description: >
         collectd's type pg_n_tup_g of plugin postgresql.
 
     - name: pg_n_tup_c
-      type: integer
+      type: long
       description: >
         collectd's type pg_n_tup_c of plugin postgresql.
 
     - name: pg_numbackends
-      type: integer
+      type: long
       description: >
         collectd's type pg_numbackends of plugin postgresql.
 
     - name: pg_xact
-      type: integer
+      type: long
       description: >
         collectd's type pg_xact of plugin postgresql.
 
     - name: pg_db_size
-      type: integer
+      type: long
       description: >
         collectd's type pg_db_size of plugin postgresql.
 
     - name: pg_blks
-      type: integer
+      type: long
       description: >
         collectd's type pg_blks of plugin postgresql.
