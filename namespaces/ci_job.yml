@@ -16,12 +16,12 @@ namespace:
     description: >
       Name of the CI job.
 
-  - name: build_id
+  - name: number
     type: integer
     description: >
-      Build ID of the CI job.
+      Build number of the CI job.
 
-  - name: build_timestamp
+  - name: timestamp
     type: date
     format: yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
     description: >
@@ -46,6 +46,21 @@ namespace:
     type: string
     description: >
       Full URL to the CI job on the CI master.
+
+  - name: node_name
+    type: string
+    description: >
+      The Jenkins node that executes the CI job.
+
+  - name: node_description
+    type: string
+    description: >
+      The description of Jenkins node.
+
+  - name: hostname
+    type: string
+    description: >
+      The Jenkins master for the node.
 
   - name: artifacts
     type: group
