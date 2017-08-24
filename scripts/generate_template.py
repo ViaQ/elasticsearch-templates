@@ -374,8 +374,9 @@ def document_fields(output, section, hier_path=[]):
         secname = str_path
         linkname = str_path
 
+    output.write(u'\n\'\'\'\n')
     output.write(u'[[exported-fields-{}]]\n'.format(linkname))
-    output.write(u'=== {} Fields\n\n'.format(secname))
+    output.write(u'=== [big]*{} Fields*\n\n'.format(secname))
 
     if 'description' in section:
         output.write(u'{}\n\n'.format(section['description']))
