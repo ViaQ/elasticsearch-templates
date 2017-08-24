@@ -9,3 +9,103 @@ namespace:
     type: string
     description: >
       Docker container id
+  - name: event
+    type: group
+    description: >
+      Event emitted by docker daemon that describes some activity that occurred in the past
+    fields:
+    - name: action
+      type: string
+      example: create
+      description: >
+        What activity occurred
+    - name: status
+      type: string
+      example: create
+      description: >
+        What is the result of the activity
+    - name: type
+      type: string
+      example: container
+      description: >
+        Container or image or volume or network or daemon or plugin or service or node or secret or config
+    - name: time
+      type: date
+      example: 2017-08-22T14:47:29.146379+00:00
+      description: >
+        Date of the occurrence of the event
+    - name: container
+      type: group
+      description: >
+        What resource the activity targeted
+      fields:
+      - name: name
+        type: string
+        example: my-fedora
+        description: >
+          Name of the container
+      - name: image
+        type: string
+        example: registry.fedoraproject.org/fedora:latest
+        description: >
+          Image from which the container is derived
+      - name: state
+        type: group
+        description: >
+          State of the container
+        fields:
+        - name: Status
+          type: string
+          example: created
+          description: >
+            Result of the acticity performed on the container
+        - name: Running
+          type: boolean
+          example: false
+          description: >
+            Is the process in running state
+        - name: Paused
+          type: boolean
+          example: false
+          description: >
+            Is the process in paused state
+        - name: Restarting
+          type: boolean
+          example: false
+          description: >
+            Is the process being restarted
+        - name: OOMKilled
+          type: boolean
+          example: false
+          description: >
+            Was the process killed by the out-of-memory manager
+        - name: Dead
+          type: boolean
+          example: false
+          description: >
+            Is the process in dead state
+        - name: Pid
+          type: integer
+          example: 0
+          description: >
+            Pid of the main process
+        - name: ExitCode
+          type: integer
+          example: 0
+          description: >
+            Exit code of the main process
+        - name: Error
+          type: string
+          example: No such file or directory
+          description: >
+            Optional message in case the container ends in error state
+        - name: StartedAt
+          type: date
+          example: 0001-01-01T00:00:00Z
+          description: >
+            Time when the container was started
+        - name: FinishedAt
+          type: date
+          example: 0001-01-01T00:00:00Z
+          description: >
+            Date when the container finished execution
