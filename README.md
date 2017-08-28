@@ -34,4 +34,14 @@ for the details.
 
 # Generating documentation
 
-TODO
+Use the makefile in the [templates/](templates) folder.
+
+Alternatively, run the following command: python ./scripts/generate_template.py (path to template in templates/) namespaces/ --doc.
+
+The generated file looks like "xxx.asciidoc".
+
+# Viewing the documentation
+
+Install the asciidoc viewer in web browser.
+
+Open the local path to the asciidoc file "xxx.asciidoc" in your browser.
