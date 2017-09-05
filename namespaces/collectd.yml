@@ -420,7 +420,7 @@ namespace:
       description: >
         collectd's virt_cpu_total type of virt plugin.
 
-  - name: CPU
+  - name: cpu
     type: group
     include_in_all: false
     description: >
