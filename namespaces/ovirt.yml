@@ -21,7 +21,7 @@ namespace:
       Namespace for oVirt engine related metadata.
     fields:
 
-  - name: fqdn
+  - name: engine_fqdn
     type: string
     description: >
       FQDN of the oVirt engine.
