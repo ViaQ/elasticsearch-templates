@@ -15,12 +15,6 @@ namespace:
     description: >
       The oVirt host UUID.
 
-  - name: engine
-    type: group
-    description: >
-      Namespace for oVirt engine related metadata.
-    fields:
-
   - name: engine_fqdn
     type: string
     description: >
