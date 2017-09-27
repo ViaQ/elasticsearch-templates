@@ -9,3 +9,53 @@ namespace:
     type: string
     description: >
       Docker container id
+
+  - name: container_id_short
+    type: string
+    description: >
+      Short docker container id
+
+  - name: sauid
+    type: string
+    description: >
+      Sent login user id
+
+  - name: container_image
+    type: string
+    description: >
+      Name of the image
+
+  - name: pid
+    type: string
+    description: >
+      The process id
+
+  - name: user
+    type: string
+    description: >
+      User under which the container process runs
+
+  - name: command
+    type: string
+    description: >
+      Name of the command
+
+  - name: reason
+    type: string
+    description: >
+      Action that triggered this event
+
+  - name: operation
+    type: string
+    description: >
+      Operation carried out
+
+  - name: result
+    type: string
+    description: >
+      Result of the action
+
+  - name: hostname
+    type: string
+    description: >
+      Hostname of the node, where the container runs
