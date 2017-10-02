@@ -13,7 +13,7 @@ namespace:
   - name: container_id_short
     type: string
     description: >
-      Short docker container id
+      Short container id, assigned by the container engine
 
   - name: sauid
     type: string
@@ -54,8 +54,3 @@ namespace:
     type: string
     description: >
       Result of the action
-
-  - name: hostname
-    type: string
-    description: >
-      Hostname of the node, where the container runs
