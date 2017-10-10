@@ -12,6 +12,11 @@ namespace:
     description: >
       Name of the testcase.
 
+  - name: message
+    type: string
+    description: >
+      Name of the testcase.
+
   - name: id
     type: string
     description: >
@@ -44,6 +49,7 @@ namespace:
 
   - name: system-out
     type: string
+    index: analyzed
     description: >
       Content of <system-out> tag in the xunit testcase.
 
