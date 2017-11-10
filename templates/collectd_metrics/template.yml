@@ -1,14 +1,16 @@
 skeleton_path: ../skeleton.json
 skeleton_index_pattern_path: ../skeleton-index-pattern.json
 
-# exclude all collectd stats fields from _source
+# disable _source and _all for metrics
+# see https://www.elastic.co/guide/en/elasticsearch/reference/2.4/mapping-source-field.html#_disabling_the_literal__source_literal_field
 elasticsearch_template:
   name: org.ovirt.viaq-collectd
   index_pattern: "project.ovirt-metrics-*"
   order: 20
   _source:
-    excludes:
-    - collectd.*
+    enabled: false
+  _all:
+    enabled: false
 
 namespaces:
   - collectd.yml
