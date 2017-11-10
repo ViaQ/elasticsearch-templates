@@ -1,4 +1,4 @@
-version: 2017.09.06.0
+version: 2017.11.11.0
 
 field_defaults:
   type: string
