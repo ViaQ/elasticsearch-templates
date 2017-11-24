@@ -1,9 +1,9 @@
 version: 2016.03.10.0
 
 defaults:
-  type: string
+  type: keyword
   doc_values: true
-  index: not_analyzed
+  index: true
 
 openstack:
   type: group
@@ -13,39 +13,34 @@ openstack:
   fields:
     - name: openstack
       type: group
-      product_subgroup: True
+      product_subgroup: true
       description: >
         TODO.
-      norms:
-        enabled: True
+      norms: true
       fields:
         - name: instance
-          type: string
+          type: keyword
           description: >
             TODO.
-          norms:
-            enabled: True
+          norms: true
 
         - name: context
-          type: string
+          type: keyword
           description: >
             We understand this to be a value scraped from the originating HTTP REST API request so that one can track related API requests throughout the stack, as such it is an identifier and should not be tokenized when indexed.
-          norms:
-            enabled: True
+          norms: true
 
         - name: class
-          type: string
+          type: keyword
           description: >
             TODO.
-          norms:
-            enabled: True
+          norms: true
             
         - name: region
-          type: string
+          type: keyword
           description: >
             Region mapping  
-          norms:
-            enabled: True
+          norms: true
 
 doc_sections:
   - ["_default_", "Common logging metadata"]

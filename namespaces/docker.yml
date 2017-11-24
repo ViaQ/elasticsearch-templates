@@ -6,51 +6,51 @@ namespace:
     Namespace for docker container-specific metadata
   fields:
   - name: container_id
-    type: string
+    type: keyword
     description: >
       Docker container id
 
   - name: container_id_short
-    type: string
+    type: keyword
     description: >
       Short container id, assigned by the container engine
 
   - name: sauid
-    type: string
+    type: keyword
     description: >
       Sent login user id
 
   - name: container_image
-    type: string
+    type: keyword
     description: >
       Name of the image
 
   - name: pid
-    type: string
+    type: keyword
     description: >
       The process id
 
   - name: user
-    type: string
+    type: keyword
     description: >
       User under which the container process runs
 
   - name: command
-    type: string
+    type: keyword
     description: >
       Name of the command
 
   - name: reason
-    type: string
+    type: keyword
     description: >
       Action that triggered this event
 
   - name: operation
-    type: string
+    type: keyword
     description: >
       Operation carried out
 
   - name: result
-    type: string
+    type: keyword
     description: >
       Result of the action

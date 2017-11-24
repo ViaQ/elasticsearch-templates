@@ -11,31 +11,31 @@ namespace:
       Collectd's interval.
 
   - name: plugin
-    type: string
+    type: keyword
     include_in_all: false
     description: >
       Collectd's plugin.
 
   - name: plugin_instance
-    type: string
+    type: keyword
     include_in_all: false
     description: >
       Collectd's plugin_instance.
 
   - name: type_instance
-    type: string
+    type: keyword
     include_in_all: false
     description: >
       Collectd's type_instance.
 
   - name: type
-    type: string
+    type: keyword
     include_in_all: false
     description: >
       Collectd's type.
 
   - name: dstypes
-    type: string
+    type: keyword
     include_in_all: false
     description: >
       Collectd's dstypes.

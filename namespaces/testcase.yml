@@ -8,17 +8,17 @@ namespace:
     they are nested under testsuite group.
   fields:
   - name: name
-    type: string
+    type: keyword
     description: >
       Name of the testcase.
 
   - name: message
-    type: string
+    type: keyword
     description: >
       Name of the testcase.
 
   - name: id
-    type: string
+    type: keyword
     description: >
       ID of the testcase.
 
@@ -28,12 +28,12 @@ namespace:
       Duration of testcase execution in seconds.
 
   - name: status
-    type: string
+    type: keyword
     description: >
       Result of the testcase. Possible values are: passed, skipped, failed.
 
   - name: classname
-    type: string
+    type: keyword
     description: >
       Xunit classname of the testcase.
 
@@ -43,30 +43,29 @@ namespace:
       TODO. Line number of testcase(?).
 
   - name: file
-    type: string
+    type: keyword
     description: >
       File name that contains this testcase.
 
   - name: system-out
-    type: string
+    type: text
+    index: true
     doc_values: false
-    index: analyzed
     description: >
       Content of <system-out> tag in the xunit testcase.
 
   - name: type
-    type: string
+    type: keyword
     description: >
       TODO.
 
   - name: details
-    type: string
-    index: analyzed
+    type: keyword
+    index: true
     doc_values: false
     description: >
       Xunit text from the body of testcase tag.
-    norms:
-      enabled: True
+    norms: true
 
   - name: properties
     type: group
@@ -80,12 +79,12 @@ namespace:
       testsuite-specific metadata.
     fields:
     - name: name
-      type: string
+      type: keyword
       description: >
         Name of the testsuite
 
     - name: id
-      type: string
+      type: keyword
       description: >
         id of the testsuite
 
@@ -121,6 +120,6 @@ namespace:
         as Hash.
       fields:
       - name: name
-        type: string
+        type: keyword
         description: >
           Name of the testsuite

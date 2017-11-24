@@ -11,11 +11,11 @@ namespace:
     description: >
       Message format version number
   - name: user
-    type: string
+    type: keyword
     description: >
       Recorded user name
   - name: term
-    type: string
+    type: keyword
     description: >
       Terminal type name
   - name: session
@@ -31,12 +31,12 @@ namespace:
     description: >
       Message position in the session, milliseconds
   - name: timing
-    type: string
+    type: keyword
     description: >
       Distribution of this message's events in time
   - name: in_txt
-    type: string
-    index: analyzed
+    type: text
+    index: true
     doc_values: false
     description: >
       Input text with invalid characters scrubbed
@@ -45,8 +45,8 @@ namespace:
     description: >
       Scrubbed invalid input characters as bytes
   - name: out_txt
-    type: string
-    index: analyzed
+    type: text
+    index: true
     doc_values: false
     description: >
       Output text with invalid characters scrubbed

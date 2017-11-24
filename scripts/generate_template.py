@@ -16,19 +16,22 @@ import yaml
 import json
 import sys
 import io
+import supported_versions as supported
 
-def object_types_to_template(template_definition, output, output_index_pattern, namespaces_dir):
+def object_types_to_template(template_definition, output, output_index_pattern, es_version, namespaces_dir):
     """
     Assemble objects for the particular template.
     """
 
+    print("Generating output for ES version: {0}".format(es_version))
+
     if template_definition is None:
-        print("template.yml is empty. Cannot generate template.")
+        print("template file is empty. Cannot generate template.")
         return
 
     if 'skeleton_path' not in template_definition or\
        'namespaces' not in template_definition:
-        print("skeleton_path is not defined. Cannot generate template.")
+        print("skeleton_path or namespaces is not defined. Cannot generate template.")
         return
 
     # Load skeleton of the template
@@ -39,7 +42,7 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
         print("skeleton_index_pattern_path is not defined. Cannot generate template.")
         return
 
-    # Load skeleton of the template
+    # Load skeleton of the index pattern
     with open(template_definition['skeleton_index_pattern_path'], 'r') as f:
         skeleton_index_pattern = yaml.load(f)
 
@@ -76,6 +79,8 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
         if field in template_definition['elasticsearch_template']:
             skeleton['mappings']['_default_'][field] = template_definition['elasticsearch_template'][field]
 
+    supported.bw_mapping_compatibility(es_version, skeleton)
+
     json.dump(
         skeleton, output, indent=2, separators=(',', ': '), sort_keys=True)
     output.write('\n')
@@ -87,10 +92,12 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
             time_field_name = ii['name']
             break
     skeleton_index_pattern["timeFieldName"] = time_field_name
-    skeleton_index_pattern["description"] = skeleton_index_pattern["description"].replace("<the_index_type>", template_definition['elasticsearch_template']['index_pattern'])
+    # Field description was dropped (see #77)
+    # skeleton_index_pattern["description"] = skeleton_index_pattern["description"].replace("<the_index_type>", template_definition['elasticsearch_template']['index_pattern'])
     # get fields
     index_pattern_fields = (traverse_group_section_index_pattern(
-        default_mapping, default_mapping_yml['field_defaults'], process_leaf_index_pattern, None, True))
+        default_mapping, default_mapping_yml['field_defaults'], process_leaf_index_pattern, es_version, None, True))
+
     skeleton_index_pattern["fields"] = json.dumps(index_pattern_fields)
     json.dump(
         skeleton_index_pattern, output_index_pattern, indent=2, separators=(',', ': '), sort_keys=True)
@@ -166,7 +173,7 @@ def process_leaf(field, defaults):
     Returns:
         dict corresponding to the data in the particular field.
     """
-    other_known_types = ["string", "date", "ip", "integer", "long",
+    other_known_types = ["text", "keyword", "date", "ip", "integer", "long",
                          "boolean", "short", "byte"]
 
     for key in defaults.keys():
@@ -190,14 +197,17 @@ def process_leaf(field, defaults):
         print("Unknown field. Skipped adding field {}".format(field))
 
 
-def traverse_group_section_index_pattern(group, defaults, leaf_handler, groupname=None, toplevel=False):
+def traverse_group_section_index_pattern(group, defaults, leaf_handler, es_version, groupname=None, toplevel=False):
     """
     Traverse the sections tree and fill in the index pattern fields
     map.
     Args:
-        group(dict): field of type group, that has multiple subfields under
-    'fields' key.
+        group(dict): field of type group, that has multiple subfields under 'fields' key.
         defaults(dict): dict with the defaults for all fields
+        leaf_handler():
+        es_version(str): supported version of Elasticsearch
+        groupname(str):
+        toplevel(bool):
     Returns:
         array of field definitions.
     """
@@ -214,12 +224,12 @@ def traverse_group_section_index_pattern(group, defaults, leaf_handler, groupnam
                 subgroupname = group.get("name", None)
             if field.get("type") == "group" or "fields" in field:
                 if not field.get("type") == "group": # assume leaf
-                    out_field = leaf_handler(field, defaults, subgroupname)
+                    out_field = leaf_handler(field, defaults, subgroupname, es_version)
                     fields.append(out_field)
-                more_fields = traverse_group_section_index_pattern(field, defaults, leaf_handler, subgroupname)
+                more_fields = traverse_group_section_index_pattern(field, defaults, leaf_handler, es_version, subgroupname)
                 fields.extend(more_fields)
             else:
-                out_field = leaf_handler(field, defaults, subgroupname)
+                out_field = leaf_handler(field, defaults, subgroupname, es_version)
                 fields.append(out_field)
     except KeyError:
         print("Skipping empty section {}".format(group))
@@ -227,13 +237,14 @@ def traverse_group_section_index_pattern(group, defaults, leaf_handler, groupnam
     return fields
 
 
-def process_leaf_index_pattern(field, defaults, groupname):
+def process_leaf_index_pattern(field, defaults, groupname, es_version):
     """Process field that is not a group. Fill the template copy with the actual
     data.
     Args:
         field(dict): contents of the field.
         defaults(dict): default values.
         groupname(string): name of group this field belongs to e.g. "systemd.u"
+        es_version(string): supported version of Elasticsearch
     Returns:
         dict corresponding to the data in the particular field.
     """
@@ -242,8 +253,9 @@ def process_leaf_index_pattern(field, defaults, groupname):
     else:
         fieldname = field["name"]
     # Kibana field types:
-    # https://github.com/elastic/kibana/blob/master/src/ui/public/index_patterns/_field_types.js
-    if field.get("type") in ["string", "date", "ip", "boolean"]:
+    # 4.6: https://github.com/elastic/kibana/blob/4.6/src/ui/public/index_patterns/_field_types.js
+    # 5.5: https://github.com/elastic/kibana/blob/5.5/src/utils/kbn_field_types.js
+    if field.get("type") in ["text", "keyword", "date", "ip", "boolean"]:
         fieldtype = field.get("type")
     elif field.get("type") in ["integer", "long", "short", "byte", "float"]:
         fieldtype = "number"
@@ -251,21 +263,21 @@ def process_leaf_index_pattern(field, defaults, groupname):
         if "geo_point" == field.get("object_struct", {}).get("properties", {}).get("location", {}).get("type", ''):
             fieldtype = "geo_point"
         else:
-            fieldtype = "string"
+            fieldtype = "text"
     elif field.get("type") == "nested":
-        fieldtype = "string"
+        fieldtype = "text"
     else:
         print("Unknown field type. Skipped adding field {}".format(field))
-    analyzed = field.get("index", "") == "analyzed"
     res = {
         "name": fieldname,
         "type": fieldtype,
         "count": 0,
         "scripted": False,
-        "indexed": True,
-        "analyzed": analyzed,
-        "doc_values": field.get("doc_values", True)
+        "searchable": True,
+        "aggregatable": True, #?? Why is Kibana 5.x internal upgrade process converting almost everything to True?
+        "readFromDocValues": field.get("doc_values", True)
     }
+    supported.bw_index_pattern_compatibility(es_version, res, field)
     return res
 
 
@@ -425,10 +437,11 @@ def parse_args():
     p.add_argument('--docs', action='store_true', default=False,
                    help='Generate field documentation')
 
-    return p.parse_args()
+    # Do not call parse_args() on parser yet so that we can use it in unittests
+    return p
 
 if __name__ == '__main__':
-    args = parse_args()
+    args = parse_args().parse_args()
 
     with open(args.template_definition, 'r') as input_template:
         template_definition = yaml.load(input_template)
@@ -440,8 +453,10 @@ if __name__ == '__main__':
                                      args.namespaces_dir)
         sys.exit()
 
-    with open('{0[elasticsearch_template][name]}.template.json'.format(
-            template_definition), 'w') as output:
-        with open('{0[elasticsearch_template][name]}.index-pattern.json'.format(
-                template_definition), 'w') as output_index_pattern:
-            object_types_to_template(template_definition, output, output_index_pattern, args.namespaces_dir)
+    for es_version in supported.elasticsearch:
+        with open('{0[elasticsearch_template][name]}.{1}.template.json'.format(
+                template_definition, es_version), 'w') as output:
+            with open('{0[elasticsearch_template][name]}.{1}.index-pattern.json'.format(
+                    template_definition, es_version), 'w') as output_index_pattern:
+                object_types_to_template(template_definition, output, output_index_pattern,
+                                         es_version, args.namespaces_dir)

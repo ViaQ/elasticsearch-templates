@@ -7,12 +7,12 @@ namespace:
     The namespace contains the details for the metadata of individual job run.
   fields:
   - name: master
-    type: string
+    type: keyword
     description: >
       FQDN of the CI Master server.
 
   - name: name
-    type: string
+    type: keyword
     description: >
       Name of the CI job.
 
@@ -33,22 +33,22 @@ namespace:
       Build duration in seconds.
 
   - name: phase
-    type: string
+    type: keyword
     description: >
       Phase of the CI job.
 
   - name: result
-    type: string
+    type: keyword
     description: >
       CI job result.
 
   - name: url
-    type: string
+    type: keyword
     description: >
       Full URL to the CI job on the CI master.
 
   - name: node_name
-    type: string
+    type: keyword
     description: >
       The Jenkins node that executes the CI job.
 
@@ -58,7 +58,7 @@ namespace:
       The description of Jenkins node.
 
   - name: hostname
-    type: string
+    type: keyword
     description: >
       The Jenkins master for the node.
 
@@ -70,16 +70,16 @@ namespace:
       `consoleText`.
     fields:
     - name: name
-      type: string
+      type: keyword
       description: >
        file name of the artifact
 
     - name: url
-      type: string
+      type: keyword
       description: >
         URL to the html log of the CI job on cold storage.
 
     - name: original_url
-      type: string
+      type: keyword
       description: >
         URL to the html log of the CI job on the CI server.
