@@ -1,0 +1,9 @@
+TEMPLATE_NAME = com.redhat.fedora-ci
+
+.PHONY: all clean
+
+all:
+	python ../../scripts/generate_template.py template.yml ../../namespaces/
+
+clean:
+	rm *.template.json

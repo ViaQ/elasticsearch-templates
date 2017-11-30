@@ -1,0 +1,156 @@
+
+namespace:
+  name: fedora-ci
+  type: group
+  description: >
+    Namespace for Fedora CI specific metadata as extracted from FedMsg.
+    The upstream repository is https://github.com/CentOS-PaaS-SIG/ci-pipeline/
+  fields:
+  - name: CI_NAME
+    type: string
+    description: >
+      Jenkins pipeline job name.
+
+  - name: CI_TYPE
+    type: string
+    description: >
+      Type of message we are sending (default value = custom).
+
+  - name: build_id
+    type: integer
+    description: >
+      Jenkins pipeline build ID.
+
+  - name: build_url
+    type: string
+    description: >
+      Full url to the Jenkins pipeline build
+      ex. https://jenkins-continuous-infra.apps.ci.centos.org/job/ci-pipeline-f26/91/".
+
+  - name: filename
+    type: string
+    description: >
+      Name of the file.
+      Typically from org.fedoraproject.prod.git.* FedMsg topic
+
+  - name: agent
+    type: string
+    description: >
+      TODO.
+      Typically from org.fedoraproject.prod.git.* FedMsg topic
+
+  - name: md5sum
+    type: string
+    description: >
+      TODO.
+      Typically from org.fedoraproject.prod.git.* FedMsg topic
+
+  - name: name
+    type: string
+    description: >
+      TODO.
+      Typically from org.fedoraproject.prod.git.* FedMsg topic
+
+  - name: path
+    type: string
+    description: >
+      TODO.
+      Typically from org.fedoraproject.prod.git.* FedMsg topic
+
+  - name: message-content
+    type: string
+    description: >
+      If additional content is needed in the bod of the message (default = "")
+
+  - name: ref
+    type: string
+    description: >
+      Indication of what we are building distro/branch/arch/distro_type
+      ex. fedora/f26/x86_64/atomic-host
+
+  - name: status
+    type: string
+    description: >
+      Status of the stage and overall pipeline at the time when the message is
+      published. UNSTABLE status
+
+  - name: test_guidance
+    type: string
+    description: >
+      required by downstream CI
+
+  - name: topic
+    type: string
+    description: >
+      FedMsg topic
+
+  - name: username
+    type: string
+    description: >
+      Audit of who is sending the message (default value = fedora-atomic)
+
+  - name: compose_rev
+    type: string
+    description: >
+      SHA-1 of the compose
+      ex. c15b07cc0f560dd4325b64b8ed8f5750ab102f2ff2e0ace39cda4158f900e4da
+
+  - name: compose_url
+    type: string
+    description: >
+      Full url to the OStree compose
+      ex. http://artifacts.ci.centos.org/artifacts/fedora-atomic/f26/ostree
+
+  - name: nvr
+    type: string
+    description: >
+      The NVR of the RPM after modification, so including sha and # commits
+      ex. gnutls-3.5.15-1.246.a3e666c.fc26
+
+  - name: original_spec_nvr
+    type: string
+    description: >
+      The NVR of the RPM if the spec file hadn't been modified
+      ex. gnutls-3.5.15-1.fc26
+
+  - name: image_name
+    type: string
+    description: >
+      Image name
+      ex. fedora-atomic-26.200-c15b07cc0f560dd.qcow2
+
+  - name: image_url
+    type: string
+    description: >
+      Full url to the image
+      ex. http://artifacts.ci.centos.org/artifacts/fedora-atomic/f26/images/fedora-atomic-26.200-c15b07cc0f560dd.qcow2
+
+  - name: commit
+    type: group
+    description: >
+      Information about the commit
+    fields:
+    - name: branch
+      type: string
+      description: >
+       Fedora branch master = rawhide for now this may change in the future
+       ex. f26
+
+    - name: namespace
+      type: string
+      description: >
+        Packaging type passed from dist-git message
+        ex. rpms
+
+    - name: repo
+      type: string
+      description: >
+        Package name
+        ex. vim
+
+    - name: rev
+      type: string
+      description: >
+        This is the commit SHA-1 that is passed on from the dist-git message we
+        recieve
+        ex. 591b0d2fc67a45e4ad13bdc3e312d5554852426a
