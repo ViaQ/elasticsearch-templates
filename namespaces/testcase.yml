@@ -49,6 +49,7 @@ namespace:
 
   - name: system-out
     type: string
+    doc_values: false
     index: analyzed
     description: >
       Content of <system-out> tag in the xunit testcase.

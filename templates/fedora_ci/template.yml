@@ -1,0 +1,13 @@
+skeleton_path: ../skeleton.json
+skeleton_index_pattern_path: ../skeleton-index-pattern.json
+
+elasticsearch_template:
+  name: com.redhat.fedora-ci
+  index_pattern: "centosci-pipeline-prod-*"
+  order: 10
+
+namespaces:
+  - ci_job.yml
+  - testcase.yml
+  - fedora_ci.yml
+  - pipeline_metadata.yml
