@@ -11,7 +11,7 @@
                     "message_field": {
                         "mapping": {
                             "index": "analyzed",
-                            "omit_norms": true,
+                            "norms": { "enabled": false },
                             "type": "string"
                         },
                         "match": "message",
@@ -29,7 +29,7 @@
                                 }
                             },
                             "index": "analyzed",
-                            "omit_norms": true,
+                            "norms": { "enabled": false },
                             "type": "string"
                         },
                         "match": "*",
