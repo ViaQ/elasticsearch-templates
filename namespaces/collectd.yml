@@ -655,6 +655,46 @@ namespace:
       type: long
       description: >
         collectd's balloon_cur type of statsd plugin.
+    
+    - name: vm_memory_majflt
+      type: long
+      description: >
+        collectd's vm_memory_majflt type of statsd plugin.
+
+    - name: vm_memory_mem_free
+      type: long
+      description: >
+        collectd's vm_memory_mem_free type of statsd plugin.
+
+    - name: vm_memory_mem_total
+      type: long
+      description: >
+        collectd's vm_memory_mem_total type of statsd plugin.
+
+    - name: vm_memory_mem_unused
+      type: long
+      description: >
+        collectd's vm_memory_mem_unused type of statsd plugin.
+
+    - name: vm_memory_mem_used
+      type: long
+      description: >
+        collectd's vm_memory_mem_used type of statsd plugin.
+    
+    - name: vm_memory_pageflt
+      type: long
+      description: >
+        collectd's vm_memory_pageflt type of statsd plugin.
+
+    - name: vm_memory_swap_in
+      type: long
+      description: >
+        collectd's vm_memory_swap_in type of statsd plugin.
+
+    - name: vm_memory_swap_out
+      type: long
+      description: >
+        collectd's vm_memory_swap_out type of statsd plugin.
 
     - name: vm_cpu_sys
       type: long
