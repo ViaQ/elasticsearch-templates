@@ -10,7 +10,7 @@ not explicitly overwritten.
 
 # Templates
 
-ElasticSearch templates consist of one or several namespaces.
+Elasticsearch templates consist of one or several namespaces.
 Individual templates are constructed from particular template directory.
 
 # Adding/change namespace

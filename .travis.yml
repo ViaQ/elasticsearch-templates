@@ -1,0 +1,18 @@
+language: python
+
+python:
+  - 3.6
+
+install:
+  - pip install pyyaml
+
+script:
+  - cd scripts
+  - python -m unittest -v generate_template_test
+  - python -m unittest -v compare_against_released_templates_test
+  - python -m unittest -v compare_against_released_patterns_test
+  - cd ..
+  - cd templates
+  - cd test
+  - ls -la
+  - ./test.sh

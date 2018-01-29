@@ -33,7 +33,6 @@ This file the skeleton of the index pattern file.
 by sections:
 `title`: Filled in by the openshift-elasticseach-plugin [index pattern loader](https://github.com/fabric8io/openshift-elasticsearch-plugin/blob/master/src/main/java/io/fabric8/elasticsearch/plugin/kibana/KibanaSeed.java#L371)
 `timeFieldName`: Name of the time field - the script will look for the first field in the `default` namespace that has `type: date`
-`description`: The script will fill in the type of pattern
 `fields`: The script will fill this in based on the namespace
 * `name`: The name of the field from the namespace
 * `type`: Field data type (string, date, etc.) - this is the `type` parameter from the namespace

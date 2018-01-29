@@ -32,6 +32,17 @@ Add/modify `template.yml` definition file to include proper namespace
 definitions. See for example [templates/openshift/README.md](templates/openshift/README.md)
 for the details.
 
+## Elasticsearch versions support
+
+Support for multiple Elasticsearch versions has been added. Resulting files (ie. index-templates or index-patterns)
+are generated for each supported version of Elasticsearch. Target version of ES is encoded into the file name.
+
+List of currently supported ES versions can be find in [scripts/supported_versions.py](scripts/supported_versions.py).
+
+The idea is that all the input file templates and data are formatted according to the latest supported ES version and
+scripts handle backward data and format conversions for older ES versions. As part of unit testing the generated data
+is compared to released common data files (automatically downloaded from GitHub during tests). 
+
 # Generating documentation
 
 Use the makefile in the [templates/](templates) folder.

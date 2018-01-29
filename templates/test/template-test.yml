@@ -1,0 +1,23 @@
+skeleton_path: ../skeleton.json
+skeleton_index_pattern_path: ../skeleton-index-pattern.json
+
+elasticsearch_template:
+  name: foo.test
+  index_pattern: ".test.*"
+  order: 10
+
+# Some namespaces are commented out for now.
+# TODO: use all available namespaces for tests
+namespaces:
+  - aushape.yml
+#  - ci_job.yml
+  - collectd.yml
+  - docker.yml
+  - kubernetes.yml
+  - ovirt.yml
+  - pipeline_metadata.yml
+  - rsyslog.yml
+  - systemd.yml
+#  - testcase.yml
+  - tlog.yml
+#  - openshift/app_log.yml

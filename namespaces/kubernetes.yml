@@ -6,55 +6,50 @@ namespace:
     Namespace for kubernetes-specific metadata
   fields:
   - name: pod_name
-    type: string
-    norms:
-      enabled: true
+    type: keyword
+    norms: true
     description: >
       The name of the pod
 
   - name: pod_id
-    type: string
-    norms:
-      enabled: true
+    type: keyword
+    norms: true
     description: >
       Kubernetes ID of the pod.
 
   - name: namespace_name
-    type: string
-    norms:
-      enabled: true
+    type: keyword
+    norms: true
     description: >
       The name of the namespace in Kubernetes.
 
   - name: namespace_id
-    type: string
-    norms:
-      enabled: true
+    type: keyword
+    norms: true
     description: >
       ID of the namespace in Kubernetes.
 
   - name: host
-    type: string
-    norms:
-      enabled: true
+    type: keyword
+    norms: true
     description: >
       Kubernetes node name
 
   - name: master_url
-    type: string
+    type: keyword
     description: >
       Kubernetes Master URL
 
   - name: container_name
-    type: string
-    norms:
-      enabled: true
+    type: text
+    doc_values: false
+    norms: true
     description: >
       The name of the container in Kubernetes.
     fields:
       - name: raw
         ignore_above: 256
-        type: string
+        type: keyword
 
   - name: annotations
     type: group
@@ -70,26 +65,26 @@ namespace:
       underscores.
     fields:
       - name: deployment
-        type: string
+        type: keyword
         example: logging-kibana-3
         description: >
           The deployment associated with this Kubernetes object
       - name: deploymentconfig
-        type: string
+        type: keyword
         example: logging-kibana
         description: >
           The deploymentconfig associated with this Kubernetes object
         fields:
           - name: raw
             ignore_above: 64
-            type: string
+            type: keyword
       - name: component
-        type: string
+        type: keyword
         example: kibana
         description: >
           The component associated with this Kubernetes object
       - name: provider
-        type: string
+        type: keyword
         example: openshift
         description: >
           The provider associated with this Kubernetes object
@@ -102,7 +97,7 @@ namespace:
       This description should loosely follow 'type Event' in https://github.com/kubernetes/kubernetes/blob/master/pkg/api/types.go
     fields:
       - name: verb
-        type: string
+        type: keyword
         example: ADDED
         description: >
           The type of event, can be ADDED, MODIFIED, DELETED
@@ -112,23 +107,23 @@ namespace:
           Information related to the location and time of the event creation
         fields:
           - name: name
-            type: string
+            type: keyword
             example: java-mainclass-1.14d888a4cfc24890
             description: >
               Name of the object that triggered the event creation
           - name: namespace
-            type: string
+            type: keyword
             example: default
             description: >
               The name of the namespace which induced the event
               It differs from namespace_name, which will be in case of every event the 'eventrouter'
           - name: selfLink
-            type: string
+            type: keyword
             example: /api/v1/namespaces/javaj/events/java-mainclass-1.14d888a4cfc24890
             description: >
               Link to the event itself
           - name: uid
-            type: string
+            type: keyword
             example: d828ac69-7b58-11e7-9cf5-5254002f560c
             description: >
               Event's unique ID
@@ -143,43 +138,43 @@ namespace:
           Description of the object involved in the event creation
         fields:
           - name: kind
-            type: string
+            type: keyword
             example: ReplicationController
             description: >
               Type of the object
           - name: namespace
-            type: string
+            type: keyword
             example: default
             description: >
               The name of the namespace in which the object triggered the event
               In case this event is not triggered by a pod then it differs from kubernetes.namespace_name, which will be in case of every event eventrouter's namespace
           - name: name
-            type: string
+            type: keyword
             example: java-mainclass-1
             description: >
               Name of the object that triggered the event
           - name: uid
-            type: string
+            type: keyword
             example: e6bff941-76a8-11e7-8193-5254002f560c
             description: >
               Object's unique ID
           - name: apiVersion
-            type: string
+            type: keyword
             example: v1
             description: >
               Version of kubernetes master API
           - name: resourceVersion
-            type: string
+            type: keyword
             example: 308882
             description: >
               String that identifies the server's internal version of the pod triggering the event that can be used by clients to determine when objects have changed
       - name: reason
-        type: string
+        type: keyword
         example: SuccessfulCreate
         description: >
           Short, machine understandable string that gives the reason for this event being generated 
       - name: source_component
-        type: string
+        type: keyword
         example: replication-controller
         description: >
           Component which reported this event
@@ -195,7 +190,7 @@ namespace:
         description: >
           The number of times this event has occurred
       - name: type
-        type: string
+        type: keyword
         example: Normal 
         description: >
           Type of this event (Normal, Warning), new types could be added in the future

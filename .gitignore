@@ -2,3 +2,7 @@
 *.template.json
 *~
 templates/*/*.asciidoc
+
+# IDEA specific
+*.iml
+.idea

@@ -14,6 +14,6 @@ templates:
 	done
 
 index_pattern:
-	python ../scripts/concat-index-pattern-fields.py \
-		{$(INDEX_PATTERN_DIRS)}/*.index-pattern.json \
-		> com.redhat.viaq-openshift.index-pattern.json
+	python ../scripts/concat_index_pattern_fields.py \
+		"$(INDEX_PATTERN_DIRS)" "*.index-pattern.json" \
+		"$(TEMPLATE_NAME).<ES_VERSION>.index-pattern.json"

@@ -6,21 +6,20 @@ namespace:
     RFC5424 based metadata.
   fields:
   - name: facility
-    type: string
+    type: keyword
     description: >
       rsyslog's facility. see syslog specification for more information
 
   - name: protocol-version
-    type: string
+    type: keyword
     description: >
        rsyslog protocol version
 
   - name: structured-data
-    type: string
+    type: keyword
     description: >
       syslog's structured-data. see syslog specification for more information
-    norms:
-      enabled: false
+    norms: false
 
   - name: msgid
     type: long
@@ -28,7 +27,7 @@ namespace:
        syslog's msgid field
 
   - name: appname
-    type: string
+    type: keyword
     description: >
       syslog's APP-NAME. If APP-NAME is same as programname, we only fill top-level field 'service'.
       If APP-NAME is not equal to programname, this field will hold APP-NAME. See syslog specification for more information
