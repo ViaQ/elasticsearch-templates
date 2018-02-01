@@ -88,6 +88,13 @@ class CompareAgainstReleasedPatternsTestCase(common_test_support.CommonTestSuppo
                 cumulative_json = self._json_from_file(os.path.join(tmpdirname, cumulative_file.name))
                 generated_fields = self._from_string_to_json(cumulative_json["fields"])
 
+        # Fix generated data:
+        # ======================
+        # VM Memory stats were added after 0.0.12 release
+        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/85
+        generated_fields = [item for item in generated_fields if not item["name"].startswith("collectd.statsd.vm_memory")]
+        # ======================
+
         # Exit the context of temporary folder. This will remove also all the content in it.
         # generated_index_pattern = self._sort(_json)
 

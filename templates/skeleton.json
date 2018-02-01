@@ -8,6 +8,32 @@
             "date_detection": false,
             "dynamic_templates": [
                 {
+                    "aushape_generic_nested_fields": {
+                        "path_match": "aushape.data.*.*.*",
+                        "mapping": {
+                            "type": "text",
+                            "index": true
+                        }
+                    }
+                },
+                {
+                    "aushape_generic_fields": {
+                        "path_match": "aushape.data.*.*",
+                        "mapping": {
+                            "type": "text",
+                            "index": true
+                        }
+                    }
+                },
+                {
+                    "aushape_generic_records": {
+                        "path_match": "aushape.data.*",
+                        "mapping": {
+                            "type": "object"
+                        }
+                    }
+                },
+                {
                     "message_field": {
                         "mapping": {
                             "index": true,
@@ -34,32 +60,6 @@
                         },
                         "match": "*",
                         "match_mapping_type": "string"
-                    }
-                },
-                {
-                    "aushape_generic_nested_fields": {
-                        "path_match": "aushape.data.*.*.*",
-                        "mapping": {
-                            "type": "text",
-                            "index": true
-                        }
-                    }
-                },
-                {
-                    "aushape_generic_fields": {
-                        "path_match": "aushape.data.*.*",
-                        "mapping": {
-                            "type": "text",
-                            "index": true
-                        }
-                    }
-                },
-                {
-                    "aushape_generic_records": {
-                        "path_match": "aushape.data.*",
-                        "mapping": {
-                            "type": "object"
-                        }
                     }
                 }
             ],

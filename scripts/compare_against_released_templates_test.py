@@ -52,6 +52,19 @@ class CompareAgainstReleasedTemplatesTestCase(common_test_support.CommonTestSupp
         # Mask version
         generated_json["mappings"]["_default_"]["_meta"]["version"] = "na"
 
+        # Fix generated data:
+        # ======================
+        # VM Memory stats were added after 0.0.12 release
+        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/85
+        if "collectd" in generated_json["mappings"]["_default_"]["properties"]:
+            vm_memory_keys = []
+            for metric_key in generated_json["mappings"]["_default_"]["properties"]["collectd"]["properties"]["statsd"]["properties"].keys():
+                if metric_key.startswith("vm_memory"):
+                    vm_memory_keys.append(metric_key)
+            for k in vm_memory_keys:
+                del generated_json["mappings"]["_default_"]["properties"]["collectd"]["properties"]["statsd"]["properties"][k]
+        # ======================
+
         generated_index_template = self._sort(generated_json)
         # print(generated_index_template)
 
@@ -73,6 +86,11 @@ class CompareAgainstReleasedTemplatesTestCase(common_test_support.CommonTestSupp
         #  - on top of #69 norms were enabled for general string fields
         del released_data["mappings"]["_default_"]["dynamic_templates"][1]["string_fields"]["mapping"]["omit_norms"]
         released_data["mappings"]["_default_"]["dynamic_templates"][1]["string_fields"]["mapping"]["norms"] = { 'enabled' : True }
+
+        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/83
+        new_order = [2, 3, 4, 0, 1]
+        reordered_dynamic_templates = [ released_data["mappings"]["_default_"]["dynamic_templates"][i] for i in new_order ]
+        released_data["mappings"]["_default_"]["dynamic_templates"] = reordered_dynamic_templates
 
         #  - see https://github.com/ViaQ/elasticsearch-templates/issues/69#issuecomment-357276665
         del released_data["mappings"]["_default_"]["properties"]["ipaddr4"]["norms"]
