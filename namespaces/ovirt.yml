@@ -19,8 +19,20 @@ namespace:
     type: keyword
     description: >
       FQDN of the oVirt engine.
+    fields:
+      - name: raw
+        ignore_above: 256
+        type: string
+    norms:
+      enabled: false
 
   - name: cluster_name
     type: keyword
     description: >
       Cluster name of the oVirt host.
+    fields:
+      - name: raw
+        ignore_above: 256
+        type: string
+    norms:
+      enabled: false
