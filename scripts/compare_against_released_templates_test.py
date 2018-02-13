@@ -80,6 +80,8 @@ class CompareAgainstReleasedTemplatesTestCase(common_test_support.CommonTestSupp
         # We need to clean some diffs that we know exists today but they are either
         # fine to ignore or there is an open ticket that has fix pending.
 
+        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/87
+        released_data["aliases"] = { ".all": {} }
         #  - see https://github.com/ViaQ/elasticsearch-templates/issues/69
         del released_data["mappings"]["_default_"]["dynamic_templates"][0]["message_field"]["mapping"]["omit_norms"]
         released_data["mappings"]["_default_"]["dynamic_templates"][0]["message_field"]["mapping"]["norms"] = { 'enabled' : False }
