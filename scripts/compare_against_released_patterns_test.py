@@ -93,6 +93,8 @@ class CompareAgainstReleasedPatternsTestCase(common_test_support.CommonTestSuppo
         # VM Memory stats were added after 0.0.12 release
         #  - see https://github.com/ViaQ/elasticsearch-templates/issues/85
         generated_fields = [item for item in generated_fields if not item["name"].startswith("collectd.statsd.vm_memory")]
+	# viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
+        generated_fields = [item for item in generated_fields if not item["name"] == "viaq_msg_id"]
         # ======================
 
         # Exit the context of temporary folder. This will remove also all the content in it.
@@ -118,7 +120,6 @@ class CompareAgainstReleasedPatternsTestCase(common_test_support.CommonTestSuppo
         list(filter(lambda i: i["name"] == "namespace_name", released_fields))[0]["analyzed"] = True
 
         # ======================
-
         generated_fields.sort(key=lambda item: item["name"])
         released_fields.sort(key=lambda item: item["name"])
 
