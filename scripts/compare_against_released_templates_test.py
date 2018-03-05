@@ -63,6 +63,9 @@ class CompareAgainstReleasedTemplatesTestCase(common_test_support.CommonTestSupp
                     vm_memory_keys.append(metric_key)
             for k in vm_memory_keys:
                 del generated_json["mappings"]["_default_"]["properties"]["collectd"]["properties"]["statsd"]["properties"][k]
+	# viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
+        if 'viaq_msg_id' in generated_json['mappings']['_default_']['properties']:
+            del generated_json['mappings']['_default_']['properties']['viaq_msg_id']
         # ======================
 
         generated_index_template = self._sort(generated_json)

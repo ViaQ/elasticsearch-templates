@@ -5,7 +5,10 @@ import json
 import sys
 import io
 import codecs
-import urllib.request
+try:
+    import urllib.request
+except ImportError:
+    import urllib3.request
 
 class CommonTestSupport(unittest.TestCase):
     """Class to be used as a parent for various tests. It provides useful methods."""
