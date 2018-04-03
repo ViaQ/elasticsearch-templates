@@ -255,17 +255,20 @@ def process_leaf_index_pattern(field, defaults, groupname, es_version):
     # Kibana field types:
     # 4.6: https://github.com/elastic/kibana/blob/4.6/src/ui/public/index_patterns/_field_types.js
     # 5.5: https://github.com/elastic/kibana/blob/5.5/src/utils/kbn_field_types.js
-    if field.get("type") in ["text", "keyword", "date", "ip", "boolean"]:
+    if field.get("type") in ["string", "text", "keyword", "_type", "_id"]:
+        fieldtype = "string"
+    elif field.get("type") in ["date", "ip", "boolean", "geo_point", "geo_shape", "attachment", "murmur3", "_source"]:
         fieldtype = field.get("type")
-    elif field.get("type") in ["integer", "long", "short", "byte", "float"]:
+    elif field.get("type") in ["float", "half_float", "scaled_float", "double", "integer", "long", "short", "byte",
+                               "token_count"]:
         fieldtype = "number"
     elif field.get("type") == "object":
         if "geo_point" == field.get("object_struct", {}).get("properties", {}).get("location", {}).get("type", ''):
             fieldtype = "geo_point"
         else:
-            fieldtype = "text"
+            fieldtype = "string"
     elif field.get("type") == "nested":
-        fieldtype = "text"
+        fieldtype = "string"
     else:
         print("Unknown field type. Skipped adding field {}".format(field))
     res = {
