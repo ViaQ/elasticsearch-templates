@@ -3,6 +3,8 @@
 The repository contains scripts and sources to generate Elasticsearch templates
 that comply with Common Data Model.
 
+[![Build Status](https://travis-ci.org/ViaQ/elasticsearch-templates.svg?branch=master)](https://travis-ci.org/ViaQ/elasticsearch-templates)
+
 # Problem Statement
 
 We are trying to solve the problem of conflicts and inconsistencies in log data
