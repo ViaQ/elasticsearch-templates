@@ -26,21 +26,21 @@ namespace:
       Cluster name of the oVirt host.
 
   - name: class
-    type: string
+    type: keyword
     description: >
       Class name of the oVirt host.
 
   - name: module_lineno
-    type: string
+    type: keyword
     description: >
       Module and line number of the oVirt host.
 
   - name: thread
-    type: string
+    type: keyword
     description: >
       Thread name of the oVirt host.
 
   - name: correlationid
-    type: string
+    type: keyword
     description: >
       Correlation ID of the oVirt host.
