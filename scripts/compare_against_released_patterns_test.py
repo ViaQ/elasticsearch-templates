@@ -38,7 +38,7 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
         # We need to clean some diffs that we know exists today but they are either
         # fine to ignore or there is an open ticket that has fix pending.
 
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/77
+        # https://github.com/ViaQ/elasticsearch-templates/issues/77
         del json_data["description"]
         # ======================
 
@@ -97,10 +97,16 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
         # Fix generated data:
         # ======================
         # VM Memory stats were added after 0.0.12 release
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/85
+        # https://github.com/ViaQ/elasticsearch-templates/issues/85
         generated_fields = [item for item in generated_fields if not item["name"].startswith("collectd.statsd.vm_memory")]
         # viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
         generated_fields = [item for item in generated_fields if not item["name"] == "viaq_msg_id"]
+
+        # https://github.com/ViaQ/elasticsearch-templates/issues/94
+        generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.class"]
+        generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.module_lineno"]
+        generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.thread"]
+        generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.correlationid"]
         # ======================
 
         # Exit the context of temporary folder. This will remove also all the content in it.
@@ -115,14 +121,14 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
         # We need to clean some diffs that we know exists today but they are either
         # fine to ignore or there is an open ticket that has fix pending.
 
-        #  We need to explicitly override doc_values to false for text type fields.
-        #  - see https://github.com/ViaQ/elasticsearch-templates/pull/70#issuecomment-360704220
+        # We need to explicitly override doc_values to false for text type fields.
+        # https://github.com/ViaQ/elasticsearch-templates/pull/70#issuecomment-360704220
         list(filter(lambda i: i["name"] == "aushape.error", released_fields))[0]["doc_values"] = False
         list(filter(lambda i: i["name"] == "kubernetes.container_name", released_fields))[0]["doc_values"] = False
 
-        #  - We changed how 'namespace_name' is configured in namespaces/_default_.yml.
-        #    TODO: We need to review how those changes need to be translated into Kibana index pattern.
-        #    This does not look correct to me.
+        # We changed how 'namespace_name' is configured in namespaces/_default_.yml.
+        # TODO: We need to review how those changes need to be translated into Kibana index pattern.
+        # This does not look correct to me.
         list(filter(lambda i: i["name"] == "namespace_name", released_fields))[0]["analyzed"] = True
 
         # ======================
