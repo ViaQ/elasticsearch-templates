@@ -32,7 +32,7 @@ class CommonTestSupport(unittest.TestCase):
         """Sort json using json.dump() method. Useful for comparing json data."""
         _io = io.StringIO()
         json.dump(json_data, _io, separators=(',', ': '), sort_keys=True)
-        out =_io.getvalue()
+        out = _io.getvalue()
         _io.close()
         return out
 
@@ -47,4 +47,7 @@ class CommonTestSupport(unittest.TestCase):
         return json.loads(value)
 
     def _json_from_file(self, path):
-        return json.load(io.open(path))
+        _io = io.open(path)
+        _json = json.load(_io)
+        _io.close()
+        return _json
