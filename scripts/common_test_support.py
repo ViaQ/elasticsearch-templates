@@ -11,6 +11,7 @@ except ImportError:
     import urllib3.request
 
 _release_download_path = "https://github.com/ViaQ/elasticsearch-templates/releases/download/"
+_v0_0_12 = "0.0.12"
 
 
 class CommonTestSupport(unittest.TestCase):

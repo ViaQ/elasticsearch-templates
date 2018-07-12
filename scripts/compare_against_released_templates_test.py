@@ -4,19 +4,22 @@ import yaml
 import os
 import io
 import supported_versions as supported
-import common_test_support
+import common_test_support as helper
 
 
-class CompareAgainstReleasedTemplatesTestCase(common_test_support.CommonTestSupport):
+class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
 
-    _index_template_viaq_os_operations = common_test_support._release_download_path + \
-        "0.0.12/com.redhat.viaq-openshift-operations.template.json"
+    _index_template_viaq_os_operations = helper._release_download_path + \
+        helper._v0_0_12 + \
+        "/com.redhat.viaq-openshift-operations.template.json"
 
-    _index_template_viaq_os_project = common_test_support._release_download_path + \
-        "0.0.12/com.redhat.viaq-openshift-project.template.json"
+    _index_template_viaq_os_project = helper._release_download_path + \
+        helper._v0_0_12 + \
+        "/com.redhat.viaq-openshift-project.template.json"
 
-    _index_template_viaq_collectd = common_test_support._release_download_path + \
-        "0.0.12/org.ovirt.viaq-collectd.template.json"
+    _index_template_viaq_collectd = helper._release_download_path + \
+        helper._v0_0_12 + \
+        "/org.ovirt.viaq-collectd.template.json"
 
     def test_compare_index_template_viaq_os_operations(self):
         args = self.parser.parse_args(['../templates/openshift/template-operations.yml', '../namespaces/'])
