@@ -63,7 +63,7 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
         # Fix generated data:
         # ======================
         # VM Memory stats were added after 0.0.12 release
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/85
+        # https://github.com/ViaQ/elasticsearch-templates/issues/85
         if "collectd" in generated_json["mappings"]["_default_"]["properties"]:
             vm_memory_keys = []
             for metric_key in generated_json["mappings"]["_default_"]["properties"]["collectd"]["properties"]["statsd"]["properties"].keys():
@@ -74,6 +74,13 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
         # viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
         if 'viaq_msg_id' in generated_json['mappings']['_default_']['properties']:
             del generated_json['mappings']['_default_']['properties']['viaq_msg_id']
+
+        # https://github.com/ViaQ/elasticsearch-templates/issues/94
+        if 'ovirt' in generated_json["mappings"]["_default_"]["properties"]:
+            del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["class"]
+            del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["module_lineno"]
+            del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["thread"]
+            del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["correlationid"]
         # ======================
 
         generated_index_template = self._sort(generated_json)
@@ -90,35 +97,35 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
         # We need to clean some diffs that we know exists today but they are either
         # fine to ignore or there is an open ticket that has fix pending.
 
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/87
+        # https://github.com/ViaQ/elasticsearch-templates/issues/87
         released_data["aliases"] = { ".all": {} }
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/69
+        # https://github.com/ViaQ/elasticsearch-templates/issues/69
         del released_data["mappings"]["_default_"]["dynamic_templates"][0]["message_field"]["mapping"]["omit_norms"]
         released_data["mappings"]["_default_"]["dynamic_templates"][0]["message_field"]["mapping"]["norms"] = { 'enabled' : False }
         #  - on top of #69 norms were enabled for general string fields
         del released_data["mappings"]["_default_"]["dynamic_templates"][1]["string_fields"]["mapping"]["omit_norms"]
         released_data["mappings"]["_default_"]["dynamic_templates"][1]["string_fields"]["mapping"]["norms"] = { 'enabled' : True }
 
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/83
+        # https://github.com/ViaQ/elasticsearch-templates/issues/83
         new_order = [2, 3, 4, 0, 1]
         reordered_dynamic_templates = [ released_data["mappings"]["_default_"]["dynamic_templates"][i] for i in new_order ]
         released_data["mappings"]["_default_"]["dynamic_templates"] = reordered_dynamic_templates
 
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/69#issuecomment-357276665
+        # https://github.com/ViaQ/elasticsearch-templates/issues/69#issuecomment-357276665
         del released_data["mappings"]["_default_"]["properties"]["ipaddr4"]["norms"]
 
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/78
+        # https://github.com/ViaQ/elasticsearch-templates/issues/78
         released_data["mappings"]["_default_"]["properties"]["kubernetes"]["properties"]["container_name"]["index"] = "analyzed"
         released_data["mappings"]["_default_"]["properties"]["kubernetes"]["properties"]["container_name"]["doc_values"] = False
 
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/79
+        # https://github.com/ViaQ/elasticsearch-templates/issues/79
         del released_data["mappings"]["_default_"]["properties"]["pipeline_metadata"]["properties"]["collector"]["properties"]["ipaddr4"]["norms"]
         released_data["mappings"]["_default_"]["properties"]["pipeline_metadata"]["properties"]["collector"]["properties"]["ipaddr4"]["type"] = "ip"
 
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/82
+        # https://github.com/ViaQ/elasticsearch-templates/issues/82
         del released_data["mappings"]["_default_"]["properties"]["pipeline_metadata"]["properties"]["normalizer"]["properties"]["ipaddr4"]["norms"]
 
-        #  - see https://github.com/ViaQ/elasticsearch-templates/issues/80
+        # https://github.com/ViaQ/elasticsearch-templates/issues/80
         if 'aushape' in released_data["mappings"]["_default_"]["properties"]:
             released_data["mappings"]["_default_"]["properties"]["aushape"]["properties"]["error"]["index"] = "analyzed"
             released_data["mappings"]["_default_"]["properties"]["aushape"]["properties"]["error"]["doc_values"] = False
