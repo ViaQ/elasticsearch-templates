@@ -15,6 +15,7 @@ import io
 import json
 import supported_versions as supported
 
+
 def removedupnames(fieldary, names):
     ret = []
     for field in fieldary:
@@ -22,6 +23,7 @@ def removedupnames(fieldary, names):
             names[field['name']] = True
             ret.append(field)
     return ret
+
 
 def parse_args():
     p = argparse.ArgumentParser()
@@ -35,6 +37,7 @@ def parse_args():
 
     # Do not call parse_args() on parser yet so that we can use it in unittests
     return p
+
 
 def filter_index_pattern_files(dirs, index_pattern, substr):
     """
@@ -50,6 +53,7 @@ def filter_index_pattern_files(dirs, index_pattern, substr):
             if substr in file:
                 files.append(file)
     return files
+
 
 def concatenate_index_pattern_files(files, output):
     """Read fields from all input files and write cumulative result into output.
@@ -73,6 +77,7 @@ def concatenate_index_pattern_files(files, output):
     json_str = json.dumps(doc, indent=4, separators=(',', ': '), sort_keys=True, ensure_ascii=False)
     output.write(json_str)
     output.write(u'\n')
+
 
 if __name__ == '__main__':
     args = parse_args().parse_args()

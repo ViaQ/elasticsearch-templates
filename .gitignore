@@ -6,3 +6,4 @@ templates/*/*.asciidoc
 # IDEA specific
 *.iml
 .idea
+.venv

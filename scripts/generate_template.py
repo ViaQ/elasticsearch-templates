@@ -18,6 +18,7 @@ import sys
 import io
 import supported_versions as supported
 
+
 def object_types_to_template(template_definition, output, output_index_pattern, es_version, namespaces_dir):
     """
     Assemble objects for the particular template.
@@ -277,7 +278,7 @@ def process_leaf_index_pattern(field, defaults, groupname, es_version):
         "count": 0,
         "scripted": False,
         "searchable": True,
-        "aggregatable": True, #?? Why is Kibana 5.x internal upgrade process converting almost everything to True?
+        "aggregatable": True,  # ?? Why is Kibana 5.x internal upgrade process converting almost everything to True?
         "readFromDocValues": field.get("doc_values", True)
     }
     supported.bw_index_pattern_compatibility(es_version, res, field)
@@ -311,6 +312,7 @@ def add_index_order(order, template_skeleton):
         template_skeleton(dict): template to operate upon
     """
     template_skeleton['order'] = order
+
 
 def object_types_to_asciidoc(template_definition, output, namespaces_dir):
     """
@@ -373,9 +375,10 @@ The fields are grouped in the following categories:
     output.write(u'\n')
 
     for field in sections:
-#        print('Working on section: {}'.format(field))
+        # print('Working on section: {}'.format(field))
 
         document_fields(output, field, [])
+
 
 def document_fields(output, section, hier_path=[]):
 
@@ -442,6 +445,7 @@ def parse_args():
 
     # Do not call parse_args() on parser yet so that we can use it in unittests
     return p
+
 
 if __name__ == '__main__':
     args = parse_args().parse_args()

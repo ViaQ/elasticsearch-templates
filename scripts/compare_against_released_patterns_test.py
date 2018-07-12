@@ -7,9 +7,12 @@ import tempfile
 import supported_versions as supported
 import common_test_support
 
+
 class CompareAgainstReleasedPatternsTestCase(common_test_support.CommonTestSupport):
 
-    _index_pattern_viaq_os = "https://github.com/ViaQ/elasticsearch-templates/releases/download/0.0.12/com.redhat.viaq-openshift.index-pattern.json"
+    _index_pattern_viaq_os = common_test_support._release_download_path +\
+                             "0.0.12" \
+                             "/com.redhat.viaq-openshift.index-pattern.json"
 
     # The following namespaces should be the same as those listed in "templates/Makefile::${INDEX_PATTERN_DIRS}"
     _template_namespaces = ['openshift', 'collectd_metrics']
@@ -69,8 +72,11 @@ class CompareAgainstReleasedPatternsTestCase(common_test_support.CommonTestSuppo
                 file.write('\n')
                 file.close()
 
-            with io.open(os.path.join(tmpdirname, "cumulative_index_pattern.json"), mode='w', encoding='utf8') as cumulative_file:
-                individual_files = concat_index_pattern_fields.filter_index_pattern_files(tmpdirname, match_index_pattern, es_version)
+            with io.open(os.path.join(tmpdirname, "cumulative_index_pattern.json"), mode='w', encoding='utf8')\
+                    as cumulative_file:
+                individual_files = concat_index_pattern_fields.filter_index_pattern_files(tmpdirname,
+                                                                                          match_index_pattern,
+                                                                                          es_version)
 
                 print("All files in temporary folder:")
                 self._print_files_in_folder(tmpdirname)
@@ -93,7 +99,7 @@ class CompareAgainstReleasedPatternsTestCase(common_test_support.CommonTestSuppo
         # VM Memory stats were added after 0.0.12 release
         #  - see https://github.com/ViaQ/elasticsearch-templates/issues/85
         generated_fields = [item for item in generated_fields if not item["name"].startswith("collectd.statsd.vm_memory")]
-	# viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
+        # viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
         generated_fields = [item for item in generated_fields if not item["name"] == "viaq_msg_id"]
         # ======================
 
@@ -163,6 +169,7 @@ class CompareAgainstReleasedPatternsTestCase(common_test_support.CommonTestSuppo
 
         return generated_json
 
-    def _print_files_in_folder(self, dir):
-        for _file in os.listdir(dir):
-            print(" -",_file, os.stat(os.path.join(dir,_file)).st_size, "bytes")
+    @staticmethod
+    def _print_files_in_folder(dir_path):
+        for _file in os.listdir(dir_path):
+            print(" -", _file, os.stat(os.path.join(dir_path,_file)).st_size, "bytes")
