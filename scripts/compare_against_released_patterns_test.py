@@ -5,14 +5,14 @@ import os
 import io
 import tempfile
 import supported_versions as supported
-import common_test_support
+import common_test_support as helper
 
 
-class CompareAgainstReleasedPatternsTestCase(common_test_support.CommonTestSupport):
+class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
 
-    _index_pattern_viaq_os = common_test_support._release_download_path +\
-                             "0.0.12" \
-                             "/com.redhat.viaq-openshift.index-pattern.json"
+    _index_pattern_viaq_os = helper._release_download_path + \
+         helper._v0_0_12 + \
+         "/com.redhat.viaq-openshift.index-pattern.json"
 
     # The following namespaces should be the same as those listed in "templates/Makefile::${INDEX_PATTERN_DIRS}"
     _template_namespaces = ['openshift', 'collectd_metrics']
