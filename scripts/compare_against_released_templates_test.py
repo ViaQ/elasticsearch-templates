@@ -85,7 +85,6 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
         # Mask version
         released_data["mappings"]["_default_"]["_meta"]["version"] = "na"
 
-
         # Fix downloaded data:
         # ======================
         # We need to clean some diffs that we know exists today but they are either
