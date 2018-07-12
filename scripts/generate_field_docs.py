@@ -73,19 +73,19 @@ grouped in the following categories:
 
     # fields file is empty
     if docs is None:
-        print "fields.yml file is empty. fields.asciidoc cannot be generated."
+        print("fields.yml file is empty. fields.asciidoc cannot be generated.")
         return
 
     # If no sections are defined, docs can't be generated
     if "doc_sections" not in docs.keys():
-        print "doc_sections is not defined in fields.yml. fields.asciidoc cannot be generated."
+        print("doc_sections is not defined in fields.yml. fields.asciidoc cannot be generated.")
         return
 
     sections = docs["doc_sections"]
 
     # Check if sections is define
     if sections is None:
-        print "No doc_sections are defined in fields.yml. fields.asciidoc cannot be generated."
+        print("No doc_sections are defined in fields.yml. fields.asciidoc cannot be generated.")
         return
 
     for doc, _ in sections:
@@ -109,17 +109,17 @@ grouped in the following categories:
 if __name__ == "__main__":
 
     if len(sys.argv) != 3:
-        print "Usage: %s path templatename" % sys.argv[0]
+        print("Usage: %s path templatename" % sys.argv[0])
         sys.exit(1)
 
     template_path = sys.argv[1]
     template_name = sys.argv[2]
 
-    input = open(template_path + "/fields.yml", 'r')
-    output = open(template_path + "/" + template_name + ".asciidoc", 'wb')
+    f_input = open(template_path + "/fields.yml", 'r')
+    f_output = open(template_path + "/" + template_name + ".asciidoc", 'wb')
 
     try:
-        fields_to_asciidoc(input, output, template_name.title())
+        fields_to_asciidoc(f_input, f_output, template_name.title())
     finally:
-        input.close()
-        output.close()
+        f_input.close()
+        f_output.close()

@@ -6,12 +6,17 @@ import io
 import supported_versions as supported
 import common_test_support
 
+
 class CompareAgainstReleasedTemplatesTestCase(common_test_support.CommonTestSupport):
 
-    # _index_template_viaq_os_operations = "https://raw.githubusercontent.com/lukas-vlcek/elasticsearch-templates/ES5x/test_resources/com.redhat.viaq-openshift-operations.template_tmp.json"
-    _index_template_viaq_os_operations = "https://github.com/ViaQ/elasticsearch-templates/releases/download/0.0.12/com.redhat.viaq-openshift-operations.template.json"
-    _index_template_viaq_os_project    = "https://github.com/ViaQ/elasticsearch-templates/releases/download/0.0.12/com.redhat.viaq-openshift-project.template.json"
-    _index_template_viaq_collectd      = "https://github.com/ViaQ/elasticsearch-templates/releases/download/0.0.12/org.ovirt.viaq-collectd.template.json"
+    _index_template_viaq_os_operations = common_test_support._release_download_path + \
+        "0.0.12/com.redhat.viaq-openshift-operations.template.json"
+
+    _index_template_viaq_os_project = common_test_support._release_download_path + \
+        "0.0.12/com.redhat.viaq-openshift-project.template.json"
+
+    _index_template_viaq_collectd = common_test_support._release_download_path + \
+        "0.0.12/org.ovirt.viaq-collectd.template.json"
 
     def test_compare_index_template_viaq_os_operations(self):
         args = self.parser.parse_args(['../templates/openshift/template-operations.yml', '../namespaces/'])
@@ -41,9 +46,9 @@ class CompareAgainstReleasedTemplatesTestCase(common_test_support.CommonTestSupp
         output_index_pattern = io.open(os.devnull, 'w')
 
         generate_template.object_types_to_template(template_definition,
-                                               output, output_index_pattern,
-                                               supported._es2x,
-                                               args.namespaces_dir)
+                                                   output, output_index_pattern,
+                                                   supported._es2x,
+                                                   args.namespaces_dir)
 
         generated_json = json.loads(output.getvalue())
         output.close()
@@ -63,7 +68,7 @@ class CompareAgainstReleasedTemplatesTestCase(common_test_support.CommonTestSupp
                     vm_memory_keys.append(metric_key)
             for k in vm_memory_keys:
                 del generated_json["mappings"]["_default_"]["properties"]["collectd"]["properties"]["statsd"]["properties"][k]
-	# viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
+        # viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
         if 'viaq_msg_id' in generated_json['mappings']['_default_']['properties']:
             del generated_json['mappings']['_default_']['properties']['viaq_msg_id']
         # ======================

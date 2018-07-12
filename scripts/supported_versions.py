@@ -4,10 +4,11 @@
 Common data model supports the following versions of Elasticsearch.
 """
 
-_es2x= "2.4.4"
-_es5x= "5.5.2"
+_es2x = "2.4.4"
+_es5x = "5.5.2"
 
-elasticsearch=[_es2x, _es5x]
+elasticsearch = [_es2x, _es5x]
+
 
 def bw_mapping_compatibility(es_version, skeleton):
     """
@@ -38,6 +39,7 @@ def bw_mapping_compatibility(es_version, skeleton):
 
     else:
         print("Unsupported Elasticsearch version: {}".format(es_version))
+
 
 def _transform_mapping_5x_to_2x(mapping):
 
@@ -82,6 +84,7 @@ def _transform_mapping_5x_to_2x(mapping):
             # ... and follows recursive call to mapping transformation.
             _transform_mapping_5x_to_2x(mapping['properties'][property_key])
 
+
 def bw_index_pattern_compatibility(es_version, res, field):
     """
     Convert index-pattern field to earlier Elasticsearch version.
@@ -100,6 +103,7 @@ def bw_index_pattern_compatibility(es_version, res, field):
         _transform_field_5x_to_2x(res, field)
     else:
         print("Unsupported Elasticsearch version: {}".format(es_version))
+
 
 def _transform_field_5x_to_2x(res, field):
     res["indexed"] = res.pop("searchable")

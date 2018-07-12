@@ -10,6 +10,9 @@ try:
 except ImportError:
     import urllib3.request
 
+_release_download_path = "https://github.com/ViaQ/elasticsearch-templates/releases/download/"
+
+
 class CommonTestSupport(unittest.TestCase):
     """Class to be used as a parent for various tests. It provides useful methods."""
 

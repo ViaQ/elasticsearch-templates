@@ -1,6 +1,7 @@
 import supported_versions as supported
 import common_test_support
 
+
 class GenerateTemplateTestCase(common_test_support.CommonTestSupport):
 
     def test_arguments(self):
