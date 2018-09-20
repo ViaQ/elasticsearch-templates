@@ -5,6 +5,17 @@ namespace:
   description: >
     Namespace for docker container-specific metadata
   fields:
+  - name: container_name
+    type: text
+    doc_values: false
+    norms: true
+    description: >
+      The name of the container - not used for Kubernetes containers.
+    fields:
+      - name: raw
+        ignore_above: 256
+        type: keyword
+
   - name: container_id
     type: keyword
     description: >
