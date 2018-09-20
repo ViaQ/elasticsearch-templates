@@ -1,0 +1,95 @@
+
+namespace:
+  name: foreman
+  type: group
+  description: >
+    Contains common fields specific to Foreman / Satellite 6 deployment.
+  fields:
+  - name: foreman_logger
+    type: keyword
+    description: >
+      Ruby on Rails logger name, one of: app, sql, permissions, audit, templates, ldap, telemetry, notifications or blob. Loggers can be individually enabled or disabled. For more info see Foreman's setting.yaml file.
+
+  - name: foreman_login
+    type: keyword
+    description: >
+      User login name who created the event.
+
+  - name: foreman_admin
+    type: boolean
+    description: >
+      Whether user who created the event is super admin or regular user.
+
+  - name: org_id
+    type: long
+    description: >
+      Organization database ID which created the event, if set.
+
+  - name: loc_id
+    type: long
+    description: >
+      Location database ID which created the event, if set.
+
+  - name: remote_ip
+    type: ip
+    description: >
+      IPv4 address of remote client which created the event, if available.
+
+  - name: request
+    type: keyword
+    description: >
+      format: [a-zA-Z][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]
+      UUID of web request for events created in web request context.
+
+  - name: session
+    type: keyword
+    description: >
+      format: [a-zA-Z][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]
+      UUID of web session for events created in web request context. For session-less requests (e.g. API call) new session UUID is generated every time.
+
+  - name: exception
+    type: group
+    description: >
+      Contains common fields specific to Ruby (Ruby on Rails) exceptions.
+    fields:
+      - name: message
+        type: text
+        doc_values: false
+        description: >
+          Exception message
+
+      - name: class
+        type: keyword
+        description: >
+          Ruby exception class.
+
+      - name: backtrace
+        type: text
+        doc_values: false
+        description: >
+          Full exception backtrace (multiline text).
+
+  - name: template
+    type: group
+    description: >
+      Contains common fields specific to template renderers. Events only appear when "blob" logger is enabled. Rendered template contents is part of log message.
+    fields:
+      - name: name
+        type: keyword
+        description: >
+          Template name which was used to render content.
+
+      - name: digest
+        type: keyword
+        description: >
+          SHA256 of the rendered template contents.
+
+      - name: host_name
+        type: keyword
+        description: >
+          Host name which was associated with the template, if present.
+
+      - name: host_id
+        type: long
+        description: >
+          Host database ID which was associated with the template, if present.

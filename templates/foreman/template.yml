@@ -1,0 +1,12 @@
+skeleton_path: ../skeleton.json
+skeleton_index_pattern_path: ../skeleton-index-pattern.json
+
+elasticsearch_template:
+  name: org.foreman.viaq-cdm
+  index_pattern: "project.foreman-*"
+  order: 20
+
+namespaces:
+  - foreman.yml
+  - systemd.yml
+  - pipeline_metadata.yml
