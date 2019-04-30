@@ -39,7 +39,7 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
     def _support_compare_index_templates(self, args, json_url):
 
         with open(args.template_definition, 'r') as input_template:
-            template_definition = yaml.load(input_template)
+            template_definition = yaml.load(input_template, Loader=yaml.FullLoader)
 
         # We need to update paths 'cos this test is started from different folder
         template_definition['skeleton_path'] = '../templates/skeleton.json'

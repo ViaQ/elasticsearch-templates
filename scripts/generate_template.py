@@ -37,7 +37,7 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
 
     # Load skeleton of the template
     with open(template_definition['skeleton_path'], 'r') as f:
-        skeleton = yaml.load(f)
+        skeleton = yaml.load(f, Loader=yaml.FullLoader)
 
     if 'skeleton_index_pattern_path' not in template_definition:
         print("skeleton_index_pattern_path is not defined. Cannot generate template.")
@@ -45,16 +45,16 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
 
     # Load skeleton of the index pattern
     with open(template_definition['skeleton_index_pattern_path'], 'r') as f:
-        skeleton_index_pattern = yaml.load(f)
+        skeleton_index_pattern = yaml.load(f, Loader=yaml.FullLoader)
 
     # Load object_type files
     with open(namespaces_dir + '/_default_.yml', 'r') as f:
-        default_mapping_yml = yaml.load(f)
+        default_mapping_yml = yaml.load(f, Loader=yaml.FullLoader)
     default_mapping = default_mapping_yml['_default_']
 
     for ns_file in template_definition['namespaces']:
         with open(namespaces_dir + ns_file, 'r') as f:
-            cur_ns_yml = yaml.load(f)
+            cur_ns_yml = yaml.load(f, Loader=yaml.FullLoader)
         if 'namespace' not in cur_ns_yml:
             print("namespace section is absent in file {0}".format(ns_file))
             return

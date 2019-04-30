@@ -155,7 +155,7 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
         args = self.parser.parse_args(['../templates/'+template_namespace+'/'+template_file_name, '../namespaces/'])
 
         with io.open(args.template_definition, 'r') as input_template:
-            template_definition = yaml.load(input_template)
+            template_definition = yaml.load(input_template, Loader=yaml.FullLoader)
 
         # We need to update paths 'cos this test is started from different folder
         template_definition['skeleton_path'] = '../templates/skeleton.json'
