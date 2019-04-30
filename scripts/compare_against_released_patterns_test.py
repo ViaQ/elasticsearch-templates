@@ -107,6 +107,10 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
         generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.module_lineno"]
         generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.thread"]
         generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.correlationid"]
+
+        # https://github.com/ViaQ/elasticsearch-templates/commit/b3db410bc93144a94ac0acfa0312de4efc313973
+        generated_fields = [item for item in generated_fields if not item["name"] == "docker.container_name"]
+        generated_fields = [item for item in generated_fields if not item["name"] == "docker.container_name.raw"]
         # ======================
 
         # Exit the context of temporary folder. This will remove also all the content in it.

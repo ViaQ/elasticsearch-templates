@@ -81,6 +81,10 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
             del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["module_lineno"]
             del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["thread"]
             del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["correlationid"]
+
+        # https://github.com/ViaQ/elasticsearch-templates/commit/b3db410bc93144a94ac0acfa0312de4efc313973
+        if 'docker' in generated_json["mappings"]["_default_"]["properties"]:
+            del generated_json["mappings"]["_default_"]["properties"]["docker"]["properties"]["container_name"]
         # ======================
 
         generated_index_template = self._sort(generated_json)
