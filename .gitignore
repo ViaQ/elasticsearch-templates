@@ -3,6 +3,7 @@
 *~
 templates/*/*.asciidoc
 scripts/*.pyc
+scripts/__pycache__/*
 
 # IDEA specific
 *.iml
