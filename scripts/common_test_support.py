@@ -11,7 +11,11 @@ except ImportError:
     import urllib3.request
 
 _release_download_path = "https://github.com/ViaQ/elasticsearch-templates/releases/download/"
+
+# The latest data model release using Elasticsearch 2.2.4
 _v0_0_12 = "0.0.12"
+# The latest data model release using Elasticsearch 5.6.13
+_v0_0_17 = "0.0.17"
 
 
 class CommonTestSupport(unittest.TestCase):

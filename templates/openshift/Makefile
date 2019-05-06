@@ -6,6 +6,8 @@ all: docs
 
 clean:
 	rm *.template.json
+	rm *.index-pattern.json
+	rm *.asciidoc
 
 docs:
 	python ../../scripts/generate_template.py template-project.yml ../../namespaces/ --docs

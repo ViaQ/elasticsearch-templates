@@ -2,9 +2,9 @@
 
 """
 This script generates both the Elasticsearch template file (*.template.json)
-and the Kibana index pattern setting file (*.index-pattern.json) from the
+and the Kibana index pattern settings file (*.index-pattern.json) from the
 fields.yml file and skeleton.json.
-The script is built upon the similar script from libbeats.
+This script was originally built upon similar script found in libbeats.
 
 Example usage:
 
@@ -143,7 +143,7 @@ def traverse_group_section(group, leaf_defaults, leaf_handler, toplevel=False):
         parameters
     """
     field = add_index_template_fields(group)
-    if toplevel or not 'name' in group:
+    if toplevel or 'name' not in group:
         ret = field
     else:
         ret = {group['name']: field}
@@ -293,16 +293,15 @@ def add_type_version(version, obj_type):
         obj_type(dict): dict of object_type where to replace the version
     """
     obj_type["_meta"]["version"] = version
-    # template["template"] = template["template"].replace("<version>", version)
 
 
 def add_index_pattern(pattern, template_skeleton):
-    """Adds index pattern to the template, overwriting the previous index pattern
+    """Override the index patterns value
     Args:
         pattern(list): list of str, index patterns to be used in the template.
         template_skeleton(dict): template to operate upon.
     """
-    template_skeleton['template'] = pattern
+    template_skeleton['index_patterns'] = pattern
 
 
 def add_index_order(order, template_skeleton):
@@ -333,16 +332,16 @@ def object_types_to_asciidoc(template_definition, output, namespaces_dir):
 
     # Load skeleton of the template
     with open(template_definition['skeleton_index_pattern_path'], 'r') as f:
-        skeleton_index_pattern = yaml.load(f)
+        skeleton_index_pattern = yaml.load(f, Loader=yaml.FullLoader)
 
     # Load object_type files
     with open(namespaces_dir + '/_default_.yml', 'r') as f:
-        default_mapping_yml = yaml.load(f)
+        default_mapping_yml = yaml.load(f, Loader=yaml.FullLoader)
     sections = [default_mapping_yml['_default_']]
 
     for ns_file in template_definition['namespaces']:
         with open(namespaces_dir + ns_file, 'r') as f:
-            cur_ns_yml = yaml.load(f)
+            cur_ns_yml = yaml.load(f, Loader=yaml.FullLoader)
         if 'namespace' not in cur_ns_yml:
             print('namespace section is absent in file {0}'.format(ns_file))
             return
@@ -451,7 +450,7 @@ if __name__ == '__main__':
     args = parse_args().parse_args()
 
     with open(args.template_definition, 'r') as input_template:
-        template_definition = yaml.load(input_template)
+        template_definition = yaml.load(input_template, Loader=yaml.FullLoader)
 
     if args.docs:
         with io.open('{0[elasticsearch_template][name]}.asciidoc'.format(
@@ -460,7 +459,7 @@ if __name__ == '__main__':
                                      args.namespaces_dir)
         sys.exit()
 
-    for es_version in supported.elasticsearch:
+    for es_version in sorted(supported.elasticsearch, reverse=True):
         with open('{0[elasticsearch_template][name]}.{1}.template.json'.format(
                 template_definition, es_version), 'w') as output:
             with open('{0[elasticsearch_template][name]}.{1}.index-pattern.json'.format(
