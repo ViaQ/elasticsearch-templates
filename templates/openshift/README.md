@@ -7,7 +7,12 @@ Please _do not edit_ the files directly.
 In order to edit the template please modify [objects.yml](objects.yml) and the respective object type files.
 
 To rebuild the template, run:
-> python ../scripts/generate_template.py . ../../objects_dir
+```shell
+$ pwd
+<elasticsearch-templates>/templates/openshift
+$ python ../../scripts/generate_template.py ./template-project.yml    ../../namespaces/
+$ python ../../scripts/generate_template.py ./template-operations.yml ../../namespaces/
+```
 
 For details about the mapping please see [ElasticSearch reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html) and [Kibana reference](https://www.elastic.co/guide/en/kibana/current/index-patterns.html)
 
