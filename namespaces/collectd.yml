@@ -6,43 +6,36 @@ namespace:
   fields:
   - name: interval
     type: float
-    include_in_all: false
     description: >
       Collectd's interval.
 
   - name: plugin
     type: keyword
-    include_in_all: false
     description: >
       Collectd's plugin.
 
   - name: plugin_instance
     type: keyword
-    include_in_all: false
     description: >
       Collectd's plugin_instance.
 
   - name: type_instance
     type: keyword
-    include_in_all: false
     description: >
       Collectd's type_instance.
 
   - name: type
     type: keyword
-    include_in_all: false
     description: >
       Collectd's type.
 
   - name: dstypes
     type: keyword
-    include_in_all: false
     description: >
       Collectd's dstypes.
 
   - name: processes
     type: group
-    include_in_all: false
     description: >
       Corresponds to collectd's processes plugin.
     fields:
@@ -161,7 +154,6 @@ namespace:
     type: group
     description: >
       Corresponds to collectd's disk plugin.
-    include_in_all: false
     fields:
     - name: disk_merged
       type: group
@@ -247,7 +239,6 @@ namespace:
     type: group
     description: >
       Corresponds to collectd's interface plugin.
-    include_in_all: false
     fields:
     - name: if_octets
       type: group
@@ -311,7 +302,6 @@ namespace:
 
   - name: virt
     type: group
-    include_in_all: false
     description: >
       Corresponds to collectd's virt plugin.
     fields:
@@ -422,7 +412,6 @@ namespace:
 
   - name: cpu
     type: group
-    include_in_all: false
     description: >
       Corresponds to collectd's CPU plugin.
     fields:
@@ -433,7 +422,6 @@ namespace:
 
   - name: df
     type: group
-    include_in_all: false
     description: >
       Corresponds to collectd's df plugin.
     fields:
@@ -450,7 +438,6 @@ namespace:
 
   - name: entropy
     type: group
-    include_in_all: false
     description: >
       Corresponds to collectd's entropy plugin.
     fields:
@@ -464,7 +451,6 @@ namespace:
     type: group
     description: >
       Corresponds to collectd's nfs plugin.
-    include_in_all: false
     fields:
 
     - name: nfs_procedure
@@ -476,7 +462,6 @@ namespace:
     type: group
     description: >
       Corresponds to collectd's memory plugin.
-    include_in_all: false
     fields:
 
     - name: memory
@@ -493,7 +478,6 @@ namespace:
     type: group
     description: >
       Corresponds to collectd's swap plugin.
-    include_in_all: false
     fields:
 
     - name: swap
@@ -510,7 +494,6 @@ namespace:
     type: group
     description: >
       Corresponds to collectd's load plugin.
-    include_in_all: false
     fields:
     - name: load
       type: group
@@ -536,7 +519,6 @@ namespace:
     type: group
     description: >
       Corresponds to collectd's aggregation plugin.
-    include_in_all: false
     fields:
 
     - name: percent
@@ -548,7 +530,6 @@ namespace:
     type: group
     description: >
       Corresponds to collectd's statsd plugin.
-    include_in_all: false
     fields:
 
     - name: host_cpu
@@ -790,7 +771,6 @@ namespace:
     type: group
     description: >
       Corresponds to collectd's postgresql plugin.
-    include_in_all: false
     fields:
 
     - name: pg_n_tup_g

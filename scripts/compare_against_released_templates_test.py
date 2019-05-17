@@ -133,6 +133,14 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
         if 'aushape' in released_data["mappings"]["_default_"]["properties"]:
             released_data["mappings"]["_default_"]["properties"]["aushape"]["properties"]["error"]["index"] = "analyzed"
             released_data["mappings"]["_default_"]["properties"]["aushape"]["properties"]["error"]["doc_values"] = False
+
+        # We need to remove the `include_in_all` from downloaded model because this setting has been removed.
+        # https://github.com/ViaQ/elasticsearch-templates/issues/102
+        if 'collectd' in released_data["mappings"]["_default_"]["properties"]:
+            for metric_key in released_data["mappings"]["_default_"]["properties"]["collectd"]["properties"].keys():
+                metric = released_data["mappings"]["_default_"]["properties"]["collectd"]["properties"][metric_key]
+                if 'include_in_all' in metric:
+                    metric.pop('include_in_all')
         # ======================
 
         released_index_template = self._sort(released_data)
