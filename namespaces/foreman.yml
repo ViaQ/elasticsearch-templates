@@ -5,20 +5,25 @@ namespace:
   description: >
     Contains common fields specific to Foreman / Satellite 6 deployment.
   fields:
-  - name: foreman_logger
+  - name: app
+    type: keyword
+    description: >
+      Application which created the log event, one of: foreman, foreman-proxy, dynflow, candlepin or pulp.
+  
+  - name: logger
     type: keyword
     description: >
       Ruby on Rails logger name, one of: app, sql, permissions, audit, templates, ldap, telemetry, notifications or blob. Loggers can be individually enabled or disabled. For more info see Foreman's setting.yaml file.
 
-  - name: foreman_login
+  - name: user_login
     type: keyword
     description: >
       User login name who created the event.
 
-  - name: foreman_admin
-    type: boolean
+  - name: user_admin
+    type: long
     description: >
-      Whether user who created the event is super admin or regular user.
+      Effective user (0) or super administrator (1).
 
   - name: org_id
     type: long
@@ -29,6 +34,26 @@ namespace:
     type: long
     description: >
       Location database ID which created the event, if set.
+
+  - name: org_name
+    type: keyword
+    description: >
+      Organization name which created the event, if set.
+
+  - name: loc_name
+    type: keyword
+    description: >
+      Location name which created the event, if set.
+
+  - name: org_label
+    type: keyword
+    description: >
+      Organization label which created the event, if set.
+
+  - name: loc_label
+    type: keyword
+    description: >
+      Location label which created the event, if set.
 
   - name: remote_ip
     type: ip
@@ -46,6 +71,43 @@ namespace:
     description: >
       format: [a-zA-Z][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]
       UUID of web session for events created in web request context. For session-less requests (e.g. API call) new session UUID is generated every time.
+
+  - name: audit
+    type: group
+    description: >
+      Audit related data (who, what, when).
+    fields:
+      - name: action
+        type: keyword
+        description: >
+          Audit action: create, update, delete
+
+      - name: type
+        type: keyword
+        description: >
+          Record type (Host, Subnet etc).
+
+      - name: id
+        type: long
+        description: >
+          Database ID of audited record
+
+      - name: attribute
+        type: keyword
+        description: >
+          Attribute which changed
+
+      - name: field_old
+        type: text
+        doc_values: false
+        description: >
+          Attribute value before the change
+
+      - name: field_new
+        type: text
+        doc_values: false
+        description: >
+          Attribute value the change
 
   - name: exception
     type: group
@@ -93,3 +155,8 @@ namespace:
         type: long
         description: >
           Host database ID which was associated with the template, if present.
+      
+      - name: context
+        type: keyword
+        description: >
+          This field is deprecated
