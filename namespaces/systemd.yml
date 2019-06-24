@@ -92,6 +92,11 @@ namespace:
       description: >
         https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_HOSTNAME=
 
+    - name: LINE_BREAK
+      type: keyword
+      description: >
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_LINE_BREAK=
+
     - name: MACHINE_ID
       type: keyword
       description: >
@@ -113,10 +118,20 @@ namespace:
         https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SOURCE_REALTIME_TIMESTAMP=
         This is converted to RFC 3339 NS format
 
+    - name: STREAM_ID
+      type: keyword
+      description: >
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_STREAM_ID=
+
     - name: SYSTEMD_CGROUP
       type: keyword
       description: >
         https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SYSTEMD_CGROUP=
+
+    - name: SYSTEMD_INVOCATION_ID
+      type: keyword
+      description: >
+        https://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html#_SYSTEMD_INVOCATION_ID=
 
     - name: SYSTEMD_OWNER_UID
       type: keyword
