@@ -111,6 +111,11 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
         # https://github.com/ViaQ/elasticsearch-templates/commit/b3db410bc93144a94ac0acfa0312de4efc313973
         generated_fields = [item for item in generated_fields if not item["name"] == "docker.container_name"]
         generated_fields = [item for item in generated_fields if not item["name"] == "docker.container_name.raw"]
+
+        # https://github.com/ViaQ/elasticsearch-templates/pull/106
+        generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.LINE_BREAK"]
+        generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.STREAM_ID"]
+        generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.SYSTEMD_INVOCATION_ID"]
         # ======================
 
         # Exit the context of temporary folder. This will remove also all the content in it.
