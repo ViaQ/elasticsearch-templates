@@ -12,6 +12,7 @@ except ImportError:
 
 _release_download_path = "https://github.com/ViaQ/elasticsearch-templates/releases/download/"
 _v0_0_12 = "0.0.12"
+_v0_0_18 = "0.0.18"
 
 
 class CommonTestSupport(unittest.TestCase):
