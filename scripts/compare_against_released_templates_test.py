@@ -9,35 +9,92 @@ import common_test_support as helper
 
 class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
 
-    _index_template_viaq_os_operations = helper._release_download_path + \
+    _index_template_viaq_os_operations_v0018_2x = helper._release_download_path + \
+        helper._v0_0_18 + \
+        "/com.redhat.viaq-openshift-operations." + supported._es2x + \
+        ".template.json"
+
+    _index_template_viaq_os_project_v0018_2x = helper._release_download_path + \
+        helper._v0_0_18 + \
+        "/com.redhat.viaq-openshift-project." + supported._es2x + \
+        ".template.json"
+
+    _index_template_viaq_collectd_v0018_2x = helper._release_download_path + \
+        helper._v0_0_18 + \
+        "/org.ovirt.viaq-collectd." + supported._es2x + \
+        ".template.json"
+
+    _index_template_viaq_os_operations_v0018_5x = helper._release_download_path + \
+        helper._v0_0_18 + \
+        "/com.redhat.viaq-openshift-operations." + supported._es5x + \
+        ".template.json"
+
+    _index_template_viaq_os_project_v0018_5x = helper._release_download_path + \
+        helper._v0_0_18 + \
+        "/com.redhat.viaq-openshift-project." + supported._es5x + \
+        ".template.json"
+
+    _index_template_viaq_collectd_v0018_5x = helper._release_download_path + \
+        helper._v0_0_18 + \
+        "/org.ovirt.viaq-collectd." + supported._es5x + \
+        ".template.json"
+
+    _index_template_viaq_os_operations_v0012 = helper._release_download_path + \
         helper._v0_0_12 + \
         "/com.redhat.viaq-openshift-operations.template.json"
 
-    _index_template_viaq_os_project = helper._release_download_path + \
+    _index_template_viaq_os_project_v0012 = helper._release_download_path + \
         helper._v0_0_12 + \
         "/com.redhat.viaq-openshift-project.template.json"
 
-    _index_template_viaq_collectd = helper._release_download_path + \
+    _index_template_viaq_collectd_v0012 = helper._release_download_path + \
         helper._v0_0_12 + \
         "/org.ovirt.viaq-collectd.template.json"
 
     def test_compare_index_template_viaq_os_operations(self):
         args = self.parser.parse_args(['../templates/openshift/template-operations.yml', '../namespaces/'])
-        json_url = self._index_template_viaq_os_operations
-        self._support_compare_index_templates(args, json_url)
+        json_url = self._index_template_viaq_os_operations_v0018_2x
+        self._support_compare_index_templates(args, json_url, supported._es2x)
+        json_url = self._index_template_viaq_os_operations_v0018_5x
+        self._support_compare_index_templates(args, json_url, supported._es5x)
 
     def test_compare_index_index_template_viaq_os_project(self):
         args = self.parser.parse_args(['../templates/openshift/template-project.yml', '../namespaces/'])
-        json_url = self._index_template_viaq_os_project
-        self._support_compare_index_templates(args, json_url)
+        json_url = self._index_template_viaq_os_project_v0018_2x
+        self._support_compare_index_templates(args, json_url, supported._es2x)
+        json_url = self._index_template_viaq_os_project_v0018_5x
+        self._support_compare_index_templates(args, json_url, supported._es5x)
 
     def test_compare_index_index_template_viaq_collectd(self):
         args = self.parser.parse_args(['../templates/collectd_metrics/template.yml', '../namespaces/'])
-        json_url = self._index_template_viaq_collectd
-        self._support_compare_index_templates(args, json_url)
+        json_url = self._index_template_viaq_collectd_v0018_2x
+        self._support_compare_index_templates(args, json_url, supported._es2x)
+        json_url = self._index_template_viaq_collectd_v0018_5x
+        self._support_compare_index_templates(args, json_url, supported._es5x)
 
-    def _support_compare_index_templates(self, args, json_url):
+    def test_compare_index_template_viaq_os_operations_v0012(self):
+        args = self.parser.parse_args(['../templates/openshift/template-operations.yml', '../namespaces/'])
+        json_url = self._index_template_viaq_os_operations_v0012
+        self._support_compare_index_templates_v0012(args, json_url)
 
+    def test_compare_index_index_template_viaq_os_project_v0012(self):
+        args = self.parser.parse_args(['../templates/openshift/template-project.yml', '../namespaces/'])
+        json_url = self._index_template_viaq_os_project_v0012
+        self._support_compare_index_templates_v0012(args, json_url)
+
+    def test_compare_index_index_template_viaq_collectd_v0012(self):
+        args = self.parser.parse_args(['../templates/collectd_metrics/template.yml', '../namespaces/'])
+        json_url = self._index_template_viaq_collectd_v0012
+        self._support_compare_index_templates_v0012(args, json_url)
+
+    def _generate_json_index_template(self, args, json_url, es_version):
+        """
+
+        :param self
+        :param args         An argument line to parse
+        :param json_url     URL of released JSON file to download
+        :param es_version   Version of supported ES to generate index template for
+        """
         with open(args.template_definition, 'r') as input_template:
             template_definition = yaml.load(input_template, Loader=yaml.FullLoader)
 
@@ -50,12 +107,41 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
 
         generate_template.object_types_to_template(template_definition,
                                                    output, output_index_pattern,
-                                                   supported._es2x,
+                                                   es_version,
                                                    args.namespaces_dir)
 
         generated_json = json.loads(output.getvalue())
         output.close()
         output_index_pattern.close()
+
+        return generated_json
+
+    def _support_compare_index_templates(self, args, json_url, es_version):
+        # --- generate data
+        generated_json = self._generate_json_index_template(args, json_url, es_version)
+
+        # Mask version
+        generated_json["mappings"]["_default_"]["_meta"]["version"] = "na"
+        generated_index_template = self._sort(generated_json)
+        # print(generated_index_template)
+
+        # ---- wget release data
+        released_data = self._wget(json_url)
+
+        # Mask version
+        released_data["mappings"]["_default_"]["_meta"]["version"] = "na"
+        released_index_template = self._sort(released_data)
+
+        self.assertEqual(released_index_template, generated_index_template)
+
+    def _support_compare_index_templates_v0012(self, args, json_url):
+        """
+        THE LEGACY METHOD
+        Compares the generated model against released model 0.0.12.
+        The model 0.0.12 was the last one before we started supporting multiple ES versions.
+        Once we upgrade logging to model 0.0.18 or higher consider getting rid of this method.
+        """
+        generated_json = self._generate_json_index_template(args, json_url, supported._es2x)
 
         # Mask version
         generated_json["mappings"]["_default_"]["_meta"]["version"] = "na"
