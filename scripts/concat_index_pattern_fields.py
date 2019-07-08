@@ -4,7 +4,7 @@
 See the parse_args() method for required arguments.
 
 Notice, this script was called "concat-index-pattern-fields.py" in the past but it was not possible
-to import this script into test due to use od dashes. Renaming this file to "concat_index_pattern_fields.py"
+to import this script into test due to use of dashes. Renaming this file to "concat_index_pattern_fields.py"
 solved this issue.
 """
 
