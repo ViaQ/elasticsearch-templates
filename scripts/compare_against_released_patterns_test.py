@@ -10,28 +10,51 @@ import common_test_support as helper
 
 class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
 
-    _index_pattern_viaq_os = helper._release_download_path + \
-         helper._v0_0_12 + \
-         "/com.redhat.viaq-openshift.index-pattern.json"
+    _index_pattern_viaq_os_v0012 = helper._release_download_path + \
+        helper._v0_0_12 + \
+        "/com.redhat.viaq-openshift.index-pattern.json"
 
-    # The following namespaces should be the same as those listed in "templates/Makefile::${INDEX_PATTERN_DIRS}"
+    _index_pattern_viaq_os_v0019_2x = helper._release_download_path + \
+        helper._v0_0_19 + \
+        "/com.redhat.viaq-openshift." + \
+        supported._es2x + \
+        ".index-pattern.json"
+
+    _index_pattern_viaq_os_v0019_5x = helper._release_download_path + \
+        helper._v0_0_19 + \
+        "/com.redhat.viaq-openshift." + \
+        supported._es5x + \
+        ".index-pattern.json"
+
+    # The following namespaces must be the same as those listed in "templates/Makefile::${INDEX_PATTERN_DIRS}"
     _template_namespaces = ['openshift', 'collectd_metrics']
 
+    def test_index_pattern_without_fields_field_v0012(self):
+        self._support_compare_index_pattern_without_fields_field(self._index_pattern_viaq_os_v0012, supported._es2x)
+
     def test_index_pattern_without_fields_field(self):
+        self._support_compare_index_pattern_without_fields_field(self._index_pattern_viaq_os_v0019_2x, supported._es2x)
+        self._support_compare_index_pattern_without_fields_field(self._index_pattern_viaq_os_v0019_5x, supported._es5x)
+
+    def _support_compare_index_pattern_without_fields_field(self, released_file_URL, es_version):
         """This test compare JSON of generated index pattern and released one
         except it removes the 'fields' field first. This is to ensure the rest
         of the index pattern is the same. There are other tests that compare
         just the content of the 'fields' field separately.
+
+        :param self
+        :param released_file_URL    URL of released JSON file to download
+        :param es_version           Version of supported ES to generate index pattern for
         """
 
-        generated_json = self._generate_index_pattern(self._template_namespaces[0], supported._es2x)
+        generated_json = self._generate_index_pattern(self._template_namespaces[0], es_version)
 
         _json = self._from_string_to_json(generated_json)
         del _json["fields"]
         generated_index_pattern = self._sort(_json)
 
         # ---- wget
-        json_data = self._wget(self._index_pattern_viaq_os)
+        json_data = self._wget(released_file_URL)
 
         # Fix downloaded data:
         # ======================
@@ -39,7 +62,7 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
         # fine to ignore or there is an open ticket that has fix pending.
 
         # https://github.com/ViaQ/elasticsearch-templates/issues/77
-        del json_data["description"]
+        if "description" in json_data: del json_data["description"]
         # ======================
 
         del json_data["fields"]
@@ -49,21 +72,27 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
         # Compare index patterns without the "fields" field.
         self.assertEqual(released_index_pattern, generated_index_pattern)
 
+    def test_index_pattern_fields_field_only_v0012(self):
+        self._support_index_pattern_fields_field_only(self._index_pattern_viaq_os_v0012, supported._es2x)
+
     def test_index_pattern_fields_field_only(self):
+        self._support_index_pattern_fields_field_only(self._index_pattern_viaq_os_v0019_2x, supported._es2x)
+        self._support_index_pattern_fields_field_only(self._index_pattern_viaq_os_v0019_5x, supported._es5x)
+
+    def _support_index_pattern_fields_field_only(self, released_file_URL, es_version):
         """This test generates index patterns for individual namespaces
         and then use the concat utility to create the cumulative index pattern file
         that is then compared with the released version.
         We compare only the "fields" field.
         """
         generated_fields = None
-        es_version = supported._es2x
         index_pattern_suffix = 'index-pattern.json'
         match_index_pattern = '*'+index_pattern_suffix
 
         # Create temp directory to store generated index patterns to (and load from also).
         # See https://docs.python.org/3/library/tempfile.html#examples
         with tempfile.TemporaryDirectory() as tmpdirname:
-            print('created temporary folder', tmpdirname)
+            print('Using temporary folder', tmpdirname)
 
             for namespace in self._template_namespaces:
                 generated_json = self._generate_index_pattern(namespace, es_version)
@@ -85,7 +114,7 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
                 print(individual_files)
 
                 concat_index_pattern_fields.concatenate_index_pattern_files(individual_files, cumulative_file)
-                print("Cumulative file populate, closing for write")
+                print("Cumulative file populated (closing it for writes now...)")
                 cumulative_file.close()
 
                 print("All files in temporary folder:")
@@ -94,53 +123,60 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
                 cumulative_json = self._json_from_file(os.path.join(tmpdirname, cumulative_file.name))
                 generated_fields = self._from_string_to_json(cumulative_json["fields"])
 
-        # Fix generated data:
-        # ======================
-        # VM Memory stats were added after 0.0.12 release
-        # https://github.com/ViaQ/elasticsearch-templates/issues/85
-        generated_fields = [item for item in generated_fields if not item["name"].startswith("collectd.statsd.vm_memory")]
-        # viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
-        generated_fields = [item for item in generated_fields if not item["name"] == "viaq_msg_id"]
+                # Exit the context of temporary folder. This will remove also all the content in it.
+                # generated_index_pattern = self._sort(_json)
 
-        # https://github.com/ViaQ/elasticsearch-templates/issues/94
-        generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.class"]
-        generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.module_lineno"]
-        generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.thread"]
-        generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.correlationid"]
+        if released_file_URL == self._index_pattern_viaq_os_v0012:
 
-        # https://github.com/ViaQ/elasticsearch-templates/commit/b3db410bc93144a94ac0acfa0312de4efc313973
-        generated_fields = [item for item in generated_fields if not item["name"] == "docker.container_name"]
-        generated_fields = [item for item in generated_fields if not item["name"] == "docker.container_name.raw"]
+            print("Cleanup generated data (this is done only for older release versions)")
+            # Fix generated data:
+            # ======================
+            # VM Memory stats were added after 0.0.12 release
+            # https://github.com/ViaQ/elasticsearch-templates/issues/85
+            generated_fields = [item for item in generated_fields if not item["name"].startswith("collectd.statsd.vm_memory")]
+            # viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
+            generated_fields = [item for item in generated_fields if not item["name"] == "viaq_msg_id"]
 
-        # https://github.com/ViaQ/elasticsearch-templates/pull/106
-        generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.LINE_BREAK"]
-        generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.STREAM_ID"]
-        generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.SYSTEMD_INVOCATION_ID"]
-        # ======================
+            # https://github.com/ViaQ/elasticsearch-templates/issues/94
+            generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.class"]
+            generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.module_lineno"]
+            generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.thread"]
+            generated_fields = [item for item in generated_fields if not item["name"] == "ovirt.correlationid"]
 
-        # Exit the context of temporary folder. This will remove also all the content in it.
-        # generated_index_pattern = self._sort(_json)
+            # https://github.com/ViaQ/elasticsearch-templates/commit/b3db410bc93144a94ac0acfa0312de4efc313973
+            generated_fields = [item for item in generated_fields if not item["name"] == "docker.container_name"]
+            generated_fields = [item for item in generated_fields if not item["name"] == "docker.container_name.raw"]
+
+            # https://github.com/ViaQ/elasticsearch-templates/pull/106
+            generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.LINE_BREAK"]
+            generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.STREAM_ID"]
+            generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.SYSTEMD_INVOCATION_ID"]
+            # ======================
 
         # ---- wget
-        json_data = self._wget(self._index_pattern_viaq_os)
+        print('\nDownloading released index pattern file for comparison:')
+        json_data = self._wget(released_file_URL)
         released_fields = self._from_string_to_json(json_data["fields"])
 
-        # Fix downloaded data:
-        # ======================
-        # We need to clean some diffs that we know exists today but they are either
-        # fine to ignore or there is an open ticket that has fix pending.
+        if released_file_URL == self._index_pattern_viaq_os_v0012:
 
-        # We need to explicitly override doc_values to false for text type fields.
-        # https://github.com/ViaQ/elasticsearch-templates/pull/70#issuecomment-360704220
-        list(filter(lambda i: i["name"] == "aushape.error", released_fields))[0]["doc_values"] = False
-        list(filter(lambda i: i["name"] == "kubernetes.container_name", released_fields))[0]["doc_values"] = False
+            print("Cleanup released data (this is done only for older release versions)")
+            # Fix downloaded data:
+            # ======================
+            # We need to clean some diffs that we know exists today but they are either
+            # fine to ignore or there is an open ticket that has fix pending.
 
-        # We changed how 'namespace_name' is configured in namespaces/_default_.yml.
-        # TODO: We need to review how those changes need to be translated into Kibana index pattern.
-        # This does not look correct to me.
-        list(filter(lambda i: i["name"] == "namespace_name", released_fields))[0]["analyzed"] = True
+            # We need to explicitly override doc_values to false for text type fields.
+            # https://github.com/ViaQ/elasticsearch-templates/pull/70#issuecomment-360704220
+            list(filter(lambda i: i["name"] == "aushape.error", released_fields))[0]["doc_values"] = False
+            list(filter(lambda i: i["name"] == "kubernetes.container_name", released_fields))[0]["doc_values"] = False
 
-        # ======================
+            # We changed how 'namespace_name' is configured in namespaces/_default_.yml.
+            # TODO: We need to review how those changes need to be translated into Kibana index pattern.
+            # This does not look correct to me.
+            list(filter(lambda i: i["name"] == "namespace_name", released_fields))[0]["analyzed"] = True
+            # ======================
+
         generated_fields.sort(key=lambda item: item["name"])
         released_fields.sort(key=lambda item: item["name"])
 
@@ -150,7 +186,12 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
         # print(self._sort(generated_fields))
 
         # Compare the "fields"
-        self.assertEqual(self._sort(released_fields), self._sort(generated_fields))
+        # In the past we dumped sorted JSONs into strings and compered those.
+        # Now we are comparing JSON object directly as it gives better diff information.
+        # TODO: consider removing self._sort() methond if possible
+        # self.assertEqual(self._sort(released_fields), self._sort(generated_fields))
+        self.assertEqual(released_fields, generated_fields)
+        print("Released and generated index patterns are equal. \n\n")
 
     def _generate_index_pattern(self, template_namespace, es_version):
         # The convention is that each namespace folder contains "template.yml" file, except
@@ -172,6 +213,7 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
 
         output = io.open(os.devnull, 'w')
         output_index_pattern = io.StringIO()
+        print("Generate cumulative index pattern")
         generate_template.object_types_to_template(template_definition,
                                                    output, output_index_pattern,
                                                    es_version,

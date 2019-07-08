@@ -12,8 +12,7 @@ except ImportError:
 
 _release_download_path = "https://github.com/ViaQ/elasticsearch-templates/releases/download/"
 _v0_0_12 = "0.0.12"
-_v0_0_18 = "0.0.18"
-
+_v0_0_19 = "0.0.19"
 
 class CommonTestSupport(unittest.TestCase):
     """Class to be used as a parent for various tests. It provides useful methods."""
@@ -40,8 +39,11 @@ class CommonTestSupport(unittest.TestCase):
 
     def _wget(self, url):
         """Download JSON data from given url and return as a json object."""
-        print("wget: {}", url)
+        print("wget", url)
         response = urllib.request.urlopen(url)
+        print("\nHTTPResponse code:", response.getcode())
+        print("HTTPResponse info:")
+        print(response.info())
         reader = codecs.getreader("utf-8")
         return json.load(reader(response))
 
