@@ -25,7 +25,7 @@ by sections:
   `properties`: empty section that is populated with the content from [fields.yml](fields.yml)  
 `order`: order of the template. lower order templates are applied first.  
 `settings`: various settings  
-`template`: the pattern of indices that will be matched by this template  
+`index_patterns`: the pattern of indices that will be matched by this template  
 
 template.yml
 ----------

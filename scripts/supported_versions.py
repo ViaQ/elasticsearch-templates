@@ -1,13 +1,21 @@
 #!/usr/bin/env python
 
 """
-Common data model supports the following versions of Elasticsearch.
+Common data model supports several versions of Elasticsearch index mappings.
+The following are versions of Elasticsearch for which the data model is released at the same time or were released
+in the past.
+
+Notice that in some cases the actually used ES version may slightly differ from the version of used model.
+However, this still means that the data model is fully compatible with used Elasticsearch version. For instance,
+as of writing we are using Elasticsearch 5.6.13 in OCP 4.1 but it is using model 5.5.2. Given there were no breaking
+changes in index mappings between ES 5.6.13 and 5.5.2 we do not have to release different version of the model.
 """
 
 _es2x = "2.4.4"
 _es5x = "5.5.2"
+_es6x = "6.8.3"
 
-elasticsearch = [_es2x, _es5x]
+elasticsearch = [_es2x, _es5x, _es6x]
 
 
 def bw_mapping_compatibility(es_version, skeleton):
@@ -16,13 +24,17 @@ def bw_mapping_compatibility(es_version, skeleton):
     See <https://github.com/ViaQ/elasticsearch-templates/issues/71> for follow up.
     """
 
-    # Right now we handle only BW conversion from es5x to es2x
-    if es_version == _es5x:
-        # es5x is the latest and all templates should be already
+    if es_version == _es6x:
+        # es6x is the latest and all templates should be already
         # formatted correctly
         return
+    elif es_version == _es5x:
+        # BW conversion from es6x to es5x
+        _transform_skeleton_6x_to_5x(skeleton)
     elif es_version == _es2x:
-
+        # First, BW conversion from es6x to es5x
+        _transform_skeleton_6x_to_5x(skeleton)
+        # Then, BW conversion from es5x to es2x
         # Convert mappings of dynamic templates
         for template in skeleton['mappings']['_default_']['dynamic_templates']:
             # json.dump(template, sys.stdout, indent=2, separators=(',', ': '), sort_keys=True)
@@ -38,7 +50,12 @@ def bw_mapping_compatibility(es_version, skeleton):
         _transform_mapping_5x_to_2x(default_mapping)
 
     else:
-        print("Unsupported Elasticsearch version: {}".format(es_version))
+        print("Unsupported Elasticsearch version: {} for index skeleton".format(es_version))
+
+
+def _transform_skeleton_6x_to_5x(skeleton):
+    # See <https://github.com/ViaQ/elasticsearch-templates/issues/98>
+    skeleton['template'] = skeleton.pop('index_patterns')
 
 
 def _transform_mapping_5x_to_2x(mapping):
@@ -94,15 +111,14 @@ def bw_index_pattern_compatibility(es_version, res, field):
     :param dict field: Original field
     """
 
-    # Right now we handle only BW conversion from es5x to es2x
-    if es_version == _es5x:
-        # es5x is the latest and all fields should be already
-        # formatted correctly
+    if es_version == _es6x:
+        return
+    elif es_version == _es5x:
         return
     elif es_version == _es2x:
         _transform_field_5x_to_2x(res, field)
     else:
-        print("Unsupported Elasticsearch version: {}".format(es_version))
+        print("Unsupported Elasticsearch version: {} for index pattern".format(es_version))
 
 
 def _transform_field_5x_to_2x(res, field):
