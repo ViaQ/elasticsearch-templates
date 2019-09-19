@@ -106,3 +106,17 @@ class GenerateTemplateTestCase(common_test_support.CommonTestSupport):
         }
         supported._transform_field_5x_to_2x(res5x, field)
         self.assertEqual("string", res5x["type"])
+
+    def test_basic_transform_skeleton_6x_to_5x(self):
+        skeleton = {
+            "index_patterns": "foo",
+            "template": "noop"
+        }
+        supported._transform_skeleton_6x_to_5x(skeleton)
+        self.assertEqual("foo", skeleton["template"])
+        try:
+            skeleton["index_patterns"]
+        except KeyError:
+            True
+        except Exception:
+            raise

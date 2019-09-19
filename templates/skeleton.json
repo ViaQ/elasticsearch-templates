@@ -72,5 +72,5 @@
     "settings": {
         "index.refresh_interval": "5s"
     },
-    "template": "logstash-*"
+    "index_patterns": "logstash-*"
 }
