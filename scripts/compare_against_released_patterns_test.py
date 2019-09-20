@@ -188,7 +188,7 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
         # Compare the "fields"
         # In the past we dumped sorted JSONs into strings and compered those.
         # Now we are comparing JSON object directly as it gives better diff information.
-        # TODO: consider removing self._sort() methond if possible
+        # TODO: consider removing self._sort() method if possible
         # self.assertEqual(self._sort(released_fields), self._sort(generated_fields))
         self.assertEqual(released_fields, generated_fields)
         print("Released and generated index patterns are equal. \n\n")
