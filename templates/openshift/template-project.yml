@@ -5,6 +5,11 @@ elasticsearch_template:
   name: com.redhat.viaq-openshift-project
   index_pattern: "project.*"
   order: 10
+  # Disabled by default starting in ES 6.x
+  # https://www.elastic.co/guide/en/elasticsearch/reference/6.7/breaking-changes-6.0.html#_the_literal__all_literal_meta_field_is_now_disabled_by_default
+  # TODO: Remove in ES 7.x
+  _all:
+    enabled: false
 
 namespaces:
   - rsyslog.yml
