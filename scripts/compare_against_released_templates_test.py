@@ -3,6 +3,7 @@ import json
 import yaml
 import os
 import io
+import sys
 import supported_versions as supported
 import common_test_support as helper
 
@@ -202,4 +203,14 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
 
         released_index_template = self._sort(released_data)
 
-        self.assertEqual(released_index_template, generated_index_template)
+        try:
+            self.assertEqual(released_index_template, generated_index_template)
+        except AssertionError as error:
+            print("Test failed.", error)
+            print("Output both index templates to stderr. "
+                  "TIP: Use 2>file.log to redirect it to a file for detailed investigation.")
+            print("\nReleased index template: ", file=sys.stderr)
+            print(released_index_template, file=sys.stderr)
+            print("\nGenerated index template: ", file=sys.stderr)
+            print(generated_index_template, file=sys.stderr)
+            raise
