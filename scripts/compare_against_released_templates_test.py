@@ -77,6 +77,16 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
                     metric.pop('include_in_all')
 
     @staticmethod
+    def _remove_all_field(data):
+        # We remove `_all` field in all models when rendering for ES 6.x and later.
+        # We need to keep use of this field in templates for ES 5.x and earlier. We need to keep doing this as long
+        # as we want to support older data models.
+        # https://github.com/ViaQ/elasticsearch-templates/issues/46
+        if "_all" in data["mappings"]["_default_"]:
+            del data["mappings"]["_default_"]["_all"]
+
+
+    @staticmethod
     def _generate_json_index_template(args, es_version):
         """
         :param args         An argument line to parse
@@ -142,9 +152,12 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
                 del generated_json["mappings"]["_default_"]["properties"]["systemd"]["properties"]["t"]["properties"]["LINE_BREAK"]
                 del generated_json["mappings"]["_default_"]["properties"]["systemd"]["properties"]["t"]["properties"]["STREAM_ID"]
                 del generated_json["mappings"]["_default_"]["properties"]["systemd"]["properties"]["t"]["properties"]["SYSTEMD_INVOCATION_ID"]
-        # ======================
-        if es_version == supported._es5x:
+
+        elif es_version == supported._es5x:
             pass
+
+        elif es_version == supported._es6x:
+            self._remove_all_field(generated_json)
         # ======================
 
         generated_index_template = self._sort(generated_json)
@@ -199,6 +212,9 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
 
         if es_version == supported._es5x:
             pass
+
+        if es_version == supported._es6x:
+            self._remove_all_field(released_data)
         # ======================
 
         released_index_template = self._sort(released_data)
