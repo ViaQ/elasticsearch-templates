@@ -9,9 +9,9 @@ elasticsearch_template:
   order: 20
   _source:
     enabled: false
-  # Disabled by default starting in ES 6.x
+  # Disabled by default starting in ES 6.x, not supported in ES 7.x and later
   # https://www.elastic.co/guide/en/elasticsearch/reference/6.7/breaking-changes-6.0.html#_the_literal__all_literal_meta_field_is_now_disabled_by_default
-  # TODO: Remove in ES 7.x
+  # Keep it here only as long as you need to support rendering BC models for ES 5.x and earlier.
   _all:
     enabled: false
 
