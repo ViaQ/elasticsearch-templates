@@ -17,6 +17,27 @@ _es6x = "6.8.3"
 
 elasticsearch = [_es2x, _es5x, _es6x]
 
+index_type_placeholder = "_index_type_"
+_default_ = "_default_"
+_doc = "_doc"
+
+_index_types = {
+    _es2x: _default_,
+    _es5x: _default_,
+    _es6x: _doc
+}
+
+
+def index_type_name(es_version):
+    """
+    :param es_version:
+    :return: Index type for given Elasticsearch version
+    """
+    if es_version in elasticsearch:
+        return _index_types[es_version]
+    else:
+        raise Exception("No index type found for ES version", es_version)
+
 
 def bw_mapping_compatibility(es_version, skeleton):
     """
@@ -36,17 +57,18 @@ def bw_mapping_compatibility(es_version, skeleton):
         _transform_skeleton_6x_to_5x(skeleton)
         # Then, BW conversion from es5x to es2x
         # Convert mappings of dynamic templates
-        for template in skeleton['mappings']['_default_']['dynamic_templates']:
+        _idx_type = index_type_name(es_version)
+        for template in skeleton['mappings'][_idx_type]['dynamic_templates']:
             # json.dump(template, sys.stdout, indent=2, separators=(',', ': '), sort_keys=True)
             first_key = list(template.keys())[0]
             dynamic_mapping = template[first_key]['mapping']
             _transform_mapping_5x_to_2x(dynamic_mapping)
 
         # Convert mappings of properties
-        # for properties in skeleton['mappings']['_default_']['properties']:
-        #     p_mapping = skeleton['mappings']['_default_']['properties'][properties]
+        # for properties in skeleton['mappings'][_idx_type]['properties']:
+        #     p_mapping = skeleton['mappings'][_idx_type]['properties'][properties]
         #     _transform_mapping_5x_to_2x(p_mapping)
-        default_mapping = skeleton['mappings']['_default_']
+        default_mapping = skeleton['mappings'][_idx_type]
         _transform_mapping_5x_to_2x(default_mapping)
 
     else:

@@ -3,7 +3,7 @@
         ".all": {}
     },
     "mappings": {
-        "_default_": {
+        "_index_type_": {
             "_meta": {
                 "version": "<version>"
             },
