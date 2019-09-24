@@ -67,23 +67,25 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
                 print()
 
     @staticmethod
-    def _remove_include_in_all(released_data):
+    def _remove_include_in_all(released_data, es_version):
         # We need to remove the `include_in_all` from downloaded model because this setting was removed.
         # https://github.com/ViaQ/elasticsearch-templates/issues/102
-        if 'collectd' in released_data["mappings"]["_default_"]["properties"]:
-            for metric_key in released_data["mappings"]["_default_"]["properties"]["collectd"]["properties"].keys():
-                metric = released_data["mappings"]["_default_"]["properties"]["collectd"]["properties"][metric_key]
+        _idx_type = supported.index_type_name(es_version)
+        if 'collectd' in released_data["mappings"][_idx_type]["properties"]:
+            for metric_key in released_data["mappings"][_idx_type]["properties"]["collectd"]["properties"].keys():
+                metric = released_data["mappings"][_idx_type]["properties"]["collectd"]["properties"][metric_key]
                 if 'include_in_all' in metric:
                     metric.pop('include_in_all')
 
     @staticmethod
-    def _remove_all_field(data):
+    def _remove_all_field(data, es_version):
         # We remove `_all` field in all models when rendering for ES 6.x and later.
         # We need to keep use of this field in templates for ES 5.x and earlier. We need to keep doing this as long
         # as we want to support older data models.
         # https://github.com/ViaQ/elasticsearch-templates/issues/46
-        if "_all" in data["mappings"]["_default_"]:
-            del data["mappings"]["_default_"]["_all"]
+        _idx_type = supported.index_type_name(es_version)
+        if "_all" in data["mappings"][_idx_type]:
+            del data["mappings"][_idx_type]["_all"]
 
 
     @staticmethod
@@ -114,50 +116,51 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
         return generated_json
 
     def _support_compare_index_templates(self, es_version, args, json_url):
+        _idx_type = supported.index_type_name(es_version)
         # --- generate data
         generated_json = self._generate_json_index_template(args, es_version)
 
         # Mask version
-        generated_json["mappings"]["_default_"]["_meta"]["version"] = "na"
+        generated_json["mappings"][_idx_type]["_meta"]["version"] = "na"
 
         # Fix generated data:
         # ======================
         if es_version == supported._es2x:
             # VM Memory stats were added after 0.0.12 release
             # https://github.com/ViaQ/elasticsearch-templates/issues/85
-            if "collectd" in generated_json["mappings"]["_default_"]["properties"]:
+            if "collectd" in generated_json["mappings"][_idx_type]["properties"]:
                 vm_memory_keys = []
-                for metric_key in generated_json["mappings"]["_default_"]["properties"]["collectd"]["properties"]["statsd"]["properties"].keys():
+                for metric_key in generated_json["mappings"][_idx_type]["properties"]["collectd"]["properties"]["statsd"]["properties"].keys():
                     if metric_key.startswith("vm_memory"):
                         vm_memory_keys.append(metric_key)
                 for k in vm_memory_keys:
-                    del generated_json["mappings"]["_default_"]["properties"]["collectd"]["properties"]["statsd"]["properties"][k]
+                    del generated_json["mappings"][_idx_type]["properties"]["collectd"]["properties"]["statsd"]["properties"][k]
             # viaq_msg_id is a new field: https://github.com/ViaQ/elasticsearch-templates/pull/90
-            if 'viaq_msg_id' in generated_json['mappings']['_default_']['properties']:
-                del generated_json['mappings']['_default_']['properties']['viaq_msg_id']
+            if 'viaq_msg_id' in generated_json['mappings'][_idx_type]['properties']:
+                del generated_json['mappings'][_idx_type]['properties']['viaq_msg_id']
 
             # https://github.com/ViaQ/elasticsearch-templates/issues/94
-            if 'ovirt' in generated_json["mappings"]["_default_"]["properties"]:
-                del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["class"]
-                del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["module_lineno"]
-                del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["thread"]
-                del generated_json["mappings"]["_default_"]["properties"]["ovirt"]["properties"]["correlationid"]
+            if 'ovirt' in generated_json["mappings"][_idx_type]["properties"]:
+                del generated_json["mappings"][_idx_type]["properties"]["ovirt"]["properties"]["class"]
+                del generated_json["mappings"][_idx_type]["properties"]["ovirt"]["properties"]["module_lineno"]
+                del generated_json["mappings"][_idx_type]["properties"]["ovirt"]["properties"]["thread"]
+                del generated_json["mappings"][_idx_type]["properties"]["ovirt"]["properties"]["correlationid"]
 
             # https://github.com/ViaQ/elasticsearch-templates/commit/b3db410bc93144a94ac0acfa0312de4efc313973
-            if 'docker' in generated_json["mappings"]["_default_"]["properties"]:
-                del generated_json["mappings"]["_default_"]["properties"]["docker"]["properties"]["container_name"]
+            if 'docker' in generated_json["mappings"][_idx_type]["properties"]:
+                del generated_json["mappings"][_idx_type]["properties"]["docker"]["properties"]["container_name"]
 
             # https://github.com/ViaQ/elasticsearch-templates/pull/106
-            if 'systemd' in generated_json["mappings"]["_default_"]["properties"]:
-                del generated_json["mappings"]["_default_"]["properties"]["systemd"]["properties"]["t"]["properties"]["LINE_BREAK"]
-                del generated_json["mappings"]["_default_"]["properties"]["systemd"]["properties"]["t"]["properties"]["STREAM_ID"]
-                del generated_json["mappings"]["_default_"]["properties"]["systemd"]["properties"]["t"]["properties"]["SYSTEMD_INVOCATION_ID"]
+            if 'systemd' in generated_json["mappings"][_idx_type]["properties"]:
+                del generated_json["mappings"][_idx_type]["properties"]["systemd"]["properties"]["t"]["properties"]["LINE_BREAK"]
+                del generated_json["mappings"][_idx_type]["properties"]["systemd"]["properties"]["t"]["properties"]["STREAM_ID"]
+                del generated_json["mappings"][_idx_type]["properties"]["systemd"]["properties"]["t"]["properties"]["SYSTEMD_INVOCATION_ID"]
 
         elif es_version == supported._es5x:
             pass
 
         elif es_version == supported._es6x:
-            self._remove_all_field(generated_json)
+            self._remove_all_field(generated_json, es_version)
         # ======================
 
         generated_index_template = self._sort(generated_json)
@@ -167,7 +170,7 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
         released_data = self._wget(json_url)
 
         # Mask version
-        released_data["mappings"]["_default_"]["_meta"]["version"] = "na"
+        released_data["mappings"][_idx_type]["_meta"]["version"] = "na"
 
         # Fix downloaded data:
         # ======================
@@ -178,43 +181,43 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
             # https://github.com/ViaQ/elasticsearch-templates/issues/87
             released_data["aliases"] = {".all": {}}
             # https://github.com/ViaQ/elasticsearch-templates/issues/69
-            del released_data["mappings"]["_default_"]["dynamic_templates"][0]["message_field"]["mapping"]["omit_norms"]
-            released_data["mappings"]["_default_"]["dynamic_templates"][0]["message_field"]["mapping"]["norms"] = {'enabled': False}
+            del released_data["mappings"][_idx_type]["dynamic_templates"][0]["message_field"]["mapping"]["omit_norms"]
+            released_data["mappings"][_idx_type]["dynamic_templates"][0]["message_field"]["mapping"]["norms"] = {'enabled': False}
             #  - on top of #69 norms were enabled for general string fields
-            del released_data["mappings"]["_default_"]["dynamic_templates"][1]["string_fields"]["mapping"]["omit_norms"]
-            released_data["mappings"]["_default_"]["dynamic_templates"][1]["string_fields"]["mapping"]["norms"] = {'enabled': True}
+            del released_data["mappings"][_idx_type]["dynamic_templates"][1]["string_fields"]["mapping"]["omit_norms"]
+            released_data["mappings"][_idx_type]["dynamic_templates"][1]["string_fields"]["mapping"]["norms"] = {'enabled': True}
 
             # https://github.com/ViaQ/elasticsearch-templates/issues/83
             new_order = [2, 3, 4, 0, 1]
-            reordered_dynamic_templates = [released_data["mappings"]["_default_"]["dynamic_templates"][i] for i in new_order]
-            released_data["mappings"]["_default_"]["dynamic_templates"] = reordered_dynamic_templates
+            reordered_dynamic_templates = [released_data["mappings"][_idx_type]["dynamic_templates"][i] for i in new_order]
+            released_data["mappings"][_idx_type]["dynamic_templates"] = reordered_dynamic_templates
 
             # https://github.com/ViaQ/elasticsearch-templates/issues/69#issuecomment-357276665
-            del released_data["mappings"]["_default_"]["properties"]["ipaddr4"]["norms"]
+            del released_data["mappings"][_idx_type]["properties"]["ipaddr4"]["norms"]
 
             # https://github.com/ViaQ/elasticsearch-templates/issues/78
-            released_data["mappings"]["_default_"]["properties"]["kubernetes"]["properties"]["container_name"]["index"] = "analyzed"
-            released_data["mappings"]["_default_"]["properties"]["kubernetes"]["properties"]["container_name"]["doc_values"] = False
+            released_data["mappings"][_idx_type]["properties"]["kubernetes"]["properties"]["container_name"]["index"] = "analyzed"
+            released_data["mappings"][_idx_type]["properties"]["kubernetes"]["properties"]["container_name"]["doc_values"] = False
 
             # https://github.com/ViaQ/elasticsearch-templates/issues/79
-            del released_data["mappings"]["_default_"]["properties"]["pipeline_metadata"]["properties"]["collector"]["properties"]["ipaddr4"]["norms"]
-            released_data["mappings"]["_default_"]["properties"]["pipeline_metadata"]["properties"]["collector"]["properties"]["ipaddr4"]["type"] = "ip"
+            del released_data["mappings"][_idx_type]["properties"]["pipeline_metadata"]["properties"]["collector"]["properties"]["ipaddr4"]["norms"]
+            released_data["mappings"][_idx_type]["properties"]["pipeline_metadata"]["properties"]["collector"]["properties"]["ipaddr4"]["type"] = "ip"
 
             # https://github.com/ViaQ/elasticsearch-templates/issues/82
-            del released_data["mappings"]["_default_"]["properties"]["pipeline_metadata"]["properties"]["normalizer"]["properties"]["ipaddr4"]["norms"]
+            del released_data["mappings"][_idx_type]["properties"]["pipeline_metadata"]["properties"]["normalizer"]["properties"]["ipaddr4"]["norms"]
 
             # https://github.com/ViaQ/elasticsearch-templates/issues/80
-            if 'aushape' in released_data["mappings"]["_default_"]["properties"]:
-                released_data["mappings"]["_default_"]["properties"]["aushape"]["properties"]["error"]["index"] = "analyzed"
-                released_data["mappings"]["_default_"]["properties"]["aushape"]["properties"]["error"]["doc_values"] = False
+            if 'aushape' in released_data["mappings"][_idx_type]["properties"]:
+                released_data["mappings"][_idx_type]["properties"]["aushape"]["properties"]["error"]["index"] = "analyzed"
+                released_data["mappings"][_idx_type]["properties"]["aushape"]["properties"]["error"]["doc_values"] = False
 
-            self._remove_include_in_all(released_data)
+            self._remove_include_in_all(released_data, es_version)
 
         if es_version == supported._es5x:
             pass
 
         if es_version == supported._es6x:
-            self._remove_all_field(released_data)
+            self._remove_all_field(released_data, es_version)
         # ======================
 
         released_index_template = self._sort(released_data)

@@ -120,3 +120,9 @@ class GenerateTemplateTestCase(common_test_support.CommonTestSupport):
             True
         except Exception:
             raise
+
+    def test_index_type_name(self):
+        self.assertEqual(supported._default_, supported.index_type_name(supported._es2x))
+        self.assertEqual(supported._default_, supported.index_type_name(supported._es5x))
+        self.assertEqual(supported._doc, supported.index_type_name(supported._es6x))
+        self.assertRaises(Exception, supported.index_type_name, "foo")

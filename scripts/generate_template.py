@@ -26,6 +26,8 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
 
     print("Generating output for ES version: {0}".format(es_version))
 
+    _idx_type = supported.index_type_name(es_version)
+
     if template_definition is None:
         print("template file is empty. Cannot generate template.")
         return
@@ -38,6 +40,15 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
     # Load skeleton of the template
     with open(template_definition['skeleton_path'], 'r') as f:
         skeleton = yaml.load(f, Loader=yaml.FullLoader)
+        mappings = skeleton["mappings"]
+        # The index type placeholder needs to be replaced according to ES version (see #84 and #111)
+        if supported.index_type_placeholder not in mappings:
+            raise Exception('Skeleton mappings does not contain "{}" key'.format(supported.index_type_placeholder))
+        else:
+            if _idx_type in mappings:
+                raise Exception('Skeleton mappings already contains key {}'.format(_idx_type))
+            else:
+                mappings[_idx_type] = mappings.pop(supported.index_type_placeholder)
 
     if 'skeleton_index_pattern_path' not in template_definition:
         print("skeleton_index_pattern_path is not defined. Cannot generate template.")
@@ -50,7 +61,7 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
     # Load object_type files
     with open(namespaces_dir + '/_default_.yml', 'r') as f:
         default_mapping_yml = yaml.load(f, Loader=yaml.FullLoader)
-    default_mapping = default_mapping_yml['_default_']
+    default_mapping = default_mapping_yml[supported.index_type_placeholder]
 
     for ns_file in template_definition['namespaces']:
         with open(namespaces_dir + ns_file, 'r') as f:
@@ -65,25 +76,20 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
     # called 'properties' which contains the field definitions for the fields
     # in the group, and other settings applicable to groups such as
     # include_in_all, etc.
-    skeleton['mappings']['_default_'].update(traverse_group_section(
+    skeleton['mappings'][_idx_type].update(traverse_group_section(
         default_mapping, default_mapping_yml['field_defaults'], process_leaf, True))
 
-    add_type_version(default_mapping_yml["version"],
-                     skeleton['mappings']['_default_'])
+    add_type_version(default_mapping_yml["version"], skeleton['mappings'][_idx_type])
+    add_index_pattern(template_definition['elasticsearch_template']['index_pattern'], skeleton)
+    add_index_order(template_definition['elasticsearch_template']['order'], skeleton)
 
-    add_index_pattern(
-        template_definition['elasticsearch_template']['index_pattern'],
-        skeleton)
-    add_index_order(template_definition['elasticsearch_template']['order'],
-                    skeleton)
     for field in ['_source', '_all', 'include_in_all']:
         if field in template_definition['elasticsearch_template']:
-            skeleton['mappings']['_default_'][field] = template_definition['elasticsearch_template'][field]
+            skeleton['mappings'][_idx_type][field] = template_definition['elasticsearch_template'][field]
 
     supported.bw_mapping_compatibility(es_version, skeleton)
 
-    json.dump(
-        skeleton, output, indent=2, separators=(',', ': '), sort_keys=True)
+    json.dump(skeleton, output, indent=2, separators=(',', ': '), sort_keys=True)
     output.write('\n')
 
     # index pattern stuff
@@ -100,11 +106,12 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
         default_mapping, default_mapping_yml['field_defaults'], process_leaf_index_pattern, es_version, None, True))
 
     skeleton_index_pattern["fields"] = json.dumps(index_pattern_fields)
-    json.dump(
-        skeleton_index_pattern, output_index_pattern, indent=2, separators=(',', ': '), sort_keys=True)
+    json.dump(skeleton_index_pattern, output_index_pattern, indent=2, separators=(',', ': '), sort_keys=True)
     output_index_pattern.write('\n')
 
 
+'''
+# Commented out, this method is not used...
 def add_mapping_to_skeleton(map_type, skeleton):
     """Add mapping type to the skeleton by cloning '_default_' section.
     Args:
@@ -112,9 +119,9 @@ def add_mapping_to_skeleton(map_type, skeleton):
         skeleton(dict): skeleton to update
     """
     if map_type != '_default_':
-        skeleton['mappings'][map_type] = skeleton['mappings'][
-            '_default_'].copy()
+        skeleton['mappings'][map_type] = skeleton['mappings']['_default_'].copy()
         del skeleton['mappings'][map_type]['dynamic_templates']
+'''
 
 
 def add_index_template_fields(rec):
@@ -337,7 +344,7 @@ def object_types_to_asciidoc(template_definition, output, namespaces_dir):
     # Load object_type files
     with open(namespaces_dir + '/_default_.yml', 'r') as f:
         default_mapping_yml = yaml.load(f, Loader=yaml.FullLoader)
-    sections = [default_mapping_yml['_default_']]
+    sections = [default_mapping_yml[supported.index_type_placeholder]]
 
     for ns_file in template_definition['namespaces']:
         with open(namespaces_dir + ns_file, 'r') as f:
