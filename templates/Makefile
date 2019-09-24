@@ -6,6 +6,15 @@ INDEX_PATTERN_DIRS = openshift,collectd_metrics
 
 all: templates index_pattern
 
+# Clean all index templates and index patterns generated during 'make'
+clean:
+	for dir in {$(INDEX_PATTERN_DIRS)}; do \
+		cd $$dir ; \
+		make clean; \
+		cd .. ; \
+	done
+	rm *.index-pattern.json
+
 templates:
 	for dir in {$(INDEX_PATTERN_DIRS)}; do \
 		cd $$dir ; \
