@@ -86,7 +86,14 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
         _idx_type = supported.index_type_name(es_version)
         if "_all" in data["mappings"][_idx_type]:
             del data["mappings"][_idx_type]["_all"]
-
+        
+    @staticmethod
+    def _remove_viaq_index_name_field(generated_json, es_version):
+        # Remove 'viaq_index_name' field. It was introduced after support for ES6.x was added.
+        # https://github.com/ViaQ/elasticsearch-templates/pull/115
+        _idx_type = supported.index_type_name(es_version)
+        if "viaq_index_name" in generated_json["mappings"][_idx_type]["properties"]:
+            del generated_json["mappings"][_idx_type]["properties"]["viaq_index_name"]
 
     @staticmethod
     def _generate_json_index_template(args, es_version):
@@ -156,11 +163,14 @@ class CompareAgainstReleasedTemplatesTestCase(helper.CommonTestSupport):
                 del generated_json["mappings"][_idx_type]["properties"]["systemd"]["properties"]["t"]["properties"]["STREAM_ID"]
                 del generated_json["mappings"][_idx_type]["properties"]["systemd"]["properties"]["t"]["properties"]["SYSTEMD_INVOCATION_ID"]
 
+            self._remove_viaq_index_name_field(generated_json, es_version)
+
         elif es_version == supported._es5x:
-            pass
+            self._remove_viaq_index_name_field(generated_json, es_version)
 
         elif es_version == supported._es6x:
             self._remove_all_field(generated_json, es_version)
+            self._remove_viaq_index_name_field(generated_json, es_version)
         # ======================
 
         generated_index_template = self._sort(generated_json)
