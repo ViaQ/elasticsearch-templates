@@ -151,7 +151,10 @@ class CompareAgainstReleasedPatternsTestCase(helper.CommonTestSupport):
             generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.LINE_BREAK"]
             generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.STREAM_ID"]
             generated_fields = [item for item in generated_fields if not item["name"] == "systemd.t.SYSTEMD_INVOCATION_ID"]
-            # ======================
+
+        # https://github.com/ViaQ/elasticsearch-templates/pull/115
+        generated_fields = [item for item in generated_fields if not item["name"] == "viaq_index_name"]
+        # ======================
 
         # ---- wget
         print('\nDownloading released index pattern file for comparison:')

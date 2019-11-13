@@ -192,5 +192,5 @@ _index_type_:
       type: keyword
       example: project.my-cool-project-in-lab04.748e92c2-70d7-11e9-b387-000d3af2d83b.2019.05.09
       description: |
-        Index name in which this message will be stored within the elastic search.
+        Index name in which this message will be stored within the Elasticsearch.
         The value of this field is generated based on the source of the message. 
