@@ -1,4 +1,4 @@
-version: 2019.09.24.0
+version: 2019.12.16.0
 
 field_defaults:
   type: keyword
