@@ -27,6 +27,23 @@ _index_types = {
     _es6x: _doc
 }
 
+_index_templates = {
+    _es2x: "index_pattern_old_model",
+    _es5x: "index_pattern_old_model",
+    _es6x: "index_pattern"
+}
+
+
+def index_patterns(es_version):
+    """
+    We change the index_patterns depending on ES version. Starting with ES6 we are switching to the
+    new data model. See https://github.com/openshift/origin-aggregated-logging/pull/1807#issuecomment-573721937
+
+    :param es_version:
+    :return: Field name containing index_patterns
+    """
+    return _index_templates[es_version]
+
 
 def index_type_name(es_version):
     """

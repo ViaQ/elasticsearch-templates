@@ -3,6 +3,7 @@ skeleton_index_pattern_path: ../skeleton-index-pattern.json
 
 elasticsearch_template:
   name: foo.test
+  index_pattern_old_model: ".test.*"
   index_pattern: ".test.*"
   order: 10
 

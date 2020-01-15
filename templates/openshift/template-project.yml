@@ -3,7 +3,8 @@ skeleton_index_pattern_path: ../skeleton-index-pattern.json
 
 elasticsearch_template:
   name: com.redhat.viaq-openshift-project
-  index_pattern: "project.*"
+  index_pattern_old_model: "project.*"
+  index_pattern: "container.app-*"
   order: 10
 
 namespaces:

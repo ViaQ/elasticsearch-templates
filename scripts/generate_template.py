@@ -80,7 +80,7 @@ def object_types_to_template(template_definition, output, output_index_pattern, 
         default_mapping, default_mapping_yml['field_defaults'], process_leaf, True))
 
     add_type_version(default_mapping_yml["version"], skeleton['mappings'][_idx_type])
-    add_index_pattern(template_definition['elasticsearch_template']['index_pattern'], skeleton)
+    add_index_pattern(template_definition['elasticsearch_template'][supported.index_patterns(es_version)], skeleton)
     add_index_order(template_definition['elasticsearch_template']['order'], skeleton)
 
     for field in ['_source', '_all', 'include_in_all']:

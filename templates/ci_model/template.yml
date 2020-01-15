@@ -3,6 +3,7 @@ skeleton_index_pattern_path: ../skeleton-index-pattern.json
 
 elasticsearch_template:
   name: com.redhat.viaq-ci
+  index_pattern_old_model: "viaq-ci-*"
   index_pattern: "viaq-ci-*"
   order: 10
 
