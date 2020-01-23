@@ -4,7 +4,7 @@ skeleton_index_pattern_path: ../skeleton-index-pattern.json
 elasticsearch_template:
   name: com.redhat.viaq-openshift-operations
   index_pattern_old_model: ".operations.*"
-  index_pattern: [ "node.infra-*", "container.infra-*", "audit.infra-*" ]
+  index_pattern: [ "infra-*"  , "audit.infra-*" ]
   order: 10
 
 namespaces:
