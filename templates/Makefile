@@ -23,6 +23,6 @@ templates:
 	done
 
 index_pattern:
-	python ../scripts/concat_index_pattern_fields.py \
+	python3 ../scripts/concat_index_pattern_fields.py \
 		"$(INDEX_PATTERN_DIRS)" "*.index-pattern.json" \
 		"$(TEMPLATE_NAME).<ES_VERSION>.index-pattern.json"

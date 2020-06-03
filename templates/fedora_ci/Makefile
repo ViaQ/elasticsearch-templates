@@ -3,7 +3,7 @@ TEMPLATE_NAME = com.redhat.fedora-ci
 .PHONY: all clean
 
 all:
-	python ../../scripts/generate_template.py template.yml ../../namespaces/
+	python3 ../../scripts/generate_template.py template.yml ../../namespaces/
 
 clean:
 	rm *.json *.asciidoc

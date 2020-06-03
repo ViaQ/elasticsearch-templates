@@ -58,3 +58,36 @@ The generated file looks like "xxx.asciidoc".
 Install the asciidoc viewer in web browser.
 
 Open the local path to the asciidoc file "xxx.asciidoc" in your browser.
+
+# Releasing a new version of the data model
+
+First, generate index templates (for Elasticsearch) and index patterns (for Kibana).
+```shell script
+$ cd <project_root>
+$ make clean
+$ make
+```
+Create a new release tag in repo and push it into GitHub.
+```shell script
+$ git tag -a 0.0.24 -m "Release 0.0.24"
+
+# We can check the tag is attached to the latest commit now 
+$ git log --oneline -n 2
+c16dc2c (HEAD -> master, tag: 0.0.24, origin/master, origin/HEAD) Fix index patterns
+39d0b71 (tag: 0.0.23) Update model & Bump to 2020.01.23
+
+# Push tag into remote GitHub repo
+$ git push origin --tags
+Total 0 (delta 0), reused 0 (delta 0)
+To github.com:ViaQ/elasticsearch-templates.git
+ * [new tag]         0.0.24 -> 0.0.24 
+```
+Create a new release in GitHub project release.
+- create a new release draft from newly created tag
+- provide meaningful description and manually attach files belonging to the release
+  - Usually the list of the files is the same as in the previous release except
+  when it is not :-) (i.e. if there is any significant change)
+- publish the release
+
+Once a new release is published you can use [update-viaq-data-model.sh](https://github.com/openshift/origin-aggregated-logging/blob/master/hack/update-viaq-data-model.sh)
+script to pull released files into AOL and prepare a new PR with updated data model.
