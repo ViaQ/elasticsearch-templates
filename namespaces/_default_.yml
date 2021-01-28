@@ -10,25 +10,20 @@ _index_type_:
   type: group
   name: "Default"
   description: |
-    The top level fields are common to every application, and may be present in every record.
-    For the Elasticsearch template, this is what populates the actual mappings
-    of either the `\_default_` type (in ES 5.x or earlier) or the only single `_doc` type (in ES 6.x or later)
-    in the template's mapping section.
+    The top level fields are common to every application, and may be present in every record. For the Elasticsearch template, the top level fields populate the actual mappings of either the `\_default_` type (in ES 5.x or earlier) or the single `_doc` type (in ES 6.x or later) in the template's mapping section.
 
     Read more about Elasticsearch index types deprecation:
 
-    - https://www.elastic.co/guide/en/elasticsearch/reference/6.0/default-mapping.html[Default mapping deprecation in ES 6.x]
-    - https://www.elastic.co/guide/en/elasticsearch/reference/6.0/removal-of-types.html[Removal of mappings types in ES 6.x]
+    - link:https://www.elastic.co/guide/en/elasticsearch/reference/6.0/default-mapping.html[Default mapping deprecation in ES 6.x]
+    - link:https://www.elastic.co/guide/en/elasticsearch/reference/6.0/removal-of-types.html[Removal of mappings types in ES 6.x]
 
   fields:
     - name: "@timestamp"
       type: date
-      format: yyyy-MM-dd HH:mm:ss,SSSZ||yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
+      format: `yyyy-MM-dd HH:mm:ss,SSSZ||yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime`
       example: 2015-01-24T14:06:05.071Z
       description: |
-        UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known;
-        this is the log processing pipeline’s “best effort” determination of when the log payload was generated
-        FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch
+        UTC value marking when the log payload was created, or when log payload was first collected if the creation time is not known; this is the log processing pipeline’s “best effort” determination of when the log payload was generated FYI: the “@” prefix convention to note a field as being reserved for a particular use; in this case, most tools by default look for “@timestamp” with ElasticSearch.
       fields:
         - name: raw
           ignore_above: 256
@@ -47,10 +42,7 @@ _index_type_:
     - name: hostname
       type: keyword
       description: >
-        FQDN of the entity generating the original payload.  This field is a
-        best effort attempt to derive this context; sometimes the entity
-        generating it knows it; other times that entity has a restricted
-        namespace itself, and the collector or normalizer knows that.
+        FQDN of the entity generating the original payload.  This field is a best effort attempt to derive this context; sometimes the entity generating it knows it; other times that entity has a restricted namespace itself, and the collector or normalizer knows that.
 
     - name: ipaddr4
       type: ip
@@ -70,23 +62,37 @@ _index_type_:
       type: keyword
       example: info
       description: |
-        Logging level as provided by: rsyslog(severitytext property), python's
-        logging module, etc.
-        Possible values are as listed here: http://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/syslog.h;h=ee01478c4b19a954426a96448577c5a76e6647c0;hb=HEAD#l74 plus `trace` and `unknown`
-        That is: alert crit debug emerg err info notice trace unknown warning
-        Note that `trace` isn't in the syslog.h list but many applications use it
-        `unknown` is only used when the logging system gets a value it doesn't understand
-        `unknown` is the highest level
-        `trace` should be considered as higher (more verbose) than `debug`
-        `error` should be converted to `err`
-        `panic` should be converted to `emerg`
-        `warn` should be converted to `warning`
-        Numeric values from syslog/journal PRIORITY can usually be mapped using the priority values as listed here:
-        http://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/syslog.h;h=ee01478c4b19a954426a96448577c5a76e6647c0;hb=HEAD#l51
-        That is, 0 -> emerg, 1 -> alert, ..., 7 -> debug, 8 -> trace, 9 -> unknown
-        Log levels/priorities from other logging systems should be mapped to the nearest match
-        For example, from python logging: https://docs.python.org/2.7/library/logging.html#logging-levels
-        CRITICAL -> crit, ERROR -> err, ...., DEBUG -> debug
+        Logging level as provided by: rsyslog(severitytext property), python's logging module, etc.
+
+        Possible values are as link:http://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/syslog.h;h=ee01478c4b19a954426a96448577c5a76e6647c0;hb=HEAD#l74[as listed here] plus `trace` and `unknown`.
+
+        That is, the possible values are: `alert`, `crit`, `debug`, `emerg`, `err`, `info`, `notice`, `trace`, `unknown`, `warning`
+
+        NOTE: `trace` isn't in the `syslog.h` list but many applications use it, and `unknown` is only used when the logging system gets a value it doesn't understand.
+
+        * `unknown` is the highest level
+        * `trace` should be considered as higher (more verbose) than `debug`
+        * `error` should be converted to `err`
+        * `panic` should be converted to `emerg`
+        * `warn` should be converted to `warning`
+
+        Numeric values from syslog/journal PRIORITY can usually be mapped using the priority values link:http://sourceware.org/git/?p=glibc.git;a=blob;f=misc/sys/syslog.h;h=ee01478c4b19a954426a96448577c5a76e6647c0;hb=HEAD#l51[as listed here].
+
+        That is, you can usually map the following numeric values with the priority values shown:
+
+        * `0` -> `emerg`
+        * `1` -> `alert`
+        * ...
+        * `7` -> `debug`
+        * `8` -> `trace`
+        * `9` -> `unknown`
+
+        Map log levels/priorities from other logging systems to the nearest match. For example, from link:https://docs.python.org/2.7/library/logging.html#logging-levels[python logging]:
+
+        * CRITICAL -> crit
+        * ERROR -> err
+        * ...
+        * DEBUG -> debug
 
     - name: message
       type: text
@@ -94,8 +100,7 @@ _index_type_:
       doc_values: false
       example: TODO
       description: >
-        Typical log entry message, or payload, possibly stripped of metadata
-        pulled out of it by collector/normalizer, UTF-8 encoded.
+        Typical log entry message, or payload, possibly stripped of metadata pulled out of it by collector/normalizer, UTF-8 encoded.
       norms: false
 
     - name: pid
@@ -106,9 +111,7 @@ _index_type_:
     - name: service
       type: keyword
       description: >
-        Name of the service associated with the logging entity, if available.
-        For example, syslog's APP-NAME and rsyslog's programname property are
-        mapped to the service field.
+        Name of the service associated with the logging entity, if available. For example, syslog's `APP-NAME` and rsyslog's `programname` property are mapped to the `service` field.
 
     - name: tags
       type: text
@@ -116,17 +119,14 @@ _index_type_:
       index: true
       analyzer: whitespace
       description: >
-        Optionally provided operator defined list of tags placed on each log
-        by the collector or normalizer. The payload can be a string with
-        whitespace-delimited string tokens, or a JSON list of string tokens.
+        Optionally provided operator defined list of tags placed on each log by the collector or normalizer. The payload can be a string with whitespace-delimited string tokens, or a JSON list of string tokens.
 
     - name: file
       type: text
       index: true
       doc_values: false
       description: >
-        Optional path to the file containing the log entry local to the
-        collector
+        Optional path to the file containing the log entry local to the collector.
         TODO: analyzer for file paths
       norms: true
       fields:
@@ -137,65 +137,34 @@ _index_type_:
     - name: offset
       type: long
       description: >
-        The offset value can represent bytes to the start of the log line in the
-        file (zero or one based), or log line numbers (zero or one based), so
-        long as the values are strictly monotonically increasing in the context
-        of a single log file. They values are allowed to wrap, representing a
-        new version of the log file (rotation).
+        The offset value can represent bytes to the start of the log line in the file (zero or one based), or log line numbers (zero or one based), so long as the values are strictly monotonically increasing in the context of a single log file. They values are allowed to wrap, representing a new version of the log file (rotation).
 
     - name: namespace_name
       type: keyword
+      format: `[a-zA-Z][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]`
       example: my-cool-project-in-lab04
       doc_values: false
       index: true
       description: |
-        format: [a-zA-Z][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]
-
-        Associate this record with the namespace with this name.
-        This value will not be stored.  It is only used to associate the
-        record with the appropriate namespace for access control and
-        visualization.  Normally this value will be given in the tag, but if the
-        protocol does not support sending a tag, this field can be used.
-        If this field is present, it will override the
-        namespace given in the tag or in kubernetes.namespace_name.
-        The format is the same format used for Kubernetes namespace names.
-        See also namespace_uuid.
+        Associate this record with the namespace with this name. This value will not be stored.  It is only used to associate the record with the appropriate namespace for access control and visualization.  Normally this value will be given in the tag, but if the protocol does not support sending a tag, this field can be used. If this field is present, it will override the namespace given in the tag or in kubernetes.namespace_name. The format is the same format used for Kubernetes namespace names. See also namespace_uuid.
 
     - name: namespace_uuid
       type: keyword
-      example: 82f13a8e-882a-4344-b103-f0a6f30fd218
+      format: `[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}`
+      example: `82f13a8e-882a-4344-b103-f0a6f30fd218`
       description: |
-        format: [a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}
-
-        The uuid associated with the namespace_name.
-        This value will not be stored.  It is only used to associate the
-        record with the appropriate namespace for access control and
-        visualization.  If this field is present, it will override the
-        uuid given in kubernetes.namespace_uuid.  This will also cause
-        the Kubernetes metadata lookup to be skipped for this log record.
+        The uuid associated with the `namespace_name`. This value will not be stored.  It is only used to associate the record with the appropriate namespace for access control and visualization.  If this field is present, it will override the uuid given in `kubernetes.namespace_uuid`.  This will also cause the Kubernetes metadata lookup to be skipped for this log record.
 
     - name: viaq_msg_id
       type: keyword
-      example: 82f13a8e-882a-4344-b103-f0a6f30fd218
+      example: `82f13a8e-882a-4344-b103-f0a6f30fd218`
       description: |
-        A unique ID assigned to each message.  The format is not specified.
-        It may be a UUID or a Base64 or some other ascii value.
-        This is currently generated by
-        https://github.com/uken/fluent-plugin-elasticsearch/tree/v1.13.2#generate-hash-id
-        and is used as the `_id` of the document in Elasticsearch.
-        An intended use of this field is that if you use another logging
-        store or application other than Elasticsearch, but you still need
-        to correlate data with the data stored in Elasticsearch, this field
-        will give you the exact document corresponding to the record.
-        
+        A unique ID assigned to each message.  The format is not specified. It may be a UUID or a Base64 or some other ascii value. This is currently generated by link:https://github.com/uken/fluent-plugin-elasticsearch/tree/v1.13.2#generate-hash-id[] and is used as the `_id` of the document in Elasticsearch. An intended use of this field is that if you use another logging store or application other than Elasticsearch, but you still need to correlate data with the data stored in Elasticsearch, this field will give you the exact document corresponding to the record.
+
     - name: viaq_index_name
       type: keyword
       example: container.app-write
       description: |
-        For Elasticsearch 6.x and later this is a name of a write index alias. The value depends on a log type
-        of this message. Detailed documentation is found at
-        https://github.com/openshift/enhancements/blob/master/enhancements/cluster-logging/cluster-logging-es-rollover-data-design.md#data-model
-        
-        For Elasticsearch 5.x and earlier an index name in which this message will be stored within the Elasticsearch.
-        The value of this field is generated based on the source of the message. Example of the value
-        is 'project.my-cool-project-in-lab04.748e92c2-70d7-11e9-b387-000d3af2d83b.2019.05.09'.
+        For Elasticsearch 6.x and later, this is a name of a write index alias. The value depends on a log type of this message. Detailed documentation is found at link:https://github.com/openshift/enhancements/blob/master/enhancements/cluster-logging/cluster-logging-es-rollover-data-design.md#data-model[]
+
+        For Elasticsearch 5.x and earlier, an index name in which this message will be stored within the Elasticsearch. The value of this field is generated based on the source of the message. Example of the value is 'project.my-cool-project-in-lab04.748e92c2-70d7-11e9-b387-000d3af2d83b.2019.05.09'.
