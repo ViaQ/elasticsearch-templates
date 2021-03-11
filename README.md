@@ -43,7 +43,7 @@ List of currently supported ES versions can be find in [scripts/supported_versio
 
 The idea is that all the input file templates and data are formatted according to the latest supported ES version and
 scripts handle backward data and format conversions for older ES versions. As part of unit testing the generated data
-is compared to released common data files (automatically downloaded from GitHub during tests). 
+is compared to released common data files (automatically downloaded from GitHub during tests).
 
 # Generating documentation
 
@@ -51,13 +51,13 @@ Use the makefile in the [templates/](templates) folder.
 
 Alternatively, run the following command: python ./scripts/generate_template.py (path to template in templates/) namespaces/ --doc.
 
-The generated file looks like "xxx.asciidoc".
+The generated file looks like "xxx.adoc".
 
 # Viewing the documentation
 
 Install the asciidoc viewer in web browser.
 
-Open the local path to the asciidoc file "xxx.asciidoc" in your browser.
+Open the local path to the asciidoc file "xxx.adoc" in your browser.
 
 # Releasing a new version of the data model
 
@@ -71,7 +71,7 @@ Create a new release tag in repo and push it into GitHub.
 ```shell script
 $ git tag -a 0.0.24 -m "Release 0.0.24"
 
-# We can check the tag is attached to the latest commit now 
+# We can check the tag is attached to the latest commit now
 $ git log --oneline -n 2
 c16dc2c (HEAD -> master, tag: 0.0.24, origin/master, origin/HEAD) Fix index patterns
 39d0b71 (tag: 0.0.23) Update model & Bump to 2020.01.23
@@ -80,7 +80,7 @@ c16dc2c (HEAD -> master, tag: 0.0.24, origin/master, origin/HEAD) Fix index patt
 $ git push origin --tags
 Total 0 (delta 0), reused 0 (delta 0)
 To github.com:ViaQ/elasticsearch-templates.git
- * [new tag]         0.0.24 -> 0.0.24 
+ * [new tag]         0.0.24 -> 0.0.24
 ```
 Create a new release in GitHub project release.
 - create a new release draft from newly created tag

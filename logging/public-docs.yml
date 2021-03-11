@@ -1,0 +1,11 @@
+skeleton_path: skeleton.json
+skeleton_index_pattern_path: ../templates/skeleton-index-pattern.json
+
+elasticsearch_template:
+  name: openshift-cluster-logging
+  index_pattern_old_model: "project.*"
+  index_pattern: [ "app*" ]
+  order: 10
+
+namespaces:
+  - kubernetes.yml

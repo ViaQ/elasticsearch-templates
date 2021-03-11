@@ -1,35 +1,41 @@
 
 namespace:
   name: kubernetes
+  public: true
   type: group
   description: >
     Namespace for kubernetes-specific metadata
   fields:
   - name: pod_name
+    public: true
     type: keyword
     norms: true
     description: >
       The name of the pod
 
   - name: pod_id
+    public: true
     type: keyword
     norms: true
     description: >
       Kubernetes ID of the pod.
 
   - name: namespace_name
+    public: true
     type: keyword
     norms: true
     description: >
       The name of the namespace in Kubernetes.
 
   - name: namespace_id
+    public: true
     type: keyword
     norms: true
     description: >
       ID of the namespace in Kubernetes.
 
   - name: host
+    public: true
     type: keyword
     norms: true
     description: >
@@ -41,6 +47,7 @@ namespace:
       Kubernetes Master URL
 
   - name: container_name
+    public: true
     type: text
     doc_values: false
     norms: true
@@ -52,24 +59,28 @@ namespace:
         type: keyword
 
   - name: annotations
+    public: true
     type: group
     description: >
-      Annotations associated with the OpenShift object
+      Annotations associated with the Kubernetes object
 
   - name: labels
+    public: true
     type: group
     description: >
-      Labels attached to the OpenShift object
+      Labels attached to the Kubernetes object
       Each label name is a subfield of labels field.
       Each label name is de-dotted: dots in the name are replaced with
       underscores.
     fields:
       - name: deployment
+        public: true
         type: keyword
         example: logging-kibana-3
         description: >
           The deployment associated with this Kubernetes object
       - name: deploymentconfig
+        public: true
         type: keyword
         example: logging-kibana
         description: >
@@ -91,107 +102,127 @@ namespace:
 
   - name: event
     type: group
+    public: true
     description: >
       The kubernetes event obtained from kubernetes master API
       The event is already JSON object and as whole nested under kubernetes field
       This description should loosely follow 'type Event' in https://github.com/kubernetes/kubernetes/blob/master/pkg/api/types.go
     fields:
       - name: verb
+        public: true
         type: keyword
         example: ADDED
         description: >
           The type of event, can be ADDED, MODIFIED, DELETED
       - name: metadata
+        public: true
         type: group
         description: >
           Information related to the location and time of the event creation
         fields:
           - name: name
+            public: true
             type: keyword
             example: java-mainclass-1.14d888a4cfc24890
             description: >
               Name of the object that triggered the event creation
           - name: namespace
+            public: true
             type: keyword
             example: default
             description: >
               The name of the namespace which induced the event
               It differs from namespace_name, which will be in case of every event the 'eventrouter'
           - name: selfLink
+            public: true
             type: keyword
             example: /api/v1/namespaces/javaj/events/java-mainclass-1.14d888a4cfc24890
             description: >
               Link to the event itself
           - name: uid
+            public: true
             type: keyword
             example: d828ac69-7b58-11e7-9cf5-5254002f560c
             description: >
               Event's unique ID
           - name: resourceVersion
+            public: true
             type: integer
             example: 311987
             description: >
               String that identifies the server's internal version of the event that can be used by clients to determine when objects have changed
       - name: involvedObject
+        public: true
         type: group
         description: >
           Description of the object involved in the event creation
         fields:
           - name: kind
+            public: true
             type: keyword
             example: ReplicationController
             description: >
               Type of the object
           - name: namespace
+            public: true
             type: keyword
             example: default
             description: >
               The name of the namespace in which the object triggered the event
               In case this event is not triggered by a pod then it differs from kubernetes.namespace_name, which will be in case of every event eventrouter's namespace
           - name: name
+            public: true
             type: keyword
             example: java-mainclass-1
             description: >
               Name of the object that triggered the event
           - name: uid
+            public: true
             type: keyword
             example: e6bff941-76a8-11e7-8193-5254002f560c
             description: >
               Object's unique ID
           - name: apiVersion
+            public: true
             type: keyword
             example: v1
             description: >
               Version of kubernetes master API
           - name: resourceVersion
+            public: true
             type: keyword
             example: 308882
             description: >
               String that identifies the server's internal version of the pod triggering the event that can be used by clients to determine when objects have changed
       - name: reason
+        public: true
         type: keyword
         example: SuccessfulCreate
         description: >
-          Short, machine understandable string that gives the reason for this event being generated 
+          Short, machine understandable string that gives the reason for this event being generated
       - name: source_component
+        public: true
         type: keyword
         example: replication-controller
         description: >
           Component which reported this event
       - name: firstTimestamp
+        public: true
         type: date
         format: yyyy-MM-dd HH:mm:ss,SSSZ||yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
         example: 2017-08-07T10:11:57Z
         description: >
           The time at which the event was first recorded
       - name: count
+        public: true
         type: integer
         example: 1
         description: >
           The number of times this event has occurred
       - name: type
+        public: true
         type: keyword
-        example: Normal 
+        example: Normal
         description: >
           Type of this event (Normal, Warning), new types could be added in the future
 

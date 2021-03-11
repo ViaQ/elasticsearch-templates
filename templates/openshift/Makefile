@@ -5,7 +5,7 @@ all: docs
 	python3 ../../scripts/generate_template.py template-operations.yml ../../namespaces/
 
 clean:
-	rm *.json *.asciidoc
+	rm *.json *.adoc
 
 docs:
 	python3 ../../scripts/generate_template.py template-project.yml ../../namespaces/ --docs

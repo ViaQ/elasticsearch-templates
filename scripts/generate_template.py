@@ -365,7 +365,7 @@ This file is generated! See scripts/generate_template.py --docs
 [[exported-fields]]
 == Exported Fields
 
-These are the fields exported by the logging system and available for searching
+    These are the fields exported by the logging system and available for searching
 from Elasticsearch and Kibana.  Use the full, dotted field name when searching.
 For example, for an Elasticsearch /_search URL, to look for a Kubernetes pod name,
 use `/_search/q=kubernetes.pod_name:name-of-my-pod`
@@ -387,6 +387,9 @@ The fields are grouped in the following categories:
 
 
 def document_fields(output, section, hier_path=[]):
+
+    if args.public and not section.get('public'):
+        return
 
     if section['name'] == 'Default':
         str_path = u''
@@ -418,6 +421,8 @@ def document_fields(output, section, hier_path=[]):
 
 
 def document_field(output, field, str_path):
+    if args.public and not field.get('public'):
+        return
 
     if len(str_path) == 0:
         path = field['name']
@@ -448,6 +453,8 @@ def parse_args():
                    help='Path to directory with namespace definitions')
     p.add_argument('--docs', action='store_true', default=False,
                    help='Generate field documentation')
+    p.add_argument('--public', action='store_true', default=False,
+                   help='Generate only public field documentation')
 
     # Do not call parse_args() on parser yet so that we can use it in unittests
     return p
@@ -460,7 +467,7 @@ if __name__ == '__main__':
         template_definition = yaml.load(input_template, Loader=yaml.FullLoader)
 
     if args.docs:
-        with io.open('{0[elasticsearch_template][name]}.asciidoc'.format(
+        with io.open('{0[elasticsearch_template][name]}.adoc'.format(
                 template_definition), mode='w', encoding='utf8') as output:
             object_types_to_asciidoc(template_definition, output,
                                      args.namespaces_dir)

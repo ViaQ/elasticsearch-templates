@@ -9,6 +9,7 @@ field_defaults:
 _index_type_:
   type: group
   name: "Default"
+  public: true
   description: |
     The top level fields are common to every application, and may be present in every record.
     For the Elasticsearch template, this is what populates the actual mappings
@@ -22,6 +23,7 @@ _index_type_:
 
   fields:
     - name: "@timestamp"
+      public: true
       type: date
       format: yyyy-MM-dd HH:mm:ss,SSSZ||yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ||yyyy-MM-dd'T'HH:mm:ssZ||dateOptionalTime
       example: 2015-01-24T14:06:05.071Z
@@ -45,6 +47,7 @@ _index_type_:
             type: geo_point
 
     - name: hostname
+      public: true
       type: keyword
       description: >
         FQDN of the entity generating the original payload.  This field is a
@@ -53,6 +56,7 @@ _index_type_:
         namespace itself, and the collector or normalizer knows that.
 
     - name: ipaddr4
+      public: true
       type: ip
       description: >
         IP address v4 of the source server. Can be an array.
@@ -62,11 +66,13 @@ _index_type_:
           type: keyword
 
     - name: ipaddr6
+      public: true
       type: ip
       description: >
         IP address v6 of the source server (if available). Can be an array.
 
     - name: level
+      public: true
       type: keyword
       example: info
       description: |
@@ -89,6 +95,7 @@ _index_type_:
         CRITICAL -> crit, ERROR -> err, ...., DEBUG -> debug
 
     - name: message
+      public: true
       type: text
       index: true
       doc_values: false
@@ -99,6 +106,7 @@ _index_type_:
       norms: false
 
     - name: pid
+      public: true
       type: keyword
       description: >
         This is the process ID of the logging entity, if available.
@@ -144,6 +152,7 @@ _index_type_:
         new version of the log file (rotation).
 
     - name: namespace_name
+      public: true
       type: keyword
       example: my-cool-project-in-lab04
       doc_values: false
@@ -162,6 +171,7 @@ _index_type_:
         See also namespace_uuid.
 
     - name: namespace_uuid
+      public: true
       type: keyword
       example: 82f13a8e-882a-4344-b103-f0a6f30fd218
       description: |
@@ -187,7 +197,7 @@ _index_type_:
         store or application other than Elasticsearch, but you still need
         to correlate data with the data stored in Elasticsearch, this field
         will give you the exact document corresponding to the record.
-        
+
     - name: viaq_index_name
       type: keyword
       example: container.app-write
@@ -195,7 +205,7 @@ _index_type_:
         For Elasticsearch 6.x and later this is a name of a write index alias. The value depends on a log type
         of this message. Detailed documentation is found at
         https://github.com/openshift/enhancements/blob/master/enhancements/cluster-logging/cluster-logging-es-rollover-data-design.md#data-model
-        
+
         For Elasticsearch 5.x and earlier an index name in which this message will be stored within the Elasticsearch.
         The value of this field is generated based on the source of the message. Example of the value
         is 'project.my-cool-project-in-lab04.748e92c2-70d7-11e9-b387-000d3af2d83b.2019.05.09'.

@@ -1,7 +1,7 @@
 *.index-pattern.json
 *.template.json
 *~
-templates/*/*.asciidoc
+templates/*/*.adoc
 scripts/*.pyc
 scripts/__pycache__/*
 

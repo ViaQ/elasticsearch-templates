@@ -2,7 +2,8 @@ TEMPLATE_NAME = com.redhat.viaq-openshift
 
 .PHONY: all templates index_pattern
 
-INDEX_PATTERN_DIRS = openshift,collectd_metrics
+INDEX_PATTERN_DIRS = openshift
+
 
 all: templates index_pattern
 
