@@ -69,8 +69,5 @@
         }
     },
     "order": 10,
-    "settings": {
-        "index.refresh_interval": "5s"
-    },
     "index_patterns": "logstash-*"
 }

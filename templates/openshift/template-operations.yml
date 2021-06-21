@@ -8,7 +8,6 @@ elasticsearch_template:
   order: 10
 
 namespaces:
-  - rsyslog.yml
   - systemd.yml
   - kubernetes.yml
   - docker.yml
@@ -16,4 +15,5 @@ namespaces:
   - ovirt.yml
   - aushape.yml
   - tlog.yml
-#  - openshift/app_log.yml
+  # - rsyslog.yml
+  # - openshift/app_log.yml
