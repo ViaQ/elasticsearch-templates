@@ -4,10 +4,10 @@ viaq openshift index templates for ElasticSearch and index patterns for Kibana
 The template files are automatically generated.
 Please _do not edit_ the files directly.
 
-In order to edit the template please modify [objects.yml](objects.yml) and the respective object type files.
+In order to edit the template please modify [template-operations.yml](template-operations.yml), [template-project.yml](template-project.yml) and the respective namespace files referenced there.
 
 To rebuild the template, run:
-> python ../scripts/generate_template.py . ../../objects_dir
+> make
 
 For details about the mapping please see [ElasticSearch reference](https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-templates.html) and [Kibana reference](https://www.elastic.co/guide/en/kibana/current/index-patterns.html)
 
@@ -18,10 +18,10 @@ This file contains the skeleton of the template without the mappings section.
 by sections:  
 `aliases`: Aliases for the indices produces from the template. Aliases will be automatically generated along with the indices in future.  
 `mappings`: mappings section  
-  `_default_`: default mapping skeleton. It is the only mapping present in the skeleton. Other mappings from [fields.yml](fields.yml) will copy this skeleton.  
+  `_default_`: default mapping skeleton. It is the only mapping present in the skeleton. Other mappings from [template-operations.yml](template-operations.yml), [template-project.yml](template-project.yml) will copy this skeleton.  
   `date_detection`: we force no date detection in the unknown fields.  
   `dynamic_templates`: describes the mapping for autocreated fields.  
-  `properties`: empty section that is populated with the content from [fields.yml](fields.yml)  
+  `properties`: empty section that is populated with the content from [template-operations.yml](template-operations.yml), [template-project.yml](template-project.yml)  
 `order`: order of the template. lower order templates are applied first.  
 `settings`: various settings  
 `index_patterns`: indices that will be matched by this template

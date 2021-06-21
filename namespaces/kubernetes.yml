@@ -194,6 +194,19 @@ namespace:
         example: Normal 
         description: >
           Type of this event (Normal, Warning), new types could be added in the future
+  
+  - name: flat_labels
+    type: keyword
+    example: [
+      "app=openshift-kube-scheduler",
+      "revision=8",
+      "scheduler=true"
+    ]
+    norms: true
+    description: >
+      Flattened Labels attached to the OpenShift object.
+      Each label name is a subfield of labels field.
+      It also contains custom labels added in CRDs. It will be an array.
 
 doc_sections:
   - ["pod_log", "Openshift logging metadata"]

@@ -11,14 +11,14 @@ elasticsearch_template:
 # TODO: use all available namespaces for tests
 namespaces:
   - aushape.yml
-#  - ci_job.yml
-  - collectd.yml
   - docker.yml
   - kubernetes.yml
   - ovirt.yml
   - pipeline_metadata.yml
-  - rsyslog.yml
   - systemd.yml
-#  - testcase.yml
   - tlog.yml
-#  - openshift/app_log.yml
+  # - ci_job.yml
+  # - collectd.yml
+  # - rsyslog.yml
+  # - testcase.yml
+  # - openshift/app_log.yml
