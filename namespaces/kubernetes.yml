@@ -128,7 +128,7 @@ namespace:
             description: >
               Event's unique ID
           - name: resourceVersion
-            type: integer
+            type: keyword
             example: 311987
             description: >
               String that identifies the server's internal version of the event that can be used by clients to determine when objects have changed
@@ -172,7 +172,7 @@ namespace:
         type: keyword
         example: SuccessfulCreate
         description: >
-          Short, machine understandable string that gives the reason for this event being generated 
+          Short, machine understandable string that gives the reason for this event being generated
       - name: source_component
         type: keyword
         example: replication-controller
@@ -191,10 +191,10 @@ namespace:
           The number of times this event has occurred
       - name: type
         type: keyword
-        example: Normal 
+        example: Normal
         description: >
           Type of this event (Normal, Warning), new types could be added in the future
-  
+
   - name: flat_labels
     type: keyword
     example: [
