@@ -55,40 +55,16 @@ namespace:
     type: group
     description: >
       Annotations associated with the OpenShift object
-
   - name: labels
-    type: group
+    type: nested
     description: >
       Labels attached to the OpenShift object
       Each label name is a subfield of labels field.
-      Each label name is de-dotted: dots in the name are replaced with
-      underscores.
-    fields:
-      - name: deployment
-        type: keyword
-        example: logging-kibana-3
-        description: >
-          The deployment associated with this Kubernetes object
-      - name: deploymentconfig
-        type: keyword
-        example: logging-kibana
-        description: >
-          The deploymentconfig associated with this Kubernetes object
-        fields:
-          - name: raw
-            ignore_above: 64
-            type: keyword
-      - name: component
-        type: keyword
-        example: kibana
-        description: >
-          The component associated with this Kubernetes object
-      - name: provider
-        type: keyword
-        example: openshift
-        description: >
-          The provider associated with this Kubernetes object
-
+  - name: namespace_labels
+    type: nested
+    description: >
+      Labels attached to the namespace in which the openshift object is deployed
+      Each label name is a subfield of labels field.
   - name: event
     type: group
     description: >
